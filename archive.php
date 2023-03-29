@@ -45,6 +45,7 @@ get_header();
 		?>
 
 	</main><!-- #main -->
+	test
 
 <?php
 get_sidebar();

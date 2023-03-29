@@ -2685,7 +2685,8 @@ cta-area css
 
 .cta-area {
   position: relative;
-  background-image: url(../img/cta/01.jpg);
+  /* background-image: url(../img/cta/01.jpg); */
+  background-image: url(https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -5513,9 +5514,9 @@ home 2
 
 
 @media (min-width: 992px){
-  .home-2 .navbar .nav-item .nav-link{
+  .home-2 .navbar .nav-item .nav-link {
     color: #394358;
-  }
+}
 
   .home-2 .navbar .nav-item .nav-link.active,
   .home-2 .navbar .nav-item:hover .nav-link{
