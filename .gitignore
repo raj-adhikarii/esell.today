@@ -1,1 +1,5 @@
 *.html
+README.md
+*.txt
+.eslintrc
+LICENSE
