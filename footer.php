@@ -17,9 +17,22 @@
                 <div class="row footer-widget-wrapper pt-100 pb-70">
                     <div class="col-md-6 col-lg-3">
                         <div class="footer-widget-box about-us">
-                            <a href="#" class="footer-logo">
-                                <img src="assets/img/logo/logo.png" alt="">
-                            </a>
+                        <?php
+                            the_custom_logo();
+                            if ( is_front_page() && is_home() ) :
+                                ?>
+                                <h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+                                <?php
+                            else :
+                                ?>
+                                <p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
+                                <?php
+                            endif;
+                            $esell_description = get_bloginfo( 'description', 'display' );
+                            if ( $esell_description || is_customize_preview() ) :
+                                ?>
+                                <p class="site-description"><?php echo $esell_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+                            <?php endif; ?>
                             <p class="mb-4">
                                 We are many variations passages available have suffered alteration
                                 in some form by injected humour.
