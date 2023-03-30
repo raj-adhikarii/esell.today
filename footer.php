@@ -123,9 +123,20 @@
                 <div class="row">
                     <div class="col-md-6 align-self-center">
                         <p class="copyright-text">
-                            &copy; Copyright <span id="date"></span> <a href="#"> CLASAD </a> All Rights Reserved.
+                            &copy; <a href="<?php echo site_url(); ?>">E-sell Today,</a> <span id="date"></span> All Rights Reserved.
                         </p>
                     </div>
+                                            <!-- <?php
+                        // Retrieve the saved option data
+                        // $my_options = get_option( 'my_options' );
+                        // ?>
+
+                        // <div class="my-options">
+                        //   <h2>My Options</h2>
+                        //   <p>Option One: <?php echo esc_html( $my_options['option_one'] ); ?></p>
+                        //   <p>Option Two: <?php echo esc_html( $my_options['option_two'] ); ?></p>
+                        // </div> -->
+
                     <div class="col-md-6 align-self-center">
                         <ul class="footer-social">
                             <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>

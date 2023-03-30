@@ -69,7 +69,7 @@
                     <div class="collapse navbar-collapse" id="main_nav">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown">Home</a>
+                                <a class="nav-link dropdown-toggle active" href="<?php echo site_url(); ?>" data-bs-toggle="dropdown">Home</a>
                                 <ul class="dropdown-menu fade-down">
                                     <li><a class="dropdown-item" href="index.html">Home One</a></li>
                                     <li><a class="dropdown-item" href="index-2.html">Home Two</a></li>
@@ -120,7 +120,7 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="#">Services</a>
+                                        <a class="dropdown-item dropdown-toggle" href="<?php echo site_url(); ?>/service">Services</a>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="service.html">Services</a></li>
                                             <li><a class="dropdown-item" href="service-single.html">Service Single</a></li>
@@ -143,20 +143,20 @@
                                     </li>
                                     <li><a class="dropdown-item" href="team.html">Our Team</a></li>
                                     <li><a class="dropdown-item" href="pricing.html">Pricing Plan</a></li>
-                                    <li><a class="dropdown-item" href="faq.html">Faq</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/faqs">Faq</a></li>
                                     <li><a class="dropdown-item" href="testimonial.html">Testimonials</a></li>
                                     <li><a class="dropdown-item" href="404.html">404 Error</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Blog</a>
+                                <a class="nav-link dropdown-toggle" href="<?php echo site_url(); ?>/blog" data-bs-toggle="dropdown">Blog</a>
                                 <ul class="dropdown-menu fade-down">
                                     <li><a class="dropdown-item" href="blog.html">Blog One</a></li>
                                     <li><a class="dropdown-item" href="blog-2.html">Blog Two</a></li>
                                     <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact">Contact</a></li>
                         </ul>
 						<!-- <?php
 			wp_nav_menu(
