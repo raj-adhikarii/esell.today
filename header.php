@@ -68,19 +68,18 @@
                     </div>
                     <div class="collapse navbar-collapse" id="main_nav">
                         <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" href="<?php echo site_url(); ?>" data-bs-toggle="dropdown">Home</a>
-                                <ul class="dropdown-menu fade-down">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="<?php echo site_url(); ?>">Home</a>
+                                <!-- <ul class="dropdown-menu fade-down">
                                     <li><a class="dropdown-item" href="index.html">Home One</a></li>
                                     <li><a class="dropdown-item" href="index-2.html">Home Two</a></li>
                                     <li><a class="dropdown-item" href="index-3.html">Home Three</a></li>
                                     <li><a class="dropdown-item" href="index-4.html">Home Four</a></li>
                                     <li><a class="dropdown-item" href="index-5.html">Home Five</a></li>
-                                </ul>
+                                </ul> -->
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/about">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="category.html">Category</a></li>
-                            <li class="nav-item dropdown">
+                            <!-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">All Ads</a>
                                 <ul class="dropdown-menu fade-down">
                                     <li><a class="dropdown-item" href="ad-grid.html">Ads Grid One</a></li>
@@ -92,7 +91,9 @@
                                     <li><a class="dropdown-item" href="ad-single.html">Ads Single One</a></li>
                                     <li><a class="dropdown-item" href="ad-single-2.html">Ads Single Two</a></li>
                                 </ul>
-                            </li>
+                            </li> -->
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/service">Services</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/location">Location</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
                                 <ul class="dropdown-menu fade-down">
@@ -148,14 +149,15 @@
                                     <li><a class="dropdown-item" href="404.html">404 Error</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs">FAQs</a></li>
+                            <!-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="<?php echo site_url(); ?>/blog" data-bs-toggle="dropdown">Blog</a>
                                 <ul class="dropdown-menu fade-down">
                                     <li><a class="dropdown-item" href="blog.html">Blog One</a></li>
                                     <li><a class="dropdown-item" href="blog-2.html">Blog Two</a></li>
                                     <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
                                 </ul>
-                            </li>
+                            </li> -->
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact">Contact</a></li>
                         </ul>
 						<!-- <?php
