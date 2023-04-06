@@ -54,6 +54,10 @@ get_header();
         
 
     </main>
-
+<!-- mysql pw " Prolific@123#!" -->
+<!-- datapase: wordpress
+user: wp_user
+pass: Pro.... -->
+<!-- https://i12bretro.github.io/tutorials/0770.html -->
 <?php
 get_footer();

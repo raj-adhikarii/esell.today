@@ -3,3 +3,5 @@ README.md
 *.txt
 .eslintrc
 LICENSE
+/inc/vendor-role.php
+/inc/woo_dashboard.php

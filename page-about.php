@@ -305,7 +305,7 @@
             <div class="col-md-6 col-lg-3">
                 <div class="team-item">
                     <div class="team-img">
-                        <img src="assets/img/team/01.jpg" alt="thumb">
+                        <img src="https://images.unsplash.com/photo-1616179054043-7570cd0d47d6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="thumb">
                     </div>
                     <div class="team-content">
                         <div class="team-bio">
@@ -324,7 +324,7 @@
             <div class="col-md-6 col-lg-3">
                 <div class="team-item">
                     <div class="team-img">
-                        <img src="assets/img/team/02.jpg" alt="thumb">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="thumb">
                     </div>
                     <div class="team-content">
                         <div class="team-bio">
@@ -343,7 +343,7 @@
             <div class="col-md-6 col-lg-3">
                 <div class="team-item">
                     <div class="team-img">
-                        <img src="assets/img/team/03.jpg" alt="thumb">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="thumb">
                     </div>
                     <div class="team-content">
                         <div class="team-bio">
@@ -362,7 +362,7 @@
             <div class="col-md-6 col-lg-3">
                 <div class="team-item">
                     <div class="team-img">
-                        <img src="assets/img/team/04.jpg" alt="thumb">
+                        <img src="https://images.unsplash.com/photo-1564522365984-c08ed1f78893?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="thumb">
                     </div>
                     <div class="team-content">
                         <div class="team-bio">

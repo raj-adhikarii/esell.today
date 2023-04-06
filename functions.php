@@ -145,6 +145,16 @@ require get_template_directory() . '/inc/cpt-dash.php';
 require get_template_directory() . '/inc/theme-option.php';
 
 /**
+ * Woocommerce dashboard
+ */
+// require get_template_directory() . '/inc/woo_dashboard.php';
+
+/**
+ * Custom vendor role
+ */
+// require get_template_directory() . '/inc/vendor-role.php';
+
+/**
  * Enqueue scripts and styles.
  */
 require get_template_directory() . '/inc/addscript.php';

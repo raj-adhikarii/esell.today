@@ -1,4 +1,5 @@
 <?php
+//Location
 add_action( 'init', 'location_register_post_type' );
 function location_register_post_type() {
 	$args = [
@@ -47,6 +48,7 @@ function location_register_post_type() {
 	register_post_type( 'location', $args );
 }
 
+//Services
 add_action( 'init', 'service_register_post_type' );
 function service_register_post_type() {
 	$args = [
@@ -93,4 +95,53 @@ function service_register_post_type() {
 	];
 
 	register_post_type( 'service', $args );
+}
+
+// Testimonial
+add_action( 'init', 'testimonial_register_post_type' );
+function testimonial_register_post_type() {
+	$args = [
+		'label'  => esc_html__( 'Testimonials', 'text-domain' ),
+		'labels' => [
+			'menu_name'          => esc_html__( 'Testimonials', 'esell-today' ),
+			'name_admin_bar'     => esc_html__( 'Testimonial', 'esell-today' ),
+			'add_new'            => esc_html__( 'Add Testimonial', 'esell-today' ),
+			'add_new_item'       => esc_html__( 'Add new Testimonial', 'esell-today' ),
+			'new_item'           => esc_html__( 'New Testimonial', 'esell-today' ),
+			'edit_item'          => esc_html__( 'Edit Testimonial', 'esell-today' ),
+			'view_item'          => esc_html__( 'View Testimonial', 'esell-today' ),
+			'update_item'        => esc_html__( 'View Testimonial', 'esell-today' ),
+			'all_items'          => esc_html__( 'All Testimonials', 'esell-today' ),
+			'search_items'       => esc_html__( 'Search Testimonials', 'esell-today' ),
+			'parent_item_colon'  => esc_html__( 'Parent Testimonial', 'esell-today' ),
+			'not_found'          => esc_html__( 'No Testimonials found', 'esell-today' ),
+			'not_found_in_trash' => esc_html__( 'No Testimonials found in Trash', 'esell-today' ),
+			'name'               => esc_html__( 'Testimonials', 'esell-today' ),
+			'singular_name'      => esc_html__( 'Testimonial', 'esell-today' ),
+		],
+		'public'              => true,
+		'exclude_from_search' => true,
+		'publicly_queryable'  => false,
+		'show_ui'             => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'show_in_rest'        => true,
+		'capability_type'     => 'post',
+		'hierarchical'        => false,
+		'has_archive'         => true,
+		'query_var'           => false,
+		'can_export'          => true,
+		'rewrite_no_front'    => false,
+		'show_in_menu'        => true,
+		'menu_icon'           => 'dashicons-money',
+		'supports' => [
+			'title',
+			'editor',
+			'thumbnail',
+		],
+		
+		'rewrite' => true
+	];
+
+	register_post_type( 'testimonial', $args );
 }
