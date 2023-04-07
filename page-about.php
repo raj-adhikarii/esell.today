@@ -3,74 +3,83 @@
 <main class="main">
 
 <!-- breadcrumb -->
-<div class="site-breadcrumb" style="background: url(https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)">
-    <div class="container">
-        <h2 class="breadcrumb-title">About Us</h2>
-        <ul class="breadcrumb-menu">
-            <li><a href="index.html">Home</a></li>
-            <li class="active">About Us</li>
-        </ul>
+<?php if(has_post_thumbnail($post ->ID)):
+    $image = wp_get_attachment_image_src(get_post_thumbnail_id($post -> ID), 'single-post-thumbnail');
+?>
+    <div class="site-breadcrumb" style="background: url(<?php echo $image[0]; ?>)">
+        <div class="container">
+            <h2 class="breadcrumb-title">About Us</h2>
+            <ul class="breadcrumb-menu">
+                <li><a href="<?php echo site_url(); ?>">Home</a></li>
+                <li class="active">About Us</li>
+            </ul>
+        </div>
     </div>
-</div>
-
+<?php endif; ?>
 
 
 <!-- about area -->
 <div class="about-area py-120 mb-30">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="about-left">
-                    <div class="about-img">
-                        <img src="https://images.pexels.com/photos/8547146/pexels-photo-8547146.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
+        <?php if(have_rows('Bnr_twi')): ?>
+            <?php while(have_rows('Bnr_twi')): the_row(); ?>
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="about-left">
+                            <div class="about-img">
+                                <?php $img = get_sub_field('banner_image'); ?>
+                                <?php if(!empty($img)): ?>
+                                <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>">
+                                <?php endif; ?>
+                            </div>
+                            <div class="about-shape">
+                                <img src="http://localhost/esell.today/wp-content/uploads/2023/03/01.svg" alt="">
+                            </div>
+                        </div>
                     </div>
-                    <div class="about-shape">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/01.svg" alt="">
+                    <div class="col-lg-6">
+                        <div class="about-right">
+                            <div class="site-heading mb-3">
+                                <span class="site-title-tagline">About Us</span>
+                                <?php $about_title = get_sub_field('bnr_t'); ?>
+                                    <?php if(!empty($about_title)): ?>
+                                        <h2 class="section-title">
+                                            <?php echo ($about_title); ?>
+                                        </h2>
+                                    <?php endif; ?>
+                            </div>
+
+                            <?php $about_desc = get_sub_field('bnr_desc'); ?>
+                            <?php if(!empty($about_desc)): ?>
+                                <p class="about-text">
+                                    <?php echo ($about_desc); ?>
+                                </p>
+                            <?php endif; ?>
+                            <div class="about-list-wrapper">
+                                <?php if(have_rows('bnr_ico_list')) : ?>
+                                    <ul class="about-list list-unstyled">
+                                        <?php while(have_rows('bnr_ico_list')): the_row(); ?>
+                                            <li>
+                                                <div class="about-icon"><span class="fas fa-check-circle"></span></div>
+                                                <div class="about-list-text">
+                                                    <?php $ico_title = get_sub_field('icon_list'); ?>
+                                                        <?php if(!empty($ico_title)): ?>
+                                                            <p><?php echo ($ico_title); ?></p>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </li>
+                                        <?php endwhile; ?>
+                                    </ul>
+                                <?php endif; ?>
+                            </div>
+                            <div class="about-bottom">
+                                <a href="about.html" class="theme-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="about-right">
-                    <div class="site-heading mb-3">
-                        <span class="site-title-tagline">About Us</span>
-                        <h2 class="site-title">
-                            We have the most listings and constant updates.
-                        </h2>
-                    </div>
-                    <p class="about-text">There are many variations of passages of Lorem Ipsum available,
-                        but the majority have suffered alteration in some form, by injected humour, or
-                        randomised words which don't look even.</p>
-                    <p class="about-text mt-2">
-                        On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment.
-                    </p>
-                    <div class="about-list-wrapper">
-                        <ul class="about-list list-unstyled">
-                            <li>
-                                <div class="about-icon"><span class="fas fa-check-circle"></span></div>
-                                <div class="about-list-text">
-                                    <p>Take a look at our round up of the best shows</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="about-icon"><span class="fas fa-check-circle"></span></div>
-                                <div class="about-list-text">
-                                    <p>It has survived not only five centuries</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="about-icon"><span class="fas fa-check-circle"></span></div>
-                                <div class="about-list-text">
-                                    <p>Lorem Ipsum has been the ndustry standard dummy text</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="about-bottom">
-                        <a href="about.html" class="theme-btn">Read More <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <?php endwhile; ?>
+        <?php endif; ?>
     </div>
 </div>
 <!-- about area end -->
@@ -81,67 +90,28 @@
 <div class="counter-area bg pt-40 pb-40">
     <div class="container">
         <div class="counter-wrapper">
+            <?php if(have_rows('about_stats')) : ?>
             <div class="row">
+                <?php while(have_rows('about_stats')): the_row(); ?>
                 <div class="col-lg-3 col-sm-6">
                     <div class="counter-box">
                         <div class="counter-icon">
                             <i class="fal fa-layer-group"></i>
                         </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="9200"
-                                    data-speed="3000">9200</span>
-                                <span class="counter-sign">+</span>
+
+                            <div class="counter-content">
+                                <div class="counter-number">
+                                    <span class="counter" data-count="+" data-to="<?php the_sub_field('stats_title'); ?>"
+                                            data-speed="3000"> <?php the_sub_field('stats_title'); ?></span>
+                                    <span class="counter-sign">+</span>
+                                </div>
+                                <h6 class="counter-title"><?php the_sub_field('stats_description'); ?></h6>
                             </div>
-                            <h6 class="counter-title">Ads Listed</h6>
-                        </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="counter-box">
-                        <div class="counter-icon">
-                            <i class="fal fa-smile"></i>
-                        </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="8530"
-                                    data-speed="3000">8530</span>
-                                <span class="counter-sign">+</span>
-                            </div>
-                            <h6 class="counter-title">Happy Clients</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="counter-box">
-                        <div class="counter-icon">
-                            <i class="fal fa-user-friends"></i>
-                        </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="5680"
-                                    data-speed="3000">5680</span>
-                                <span class="counter-sign">+</span>
-                            </div>
-                            <h6 class="counter-title">Daily Visitors</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="counter-box">
-                        <div class="counter-icon">
-                            <i class="fal fa-award"></i>
-                        </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="50" data-speed="3000">50</span>
-                                <span class="counter-sign">+</span>
-                            </div>
-                            <h6 class="counter-title">Win Awards</h6>
-                        </div>
-                    </div>
-                </div>
+                <?php endwhile; ?>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -156,7 +126,7 @@
             <div class="col-lg-7 mx-auto">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Testimonials</span>
-                    <h2 class="site-title">What Our Client Say's</h2>
+                    <h2 class="section-title">What Our Client Say's</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.</p>
                 </div>
             </div>
@@ -296,7 +266,7 @@
             <div class="col-lg-7 mx-auto">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Our Team</span>
-                    <h2 class="site-title">Meet With Our Team</h2>
+                    <h2 class="section-title">Meet With Our Team</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.</p>
                 </div>
             </div>
@@ -386,20 +356,32 @@
 
 
 <!-- partner area -->
-<div class="partner-area bg pt-50 pb-50">
-    <div class="container">
-        <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-            <img src="assets/img/partner/01.png" alt="thumb">
-            <img src="assets/img/partner/02.png" alt="thumb">
-            <img src="assets/img/partner/03.png" alt="thumb">
-            <img src="assets/img/partner/04.png" alt="thumb">
-            <img src="assets/img/partner/05.png" alt="thumb">
-            <img src="assets/img/partner/06.png" alt="thumb">
-            <img src="assets/img/partner/04.png" alt="thumb">
+    <?php
+    // Check if the partner repeater field exists and has rows
+    if( have_rows('footer_client_list') ):
+        ?>
+        <div class="partner-area bg pt-50 pb-50">
+            <div class="container">
+                <div class="partner-wrapper partner-slider owl-carousel owl-theme">
+                    <?php
+                    // Loop through the partner repeater field
+                    while( have_rows('footer_client_list') ) : the_row();
+                        // Retrieve the image field
+                        $image = get_sub_field('client_img');
+                        // Output the image with an <img> tag
+                        if( $image ) {
+                            $url = $image['url'];
+                            $alt = $image['alt'];
+                            echo '<img src="' . $url . '" alt="' . $alt . '">';
+                        }
+                    endwhile;
+                    ?>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+        <?php
+    endif;
+?>
 <!-- partner area end -->
-
 </main>
 <?php get_footer(); 

@@ -145,3 +145,41 @@ function testimonial_register_post_type() {
 
 	register_post_type( 'testimonial', $args );
 }
+
+//vendor post type
+function custom_post_type_vendor() {
+
+	$labels = array(
+		'name'               => __( 'Vendors', 'text-domain' ),
+		'singular_name'      => __( 'Vendor', 'text-domain' ),
+		'menu_name'          => __( 'Vendors', 'text-domain' ),
+		'add_new'            => __( 'Add New', 'text-domain' ),
+		'add_new_item'       => __( 'Add New Vendor', 'text-domain' ),
+		'edit_item'          => __( 'Edit Vendor', 'text-domain' ),
+		'new_item'           => __( 'New Vendor', 'text-domain' ),
+		'view_item'          => __( 'View Vendor', 'text-domain' ),
+		'search_items'       => __( 'Search Vendors', 'text-domain' ),
+		'not_found'          => __( 'No vendors found', 'text-domain' ),
+		'not_found_in_trash' => __( 'No vendors found in trash', 'text-domain' ),
+	);
+
+	$args = array(
+		'label'              => __( 'Vendor', 'text-domain' ),
+		'labels'             => $labels,
+		'description'        => __( 'Vendor information', 'text-domain' ),
+		'public'             => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'capability_type'    => 'post',
+		'hierarchical'       => false,
+		'rewrite'            => array( 'slug' => 'vendor' ),
+		'menu_position'      => 5,
+		'supports'           => array( 'title', 'editor', 'thumbnail' ),
+		'has_archive'        => true,
+		'menu_icon'          => 'dashicons-businessman',
+	);
+
+	register_post_type( 'vendor', $args );
+
+}
+add_action( 'init', 'custom_post_type_vendor' );
