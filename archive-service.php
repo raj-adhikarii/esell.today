@@ -1,18 +1,16 @@
 <?php get_header(); ?>
     <main class="main">
 
-        <!-- breadcrumb -->
-        <div class="site-breadcrumb" style="background: url(https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)">
+    <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url(https://tinysol.com.au/esell/wp-content/uploads/2023/04/abt.jpeg)">
             <div class="container">
                 <h2 class="breadcrumb-title">Services</h2>
                 <ul class="breadcrumb-menu">
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="<?php echo site_url(); ?>">Home</a></li>
                     <li class="active">Services</li>
                 </ul>
             </div>
         </div>
-
-
 
         <!-- service area -->
         <div class="service-area bg py-120">
@@ -21,7 +19,7 @@
                     <div class="col-lg-7 mx-auto">
                         <div class="site-heading text-center">
                             <span class="site-title-tagline">Services</span>
-                            <h2 class="site-title">Our Popular Services</h2>
+                            <h2 class="section-title">Our Popular Services</h2>
                             <p>It is a long established fact that a reader will be distracted by the readable content.
                             </p>
                         </div>
@@ -104,7 +102,5 @@
             </div>
         </div>
         <!-- service area end -->
-
-
-    </main>
+</main>
 <?php get_footer();

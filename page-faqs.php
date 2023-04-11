@@ -3,16 +3,19 @@
 <main class="main">
 
 <!-- breadcrumb -->
-<div class="site-breadcrumb" style="background: url(https://images.unsplash.com/photo-1536007164800-b7f11331f35c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)">
+<?php if(has_post_thumbnail($post ->ID)):
+        $image = wp_get_attachment_image_src(get_post_thumbnail_id($post -> ID), 'single-post-thumbnail');
+    ?>
+<div class="site-breadcrumb" style="background: url(<?php echo $image[0]; ?>)">
     <div class="container">
         <h2 class="breadcrumb-title">Faq's</h2>
         <ul class="breadcrumb-menu">
-            <li><a href="index.html">Home</a></li>
+            <li><a href="<?php echo site_url(); ?>">Home</a></li>
             <li class="active">Faq's</li>
         </ul>
     </div>
 </div>
-
+<?php endif; ?>
 
 
 <!-- faq area -->
@@ -105,13 +108,13 @@
                         </div>
                     </div>
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading1">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                                <span><i class="far fa-question"></i></span> How I Can Reset My Password ?
+                        <h2 class="accordion-header" id="heading6">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                                <span><i class="far fa-question"></i></span> How Do I Change My Email Id ?
                             </button>
                         </h2>
-                        <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1"
+                        <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 We denounce with righteous indignation and dislike men who

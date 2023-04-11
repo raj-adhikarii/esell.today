@@ -4,16 +4,19 @@
     <main class="main">
 
     <!-- breadcrumb -->
-    <div class="site-breadcrumb" style="background: url(https://images.unsplash.com/photo-1587560699334-cc4ff634909a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)">
+    <?php if(has_post_thumbnail($post ->ID)):
+        $image = wp_get_attachment_image_src(get_post_thumbnail_id($post -> ID), 'single-post-thumbnail');
+    ?>
+    <div class="site-breadcrumb" style="background: url(<?php echo $image[0]; ?>)">
         <div class="container">
             <h2 class="breadcrumb-title">Contact Us</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="<? echo site_url(); ?>">Home</a></li>
                 <li class="active">Contact Us</li>
             </ul>
         </div>
     </div>
-
+    <?php endif; ?>
 
     <!-- contact area -->
     <div class="contact-area py-120">
@@ -63,9 +66,15 @@
                     <div class="col-lg-8 align-self-center">
                         <div class="contact-form">
                             <div class="contact-form-header">
-                                <h2>Get In Touch</h2>
-                                <p>It is a long established fact that a reader will be distracted by the readable
-                                    content of a page randomised words which don't look even slightly when looking at its layout. </p>
+                                <?php $cta_title = get_field('cta_title'); ?>
+                                <?php if(!empty($cta_title)): ?>
+                                    <h2><?php echo ($cta_title); ?></h2>
+                                <?php endif; ?>
+                                
+                                <?php $cta_desc = get_field('cta_desc'); ?>
+                                <?php if(!empty($cta_desc)) : ?>
+                                    <p><?php echo ($cta_desc); ?></p>
+                                <?php endif; ?>
                             </div>
                             <form method="post" action="/clasad/assets/php/contact.php" id="contact-form">
                                 <div class="row">

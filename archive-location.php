@@ -2,11 +2,11 @@
     <main class="main">
 
     <!-- breadcrumb -->
-    <div class="site-breadcrumb" style="background: url(https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)">
+    <div class="site-breadcrumb" style="background: url(https://tinysol.com.au/esell/wp-content/uploads/2023/04/abt.jpeg)">
         <div class="container">
             <h2 class="breadcrumb-title">Locations</h2>
             <ul class="breadcrumb-menu">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="<?php echo site_url(); ?>">Home</a></li>
                 <li class="active">Locations</li>
             </ul>
         </div>
@@ -19,7 +19,7 @@
                     <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                         <div class="site-heading text-center">
                             <span class="site-title-tagline">Location</span>
-                            <h2 class="site-title">Most Popular Location</h2>
+                            <h2 class="section-title">Most Popular Location</h2>
                             <p>It is a long established fact that a reader will be distracted by the readable content.
                             </p>
                         </div>

@@ -18,21 +18,35 @@ get_header();
 <main class="main">
 
 <!-- hero area -->
+<?php if(have_rows('home_banner')) : ?>
 <div class="hero-section">
-    <div class="hero-single" style="background: url(https://images.unsplash.com/photo-1546213290-e1b492ab3eee?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80)">
+    <?php if(has_post_thumbnail($post ->ID)):
+            $image = wp_get_attachment_image_src(get_post_thumbnail_id($post -> ID), 'single-post-thumbnail');
+    ?>
+    <div class="hero-single" style="background: url(<?php echo $image[0]; ?>)">
+    <?php endif; ?>
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-9">
                     <div class="hero-content">
+                        <?php while(have_rows('home_banner')) : the_row(); ?>
                         <div class="hero-content-wrapper">
-                            <h1 class="hero-title">Buy, <span>Sell, Rent</span> & Exchange in one Click</h1>
-                            <p>Search from over 3000+ Active Ads in 35+ Categories for Free</p>
+                            <?php $banner_title = get_sub_field('banner_title') ?>
+                                <?php if(!empty($banner_title)): ?>
+                                    <h1 class="hero-title"> <?php echo ($banner_title); ?></h1>
+                                <?php endif; ?>
+
+                            <?php $banner_desc = get_sub_field('banner_desc'); ?>
+                                <?php if(!empty($banner_desc)): ?>
+                                    <?php echo ($banner_desc); ?>
+                                <?php endif; ?>
                             <div class="hero-btn">
                                 <a href="#" class="theme-btn">Browse Ads <i class="fas fa-arrow-right"></i></a>
                                 <a href="#" class="theme-border-btn text-white">Post Your Ads <i
                                         class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
+                        <?php endwhile; ?>
                     </div>
                 </div>
             </div>
@@ -108,63 +122,75 @@ get_header();
             </div>
         </div>
     </div>
+
 </div>
+<?php endif; ?>
 <!-- hero area end -->
 
 
 
 <!-- process area -->
+
 <div class="process-area pt-120">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                <div class="site-heading text-center">
-                    <span class="site-title-tagline">Process</span>
-                    <h2 class="site-title">How It Works</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
-                </div>
+        <?php if(have_rows('how_it_works')): ?>
+            <div class="row">
+                <?php while(have_rows('how_it_works')): the_row(); ?>
+                    <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Process</span>
+                            <?php $title = get_sub_field('how_it_works_title'); ?>
+                                <?php if(!empty($title)): ?>
+                                    <h2 class="section-title"><?php echo $title; ?></h2>
+                                <?php endif; ?>
+
+                            <?php $desc = get_sub_field('how_it_works_desc'); ?>
+                                <?php if(!empty($desc)): ?>
+                                    <?php echo $desc; ?>
+                                <?php endif; ?>
+                        </div>
+                    </div>
+
+                    
+                    <?php
+                    $counter = 1;
+                    if(have_rows('how_it_works_cards')): ?>
+                        <div class="row">
+                            <?php while(have_rows('how_it_works_cards')): the_row(); ?>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="process-item wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".50s">
+                                        <span class="process-count"><?php echo $counter; ?></span>
+                                        <div class="process-icon">
+                                            <?php $ico_class = get_sub_field('cards_icon_class'); ?>
+                                                <?php if(!empty($ico_class)): ?> 
+                                                    <i class="fal <?php echo $ico_class; ?>"></i>
+                                                <?php endif; ?>
+                                        </div>
+                                        <div class="process-content">
+                                            <?php $card_title = get_sub_field('cards_title'); ?>
+                                                <?php if(!empty($card_title)): ?>
+                                                    <h5><?php echo $card_title; ?></h5>
+                                                <?php endif; ?>
+
+                                            <?php $card_desc = get_sub_field('cards_desc'); ?>
+                                                <?php if(!empty($card_desc)): ?>
+                                                    <?php echo $card_desc; ?>
+                                                <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            <?php 
+                            $counter++; 
+                            endwhile; ?>
+                        </div>
+                    <?php endif; ?>
+                <?php endwhile; ?>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-lg-4">
-                <div class="process-item wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
-                    <span class="process-count">01</span>
-                    <div class="process-icon">
-                        <i class="fal fa-user"></i>
-                    </div>
-                    <div class="process-content">
-                        <h5>Create Account</h5>
-                        <p>It is a long established fact that the reader will be distracted readable. </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="process-item wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".50s">
-                    <span class="process-count">02</span>
-                    <div class="process-icon">
-                        <i class="fal fa-layer-group"></i>
-                    </div>
-                    <div class="process-content">
-                        <h5>Post Your Ad</h5>
-                        <p>It is a long established fact that the reader will be distracted readable. </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="process-item wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".75s">
-                    <span class="process-count">03</span>
-                    <div class="process-icon">
-                        <i class="fal fa-sack-dollar"></i>
-                    </div>
-                    <div class="process-content">
-                        <h5>Sell Your Item</h5>
-                        <p>It is a long established fact that the reader will be distracted readable. </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>
+
 <!-- process area end -->
 
 
@@ -692,69 +718,39 @@ get_header();
 <!-- counter area -->
 <div class="counter-area bg pt-60 pb-60">
     <div class="container">
-        <div class="counter-wrapper">
-            <div class="row">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="counter-box">
-                        <div class="counter-icon">
-                            <i class="fal fa-layer-group"></i>
-                        </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="9200"
-                                    data-speed="3000">9200</span>
-                                <span class="counter-sign">+</span>
+        <?php if(have_rows('stats')) : ?>
+            <div class="counter-wrapper">
+                <div class="row">
+                    <?php while(have_rows('stats')): the_row(); ?>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="counter-box">
+                                <div class="counter-icon">
+                                    <?php $ico = get_sub_field('stats_icon_class'); ?>
+                                        <?php if(!empty($ico)): ?>
+                                            <i class="fal <?php echo ($ico); ?>"></i>
+                                        <?php endif; ?>
+                                </div>
+                                <div class="counter-content">
+                                    <div class="counter-number">
+                                        <?php $number = get_sub_field('stats_number'); ?>
+                                            <?php if(!empty($number)): ?>
+                                                <span class="counter" data-count="+" data-to="<?php echo ($number); ?>"
+                                                    data-speed="3000"><?php echo ($number); ?></span>
+                                                <span class="counter-sign">+</span>
+                                            <?php endif; ?>
+                                    </div>
+
+                                    <?php $counter_title = get_sub_field('stats_title'); ?>
+                                        <?php if(!empty($counter_title)): ?>
+                                            <h6 class="counter-title"><?php echo ($counter_title); ?></h6>
+                                        <?php endif; ?>
+                                </div>
                             </div>
-                            <h6 class="counter-title">Ads Listed</h6>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="counter-box">
-                        <div class="counter-icon">
-                            <i class="fal fa-smile"></i>
-                        </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="8530"
-                                    data-speed="3000">8530</span>
-                                <span class="counter-sign">+</span>
-                            </div>
-                            <h6 class="counter-title">Happy Clients</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="counter-box">
-                        <div class="counter-icon">
-                            <i class="fal fa-user-friends"></i>
-                        </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="5680"
-                                    data-speed="3000">5680</span>
-                                <span class="counter-sign">+</span>
-                            </div>
-                            <h6 class="counter-title">Daily Visitors</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="counter-box">
-                        <div class="counter-icon">
-                            <i class="fal fa-award"></i>
-                        </div>
-                        <div class="counter-content">
-                            <div class="counter-number">
-                                <span class="counter" data-count="+" data-to="50" data-speed="3000">50</span>
-                                <span class="counter-sign">+</span>
-                            </div>
-                            <h6 class="counter-title">Win Awards</h6>
-                        </div>
-                    </div>
+                    <?php endwhile; ?>
                 </div>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>
 <!-- counter area end -->
@@ -764,32 +760,54 @@ get_header();
 <!-- choose area -->
 <div class="choose-area py-120">
     <div class="container">
+        <?php if(have_rows('why_choose_us')) : ?>
         <div class="row align-items-center">
+            <?php while(have_rows('why_choose_us')): the_row(); ?>
             <div class="col-lg-6">
                 <div class="choose-img wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
-                    <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=781&q=80" alt="">
+                    <?php $img = get_sub_field('why_us_img'); ?>
+                        <?php if(!empty($img)): ?>
+                            <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>">
+                        <?php endif; ?>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="choose-right wow fadeInRight" data-wow-duration="1s" data-wow-delay=".25s">
                     <div class="site-heading mb-3">
                         <span class="site-title-tagline">Why Choose Us</span>
-                        <h2 class="site-title">
-                            Earn cash by selling or Find anything you desire
-                        </h2>
+                            <?php $whyus_title = get_sub_field('why_us_title'); ?>
+                                <?php if(!empty($whyus_title)): ?>
+                                    <h2 class="section-title">
+                                        <?php echo ($whyus_title); ?>
+                                    </h2>
+                                <?php endif; ?>
                     </div>
-                    <p class="choose-text">There are many variations of passages of Lorem Ipsum available,
-                        but the majority have suffered alteration in some form, by injected humour, or
-                        randomised words which don't look even.</p>
+
+                    <?php
+                        $paragraph_text = get_sub_field('why_us_desc'); // Get the ACF paragraph field content
+                            if ($paragraph_text) {
+                                $paragraph_text = strip_tags($paragraph_text); // Remove any existing HTML tags
+                                echo '<p class="choose-text">' . $paragraph_text . '</p>'; // Output the cleaned paragraph with a class
+                            }
+                        ?>
+
+                    <?php if(have_rows('why_us_icon_list')): ?>
                         <ul class="choose-list">
-                            <li><i class="fad fa-check-circle"></i> Take a look at our round up of the best shows.</li>
-                            <li><i class="fad fa-check-circle"></i> It is a long established fact reader will be distracted.</li>
-                            <li><i class="fad fa-check-circle"></i> At vero eos et accusamus et iusto odio dignissimos.</li>
+                            <?php while(have_rows('why_us_icon_list')): the_row(); ?>
+
+                                <?php $icon_list = get_sub_field('icon_list'); ?>
+                                    <?php if(!empty($icon_list)) : ?>
+                                        <li><i class="fad fa-check-circle"></i><?php echo ($icon_list); ?></li>
+                                    <?php endif; ?>
+                            <?php endwhile; ?>
                         </ul>
+                    <?php endif; ?>
                     <a href="#" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
+            <?php endwhile; ?>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 <!-- choose area end -->
@@ -797,19 +815,30 @@ get_header();
 
 
 <!-- cta-area -->
-<div class="cta-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto text-center">
-                <div class="cta-text">
-                    <h1>World's Largest Marketplace</h1>
-                    <p>It is a long established fact that a reader will be distracted by the read is that it has desktop publishing packages and web page normal distribution of letters</p>
-                </div>
-                <a href="#" class="theme-btn mt-30">Get Started Now<i class="fas fa-arrow-right"></i></a>
+<?php if(have_rows('marketplace_section')): ?>
+    <div class="cta-area" style="background: url(https://images.unsplash.com/photo-1483134529005-4c93495107d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80); background-size: cover;background-position:center center;">
+        <div class="container">
+            <div class="row">
+                <?php while(have_rows('marketplace_section')): the_row(); ?>
+                    <div class="col-lg-8 mx-auto text-center">
+                        <div class="cta-text">
+                            <?php $marketplace_title = get_sub_field('marketplace_title'); ?>
+                                <?php if(!empty($marketplace_title)): ?>
+                                    <h1><?php echo ($marketplace_title); ?></h1>
+                                <?php endif; ?>
+
+                            <?php $marketplace_desc = get_sub_field('marketplace_desc'); ?>
+                                <?php if(!empty($marketplace_desc)): ?>
+                                    <?php echo ($marketplace_desc); ?>
+                                <?php endif; ?>
+                        </div>
+                        <a href="#" class="theme-btn mt-30">Get Started Now<i class="fas fa-arrow-right"></i></a>
+                    </div>
+                <?php endwhile; ?>
             </div>
         </div>
     </div>
-</div>
+<?php endif; ?>
 <!-- cta-area end -->
 
 
@@ -821,7 +850,7 @@ get_header();
             <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Pricing</span>
-                    <h2 class="site-title">Our Flexiable Pricing Plan</h2>
+                    <h2 class="section-title">Our Flexiable Pricing Plan</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.</p>
                 </div>
             </div>
@@ -932,7 +961,7 @@ get_header();
                 <div class="download-right wow fadeInRight" data-wow-duration="1s" data-wow-delay=".75s">
                     <div class="site-heading mb-30">
                         <span class="site-title-tagline">Download App</span>
-                        <h2 class="site-title">Get More In Our Application Sit Back And Enjoy</h2>
+                        <h2 class="section-title">Get More In Our Application Sit Back And Enjoy</h2>
                         <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using is that it has normal distribution of letters.</p>
                     </div>
                     <div class="download-btn">
