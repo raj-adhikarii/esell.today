@@ -949,28 +949,42 @@ get_header();
 <!-- download area -->
 <div class="download-area pt-60 pb-60">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="download-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="download-img">
-                        <img src="https://images.unsplash.com/photo-1613442301239-ea2478101ea7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
+        <?php if(have_rows('download_app')) : ?>
+            <div class="row align-items-center">
+                <?php while(have_rows('download_app')): the_row(); ?>
+                <div class="col-lg-6">
+                        <div class="download-left wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".25s">
+                            <div class="download-img">
+                                <?php $download_image = get_sub_field('down_img'); ?>
+                                    <?php if(!empty($download_image)): ?>
+                                        <img src="<?php echo $download_image['url']; ?>" alt="<?php echo $download_image['alt']; ?>">
+                                    <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-lg-6">
+                        <div class="download-right wow fadeInRight" data-wow-duration="1s" data-wow-delay=".75s">
+                            <div class="site-heading mb-30">
+                                <span class="site-title-tagline">Download App</span>
+                                    <?php $down_title = get_sub_field('download_app_title'); ?>
+                                        <?php if(!empty($down_title)) : ?>
+                                            <h2 class="section-title"><?php echo ($down_title); ?></h2>
+                                        <?php endif; ?>
+
+                                    <?php $down_desc = get_sub_field('down_desc'); ?>
+                                        <?php if(!empty($down_desc)): ?>
+                                            <?php echo ($down_desc); ?>
+                                        <?php endif; ?>
+                            </div>
+                            <div class="download-btn">
+                                <a href="#"><img src="assets/img/download/google-play.png" alt=""></a>
+                                <a href="#"><img src="assets/img/download/app-store.png" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile; ?> 
             </div>
-            <div class="col-lg-6">
-                <div class="download-right wow fadeInRight" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="site-heading mb-30">
-                        <span class="site-title-tagline">Download App</span>
-                        <h2 class="section-title">Get More In Our Application Sit Back And Enjoy</h2>
-                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using is that it has normal distribution of letters.</p>
-                    </div>
-                    <div class="download-btn">
-                        <a href="#"><img src="assets/img/download/google-play.png" alt=""></a>
-                        <a href="#"><img src="assets/img/download/app-store.png" alt=""></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>
 <!-- download area end -->
