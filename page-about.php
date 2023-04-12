@@ -117,144 +117,72 @@
 </div>
 <!-- counter area end -->
 
-
-
 <!-- testimonial-area -->
 <div class="testimonial-area py-120">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-7 mx-auto">
-                <div class="site-heading text-center">
-                    <span class="site-title-tagline">Testimonials</span>
-                    <h2 class="section-title">What Our Client Say's</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+        <?php if(have_rows('testimonial_sec')): ?>
+                <div class="row">
+                    <?php while(have_rows('testimonial_sec')): the_row(); ?>
+                        <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
+                            <div class="site-heading text-center">
+                                <span class="site-title-tagline">Testimonials</span>
+                                    <?php $section_title = get_sub_field('testi_title'); ?>
+                                        <?php if(!empty($section_title)) : ?>
+                                            <h2 class="section-title"><?php echo ($section_title); ?></h2>
+                                        <?php endif; ?>
+
+                                    <?php $section_desc = get_sub_field('testi_desc'); ?>
+                                        <?php if(!empty($section_desc)): ?>
+                                            <?php echo ($section_desc); ?>
+                                        <?php endif; ?>
+                            </div>
+                        </div>
                 </div>
-            </div>
-        </div>
-        <div class="testimonial-slider owl-carousel owl-theme">
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-sumit-kapoor-718261-1.jpg" alt="">
+                <?php if(have_rows('testimonial_card')) : ?>
+                    <div class="testimonial-slider owl-carousel owl-theme">
+                        <?php while(have_rows('testimonial_card')): the_row(); ?>
+                            <div class="testimonial-item">
+                                <div class="testimonial-content">
+                                    <div class="testimonial-author-img">
+                                        <?php $testi_img = get_sub_field('testimonial_img'); ?>
+                                            <?php if(!empty($testi_img)): ?>
+                                                <img src="<?php echo $testi_img['url']; ?>" alt="<?php echo $testi_img['alt']; ?>">
+                                            <?php endif; ?>
+                                    </div>
+                                    <div class="testimonial-author-info">
+                                        <?php $name = get_sub_field('name'); ?>
+                                            <?php if(!empty($name)): ?>
+                                                <h4><?php echo ($name); ?></h4>
+                                            <?php endif; ?>
+                                        <?php $designation = get_sub_field('title'); ?>
+                                            <?php if(!empty($title)) : ?>
+                                                <?php echo ($designation); ?>
+                                            <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="testimonial-quote">
+                                    <?php $testi_desc = get_sub_field('reviews'); ?>
+                                        <?php if(!empty($testi_desc)) : ?>
+                                            <?php echo ($testi_desc); ?>
+                                        <?php endif; ?>
+                                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
+                                </div>
+                                <div class="testimonial-rate">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
                     </div>
-                    <div class="testimonial-author-info">
-                        <h4>Sylvia H Green</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-moose-photos-1587009-1.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Gordo Novak</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-andrea-piacquadio-874158-2.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Reid E Butt</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-moose-photos-1587009-1.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Parker Jimenez</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-andrea-piacquadio-874158-2.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Heruli Nez</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-        </div>
+                <?php endif; ?>
+            <?php endwhile; ?>
+        <?php endif; ?>
     </div>
 </div>
+
 <!-- testimonial-area end -->
 
 
@@ -262,93 +190,62 @@
 <!-- team-area -->
 <div class="team-area pb-120">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-7 mx-auto">
-                <div class="site-heading text-center">
-                    <span class="site-title-tagline">Our Team</span>
-                    <h2 class="section-title">Meet With Our Team</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-lg-3">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1616179054043-7570cd0d47d6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="thumb">
-                    </div>
-                    <div class="team-content">
-                        <div class="team-bio">
-                            <h5><a href="#">Edna Craig</a></h5>
-                            <span>Business Manager</span>
-                        </div>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <?php if(have_rows('team_section')) : ?>  
+            <div class="row">
+                <?php while(have_rows('team_section')): the_row(); ?>
+                    <div class="col-lg-7 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Our Team</span>
+                            <?php $team_title = get_sub_field('team_section'); ?>
+                                <?php if(!empty($team_title)): ?>
+                                    <h2 class="section-title">Meet With Our Team <?php echo ($team_title); ?></h2>
+                                <?php endif; ?>
+
+                            <?php $team_desc = get_sub_field('team_desc'); ?>
+                                <?php if(!empty($team_desc)): ?>
+                                    <?php echo ($team_desc); ?>
+                                <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="thumb">
+
+                <?php if(have_rows('team_card')) : ?>
+                    <div class="row">
+                        <?php while(have_rows('team_card')): the_row(); ?>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="team-item">
+                                    <div class="team-img">
+                                        <?php $team_image = get_sub_field('team_image'); ?>
+                                            <?php if(!empty($team_image)) : ?>
+                                                <img src="<?php echo $team_image['url']; ?>" alt="<?php echo $team_image['alt']; ?>">
+                                            <?php endif; ?>
+                                    </div>
+                                    <div class="team-content">
+                                        <div class="team-bio">
+                                            <?php $team_card_title = get_sub_field('member_name'); ?>
+                                                <?php if(!empty($team_card_title)) : ?>
+                                                    <h5><a href="#"><?php echo ($team_card_title); ?></a></h5>
+                                                <?php endif; ?>
+
+                                            <?php $position = get_sub_field('member_designation'); ?>
+                                                <?php if(!empty($position)) : ?>
+                                                    <span><?php echo ($position); ?></span>
+                                                <?php endif; ?>
+                                        </div>
+                                        <div class="team-social">
+                                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                            <a href="#"><i class="fab fa-twitter"></i></a>
+                                            <a href="#"><i class="fab fa-instagram"></i></a>
+                                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
                     </div>
-                    <div class="team-content">
-                        <div class="team-bio">
-                            <h5><a href="#">Jeffrey Cox</a></h5>
-                            <span>CEO & Founder</span>
-                        </div>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="thumb">
-                    </div>
-                    <div class="team-content">
-                        <div class="team-bio">
-                            <h5><a href="#">Audrey Gadis</a></h5>
-                            <span>Support Manager</span>
-                        </div>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="team-item">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1564522365984-c08ed1f78893?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="thumb">
-                    </div>
-                    <div class="team-content">
-                        <div class="team-bio">
-                            <h5><a href="#">Rodger Garza</a></h5>
-                            <span>Creative Director</span>
-                        </div>
-                        <div class="team-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <?php endif; ?>
+            <?php endwhile; ?>
+        <?php endif; ?>
     </div>
 </div>
 <!-- team-area end -->

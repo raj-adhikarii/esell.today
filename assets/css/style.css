@@ -3001,7 +3001,7 @@ blog css
 .blog-title {
   font-size: 22px;
   margin-bottom: 30px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 
 .blog-item-info p {

@@ -947,7 +947,7 @@ get_header();
 
 
 <!-- download area -->
-<div class="download-area pt-60 pb-60">
+<div class="download-area pt-90 pb-90">
     <div class="container">
         <?php if(have_rows('download_app')) : ?>
             <div class="row align-items-center">
@@ -993,139 +993,69 @@ get_header();
 <!-- testimonial-area -->
 <div class="testimonial-area py-120">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                <div class="site-heading text-center">
-                    <span class="site-title-tagline">Testimonials</span>
-                    <h2 class="site-title">What Our Client Say's</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+        <?php if(have_rows('testimonial_sec')): ?>
+                <div class="row">
+                    <?php while(have_rows('testimonial_sec')): the_row(); ?>
+                        <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
+                            <div class="site-heading text-center">
+                                <span class="site-title-tagline">Testimonials</span>
+                                    <?php $section_title = get_sub_field('testi_title'); ?>
+                                        <?php if(!empty($section_title)) : ?>
+                                            <h2 class="section-title"><?php echo ($section_title); ?></h2>
+                                        <?php endif; ?>
+
+                                    <?php $section_desc = get_sub_field('testi_desc'); ?>
+                                        <?php if(!empty($section_desc)): ?>
+                                            <?php echo ($section_desc); ?>
+                                        <?php endif; ?>
+                            </div>
+                        </div>
                 </div>
-            </div>
-        </div>
-        <div class="testimonial-slider owl-carousel owl-theme">
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-sumit-kapoor-718261-1.jpg" alt="">
+                <?php if(have_rows('testimonial_card')) : ?>
+                    <div class="testimonial-slider owl-carousel owl-theme">
+                        <?php while(have_rows('testimonial_card')): the_row(); ?>
+                            <div class="testimonial-item">
+                                <div class="testimonial-content">
+                                    <div class="testimonial-author-img">
+                                        <?php $testi_img = get_sub_field('testimonial_img'); ?>
+                                            <?php if(!empty($testi_img)): ?>
+                                                <img src="<?php echo $testi_img['url']; ?>" alt="<?php echo $testi_img['alt']; ?>">
+                                            <?php endif; ?>
+                                    </div>
+                                    <div class="testimonial-author-info">
+                                        <?php $name = get_sub_field('name'); ?>
+                                            <?php if(!empty($name)): ?>
+                                                <h4><?php echo ($name); ?></h4>
+                                            <?php endif; ?>
+                                        <?php $designation = get_sub_field('title'); ?>
+                                            <?php if(!empty($title)) : ?>
+                                                <?php echo ($designation); ?>
+                                            <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="testimonial-quote">
+                                    <?php $testi_desc = get_sub_field('reviews'); ?>
+                                        <?php if(!empty($testi_desc)) : ?>
+                                            <?php echo ($testi_desc); ?>
+                                        <?php endif; ?>
+                                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
+                                </div>
+                                <div class="testimonial-rate">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
                     </div>
-                    <div class="testimonial-author-info">
-                        <h4>Sylvia H Green</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-moose-photos-1587009-1.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Gordo Novak</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-andrea-piacquadio-874158-2.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Reid E Butt</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-moose-photos-1587009-1.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Parker Jimenez</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <div class="testimonial-author-img">
-                        <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pexels-sumit-kapoor-718261-1.jpg" alt="">
-                    </div>
-                    <div class="testimonial-author-info">
-                        <h4>Heruli Nez</h4>
-                        <p>Customer</p>
-                    </div>
-                </div>
-                <div class="testimonial-quote">
-                    <p>
-                        There are many variations of majority have suffered alteration popularity belief believable in some form by injected.
-                    </p>
-                    <div class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></div>
-                </div>
-                <div class="testimonial-rate">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-        </div>
+                <?php endif; ?>
+            <?php endwhile; ?>
+        <?php endif; ?>
     </div>
 </div>
+
 <!-- testimonial-area end -->
 
 
@@ -1136,89 +1066,81 @@ get_header();
             <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Our Blog</span>
-                    <h2 class="site-title">Our Latest News & Blog</h2>
+                    <h2 class="section-title">Our Latest News & Blog</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.</p>
                 </div>
             </div>
         </div>
+
+        <?php $args = array(
+            'post_type' => 'post',
+            'post_per_page' => '3',
+            'order' => 'DESC',
+            'orderby' => 'date'
+        );
+
+        $query = new WP_Query($args); ?>
+
+       <?php if($query->have_posts()): ?>
         <div class="row">
+            <?php while($query->have_posts()): $query->the_post(); ?>
             <div class="col-md-6 col-lg-4">
                 <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                    <?php if(has_post_thumbnail()): ?>
                     <div class="blog-item-img">
-                        <img src="https://images.pexels.com/photos/39284/macbook-apple-imac-computer-39284.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Thumb">
+                    <?php the_post_thumbnail( 'full', [ 'alt' => esc_html ( get_the_title() ) ] ); ?>
                     </div>
+                    <?php endif; ?>
                     <div class="blog-item-info">
                         <div class="blog-item-meta">
                             <ul>
-                                <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                <li><a href="#"><i class="far fa-calendar-alt"></i> December 04, 2022</a></li>
+                                <li><a href="#"><i class="far fa-user-circle"></i> By: <?php the_author(); ?></a></li>
+                                <li><a href="#"><i class="far fa-calendar-alt"></i> <?php the_time('F j, Y'); ?></a></li>
                             </ul>
                         </div>
                         <h4 class="blog-title">
-                            <a href="#">There are many variations for passages available suffer</a>
+                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                         </h4>
-                        <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
+                        <a class="theme-btn" href="<?php the_permalink(); ?>">Read More<i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                    <div class="blog-item-img">
-                        <img src="https://images.pexels.com/photos/245032/pexels-photo-245032.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Thumb">
-                    </div>
-                    <div class="blog-item-info">
-                        <div class="blog-item-meta">
-                            <ul>
-                                <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                <li><a href="#"><i class="far fa-calendar-alt"></i> December 04, 2022</a></li>
-                            </ul>
-                        </div>
-                        <h4 class="blog-title">
-                            <a href="#">There are many variations for passages available suffer</a>
-                        </h4>
-                        <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="blog-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="blog-item-img">
-                        <img src="https://images.pexels.com/photos/245032/pexels-photo-245032.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Thumb">
-                    </div>
-                    <div class="blog-item-info">
-                        <div class="blog-item-meta">
-                            <ul>
-                                <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
-                                <li><a href="#"><i class="far fa-calendar-alt"></i> December 04, 2022</a></li>
-                            </ul>
-                        </div>
-                        <h4 class="blog-title">
-                            <a href="#">There are many variations for passages available suffer</a>
-                        </h4>
-                        <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
+            <?php endwhile; ?>
         </div>
+       <?php wp_reset_postdata(); ?>
+        <?php endif; ?>
     </div>
 </div>
 <!-- blog-area end -->
 
 
 <!-- partner area -->
-<div class="partner-area bg pt-50 pb-50">
-    <div class="container">
-        <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-            <!-- <img src="https://images.pexels.com/photos/258174/pexels-photo-258174.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="thumb"> -->
-            <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pngegg-4.png" alt="thumb">
-            <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pngegg-1.png" alt="thumb">
-            <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pngegg-2.png" alt="thumb">
-            <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pngegg-3.png" alt="thumb">
-            <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pngegg-1.png" alt="thumb">
-            <img src="http://localhost/esell.today/wp-content/uploads/2023/03/pngegg-2.png" alt="thumb">
+<?php
+    // Check if the partner repeater field exists and has rows
+    if( have_rows('footer_client_list') ):
+        ?>
+        <div class="partner-area bg pt-50 pb-50">
+            <div class="container">
+                <div class="partner-wrapper partner-slider owl-carousel owl-theme">
+                    <?php
+                    // Loop through the partner repeater field
+                    while( have_rows('footer_client_list') ) : the_row();
+                        // Retrieve the image field
+                        $image = get_sub_field('client_img');
+                        // Output the image with an <img> tag
+                        if( $image ) {
+                            $url = $image['url'];
+                            $alt = $image['alt'];
+                            echo '<img src="' . $url . '" alt="' . $alt . '">';
+                        }
+                    endwhile;
+                    ?>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+        <?php
+    endif;
+?>
 <!-- partner area end -->
 
 </main>
