@@ -25,74 +25,33 @@
                         </div>
                     </div>
                 </div>
+
+                <?php
+                $args = array(
+                    'post_type' => 'location',
+                    'posts_per_page' => 6
+                );
+
+                $query = new WP_Query($args); ?>
+
+                <?php if($query->have_posts()) : ?>
                 <div class="row align-items-center">
-                    <div class="col-md-12 col-lg-6">
+                    <?php while($query->have_posts()): $query->the_post(); ?> 
+                    <div class="col-md-12 col-lg-4">
                         <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="location-img">
                                 <img src="https://images.unsplash.com/photo-1588992370249-1b0fcaf6249b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
                             </div>
                             <div class="location-info">
-                                <h4>New York</h4>
+                                <h4>New York <?php the_title(); ?></h4>
                                 <span><i class="far fa-location-dot"></i> 30 Ads</span>
                             </div>
                         </a>
                     </div>
-                    <div class="col-md-6 col-lg-3">
-                        <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                            <div class="location-img">
-                                <img src="https://images.unsplash.com/photo-1513094735237-8f2714d57c13?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80" alt="">
-                            </div>
-                            <div class="location-info">
-                                <h4>San Francisco</h4>
-                                <span><i class="far fa-location-dot"></i> 25 Ads</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                            <div class="location-img">
-                                <img src="https://images.unsplash.com/photo-1555529669-83329d5fac8e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1941&q=80" alt="">
-                            </div>
-                            <div class="location-info">
-                                <h4>Florida</h4>
-                                <span><i class="far fa-location-dot"></i> 15 Ads</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                            <div class="location-img">
-                                <img src="https://images.unsplash.com/photo-1587141121200-3cdb4c1b78a7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
-                            </div>
-                            <div class="location-info">
-                                <h4>Miami</h4>
-                                <span><i class="far fa-location-dot"></i> 40 Ads</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                            <div class="location-img">
-                                <img src="https://images.unsplash.com/photo-1603466474065-e91b8dfff202?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
-                            </div>
-                            <div class="location-info">
-                                <h4>London</h4>
-                                <span><i class="far fa-location-dot"></i> 50 Ads</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-12 col-lg-6">
-                        <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                            <div class="location-img">
-                                <img src="https://images.unsplash.com/photo-1589526174056-2d6960ead9a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                            </div>
-                            <div class="location-info">
-                                <h4>Los Angeles</h4>
-                                <span><i class="far fa-location-dot"></i> 45 Ads</span>
-                            </div>
-                        </a>
-                    </div>
+                    <?php endwhile; ?>
                 </div>
+                <?php wp_reset_postdata(); ?>
+                <?php endif; ?>
             </div>
         </div>
         <!-- location area end -->

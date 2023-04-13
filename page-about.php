@@ -196,9 +196,9 @@
                     <div class="col-lg-7 mx-auto">
                         <div class="site-heading text-center">
                             <span class="site-title-tagline">Our Team</span>
-                            <?php $team_title = get_sub_field('team_section'); ?>
+                            <?php $team_title = get_sub_field('team_title'); ?>
                                 <?php if(!empty($team_title)): ?>
-                                    <h2 class="section-title">Meet With Our Team <?php echo ($team_title); ?></h2>
+                                    <h2 class="section-title"><?php echo ($team_title); ?></h2>
                                 <?php endif; ?>
 
                             <?php $team_desc = get_sub_field('team_desc'); ?>

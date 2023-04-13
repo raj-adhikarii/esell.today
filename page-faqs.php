@@ -21,17 +21,28 @@
 <!-- faq area -->
 <div class="faq-area py-120">
     <div class="container">
+        <?php 
+        $counter = 1;
+        $head = 100;
+        if(have_rows('faqs_section')): ?>
+
         <div class="accordion" id="accordionExample">
             <div class="row">
+                <?php while(have_rows('faqs_section')): the_row(); ?>
                 <div class="col-lg-6">
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading1">
+                        <h2 class="accordion-header" id="<?php echo $head; ?>">
+                            <?php $faqs_title = get_sub_field('faqs_title'); ?>
+                           
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                                <span><i class="far fa-question"></i></span> What Are The Charges Of Services ?
+                                data-bs-target="#<?php echo $counter; ?>" aria-expanded="true" aria-controls="<?php echo $counter; ?>">
+                                <span><i class="far fa-question"></i></span> 
+                                <?php if(!empty($faqs_title)): ?>
+                                <?php echo ($faqs_title); ?>
+                                <?php endif; ?>
                             </button>
                         </h2>
-                        <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1"
+                        <div id="<?php echo $counter; ?>" class="accordion-collapse collapse show" aria-labelledby="<?php echo $head; ?>"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 We denounce with righteous indignation and dislike men who
@@ -74,6 +85,11 @@
                         </div>
                     </div>
                 </div>
+                
+                <?php 
+            $counter++;
+            $head++;
+            endwhile; ?>
                 <div class="col-lg-6">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading4">
@@ -126,6 +142,7 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 <!-- faq area end -->

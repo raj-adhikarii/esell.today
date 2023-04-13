@@ -816,7 +816,12 @@ get_header();
 
 <!-- cta-area -->
 <?php if(have_rows('marketplace_section')): ?>
-    <div class="cta-area" style="background: url(https://images.unsplash.com/photo-1483134529005-4c93495107d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80); background-size: cover;background-position:center center;">
+    <div class="cta-area" style="background: url(https://images.unsplash.com/photo-1483134529005-4c93495107d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80);background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    z-index: 1;">
         <div class="container">
             <div class="row">
                 <?php while(have_rows('marketplace_section')): the_row(); ?>

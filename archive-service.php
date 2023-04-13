@@ -15,92 +15,44 @@
         <!-- service area -->
         <div class="service-area bg py-120">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-7 mx-auto">
-                        <div class="site-heading text-center">
-                            <span class="site-title-tagline">Services</span>
-                            <h2 class="section-title">Our Popular Services</h2>
-                            <p>It is a long established fact that a reader will be distracted by the readable content.
-                            </p>
-                        </div>
+                    <div class="row">
+                            <div class="col-lg-7 mx-auto">
+                                <div class="site-heading text-center">
+                                    <span class="site-title-tagline">Services</span>
+                                            <h2 class="section-title">Our Popular Services </h2>
+                                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+                                </div>
+                            </div>
                     </div>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <i class="fal fa-dolly-flatbed"></i>
+
+                <?php
+                $args = array(
+                    'post_type' => 'service',
+                    'posts_per_page' => 3
+                );
+
+                $query = new WP_Query($args); ?>
+                <?php if($query->have_posts()) : ?>
+                    <div class="row align-items-center">
+                        <?php while($query->have_posts()): $query->the_post(); ?>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="service-item">
+                                    <div class="service-icon">
+                                        <i class="fal fa-dolly-flatbed"></i>
+                                    </div>
+                                    <div class="service-content">
+                                        <h4> <?php the_title(); ?></h4>
+                                        <p>It is a long established fact that readable content of a page when looking at its layout.</p>
+                                        <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="service-content">
-                                <h4>Buy Item Directly</h4>
-                                <p>It is a long established fact that readable content of a page when looking at its layout.</p>
-                                <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
+                        <?php endwhile; ?>
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <i class="fal fa-sack-dollar"></i>
-                            </div>
-                            <div class="service-content">
-                                <h4>Sell Your Item Safely</h4>
-                                <p>It is a long established fact that readable content of a page when looking at its layout.</p>
-                                <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <i class="fal fa-hands-heart"></i>
-                            </div>
-                            <div class="service-content">
-                                <h4>Friendly Platform</h4>
-                                <p>It is a long established fact that readable content of a page when looking at its layout.</p>
-                                <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <i class="fal fa-user-shield"></i>
-                            </div>
-                            <div class="service-content">
-                                <h4>Verified Users</h4>
-                                <p>It is a long established fact that readable content of a page when looking at its layout.</p>
-                                <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <i class="fal fa-wallet"></i>
-                            </div>
-                            <div class="service-content">
-                                <h4>Pay in Person</h4>
-                                <p>It is a long established fact that readable content of a page when looking at its layout.</p>
-                                <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <i class="fal fa-headset"></i>
-                            </div>
-                            <div class="service-content">
-                                <h4>24/7 Support</h4>
-                                <p>It is a long established fact that readable content of a page when looking at its layout.</p>
-                                <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
+
         <!-- service area end -->
 </main>
 <?php get_footer();
