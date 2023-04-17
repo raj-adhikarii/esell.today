@@ -169,10 +169,22 @@
 			);
 			?> -->
                         <div class="header-nav-right">
-                            <div class="header-account">
-                                <a href="login.html" class="header-account-link"><i class="far fa-user-circle"></i> Sign
-                                    In</a>
-                            </div>
+                        <?php if ( is_user_logged_in() ) { ?>
+    <div class="header-account">
+        <a href="<?php echo esc_url( get_edit_profile_url() ); ?>" class="header-account-link">
+            <?php echo get_avatar( get_current_user_id(), 40 ); ?>
+            <?php $current_user = wp_get_current_user(); ?>
+            <?php echo esc_html( $current_user->display_name ); ?>
+        </a>
+    </div>
+<?php } else { ?>
+    <div class="header-account">
+        <a href="<?php echo esc_url( wp_login_url() ); ?>" class="header-account-link">
+            <i class="far fa-user-circle"></i> Sign In
+        </a>
+    </div>
+<?php } ?>
+
                             <div class="header-btn">
                                 <a href="post-ad.html" class="theme-btn mt-2"><span
                                         class="far fa-plus-circle"></span>Post Your Ads</a>

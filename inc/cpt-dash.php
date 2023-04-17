@@ -97,59 +97,6 @@ function service_register_post_type() {
 	register_post_type( 'service', $args );
 }
 
-// // Testimonial
-// add_action( 'init', 'testimonial_register_post_type' );
-// function testimonial_register_post_type() {
-//     $args = [
-//         'label'  => esc_html__( 'Testimonials', 'text-domain' ),
-//         'labels' => [
-//             'menu_name'          => esc_html__( 'Testimonials', 'esell-today' ),
-//             'name_admin_bar'     => esc_html__( 'Testimonial', 'esell-today' ),
-//             'add_new'            => esc_html__( 'Add Testimonial', 'esell-today' ),
-//             'add_new_item'       => esc_html__( 'Add new Testimonial', 'esell-today' ),
-//             'new_item'           => esc_html__( 'New Testimonial', 'esell-today' ),
-//             'edit_item'          => esc_html__( 'Edit Testimonial', 'esell-today' ),
-//             'view_item'          => esc_html__( 'View Testimonial', 'esell-today' ),
-//             'update_item'        => esc_html__( 'View Testimonial', 'esell-today' ),
-//             'all_items'          => esc_html__( 'All Testimonials', 'esell-today' ),
-//             'search_items'       => esc_html__( 'Search Testimonials', 'esell-today' ),
-//             'parent_item_colon'  => esc_html__( 'Parent Testimonial', 'esell-today' ),
-//             'not_found'          => esc_html__( 'No Testimonials found', 'esell-today' ),
-//             'not_found_in_trash' => esc_html__( 'No Testimonials found in Trash', 'esell-today' ),
-//             'name'               => esc_html__( 'Testimonials', 'esell-today' ),
-//             'singular_name'      => esc_html__( 'Testimonial', 'esell-today' ),
-//         ],
-//         'public'              => true,
-//         'exclude_from_search' => true,
-//         'publicly_queryable'  => false,
-//         'show_ui'             => true,
-//         'show_in_nav_menus'   => true,
-//         'show_in_admin_bar'   => true,
-//         'show_in_rest'        => true,
-//         'capability_type'     => 'post',
-//         'hierarchical'        => false,
-//         'has_archive'         => true,
-//         'query_var'           => true,
-//         'can_export'          => true,
-//         'rewrite_no_front'    => false,
-//         'show_in_menu'        => true,
-//         'supports' => [
-//             'title',
-//             'editor',
-//             'thumbnail',
-//             'trackbacks',
-//             'custom-fields',
-//             'revisions',
-//             'page-attributes',
-//         ],
-        
-//         'rewrite' => true
-//     ];
-
-//     register_post_type( 'testimonial', $args );
-// }
-
-
 //vendor post type
 function custom_post_type_vendor() {
 
@@ -243,3 +190,19 @@ function store_register_post_type() {
 
 	register_post_type( 'store', $args );
 }
+
+//Register Map Widget
+function wpb_widgets_init() {
+ 
+    register_sidebar( array(
+        'name' => __( 'Map', 'wpb' ),
+        'id' => 'map_widget',
+        'description' => __( 'The main map widget appears on the page choch contain map field', 'wpb' ),
+        'before_widget' => '<aside id="%1$s" class="widgett %2$s">',
+        'after_widget' => '</aside>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
+    ) );
+    }
+ 
+add_action( 'widgets_init', 'wpb_widgets_init' );

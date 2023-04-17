@@ -89,14 +89,6 @@ function e_sell_options_callback() {
                     <label for="open_time">Open Time</label>
                     <input type="text" name="open_time" id="open_time" class="form-control" value="<?php echo esc_attr( get_option( 'open_time' ) ); ?>">
                 </div>
-
-                <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
-                    <input type="file" class="form-control" id="image" accept="image/*" value="<?php echo esc_attr( get_option( 'image' ) ); ?>">
-                </div>
-                <div class="mb-3">
-                    <img id="preview" src="" alt="" class="img-thumbnail">
-                </div>
             </div>
 
             <div class="form-group mt-2">
@@ -169,33 +161,7 @@ function e_sell_options_callback() {
             }
         }
     </style>
-    <script>
-        // Get the input element
-const input = document.getElementById('image');
-
-// Add event listener on input change
-input.addEventListener('change', () => {
-  // Get the selected file
-  const file = input.files[0];
-
-  // If file is selected
-  if (file) {
-    // Create a FileReader object
-    const reader = new FileReader();
-
-    // Set the preview image source when reader is loaded
-    reader.addEventListener('load', () => {
-      document.getElementById('preview').setAttribute('src', reader.result);
-    });
-
-    // Read the file as a Data URL
-    reader.readAsDataURL(file);
-  } else {
-    // Clear the preview image source
-    document.getElementById('preview').setAttribute('src', '');
-  }
-});
-
-    </script>
     <?php
 }
+
+

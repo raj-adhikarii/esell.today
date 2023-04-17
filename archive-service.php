@@ -43,7 +43,7 @@
                                     <div class="service-content">
                                         <h4> <?php the_title(); ?></h4>
                                         <p>It is a long established fact that readable content of a page when looking at its layout.</p>
-                                        <a href="#" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                        <a href="<?php the_permalink(); ?>" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
