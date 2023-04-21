@@ -126,8 +126,32 @@ get_header();
 </div>
 <?php endif; ?>
 <!-- hero area end -->
+<?php $args = array(
+    'post_type'      => 'product',
+    'posts_per_page' => 10,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+);
 
+$products = new WP_Query( $args );
 
+if ( $products->have_posts() ) {
+    while ( $products->have_posts() ) {
+        $products->the_post();
+        $product = wc_get_product( get_the_ID() );
+        
+        // Display the product information
+        echo 'Product Name: ' . $product->get_name() . '<br>';
+        echo 'Product Price: ' . $product->get_price() . '<br>';
+        echo 'Product SKU: ' . $product->get_sku() . '<br>';
+        // and so on...
+    }
+} else {
+    echo 'No products found';
+}
+
+wp_reset_postdata();
+?>
 
 <!-- process area -->
 

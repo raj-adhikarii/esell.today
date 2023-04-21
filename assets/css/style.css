@@ -168,6 +168,10 @@ label {
   opacity: 1;
 }
 
+.fa, .far, .fas {
+  font-family: 'Font Awesome 5 Pro' !important;
+}
+
 
 
 

@@ -70,123 +70,71 @@
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link active" href="<?php echo site_url(); ?>">Home</a>
-                                <!-- <ul class="dropdown-menu fade-down">
-                                    <li><a class="dropdown-item" href="index.html">Home One</a></li>
-                                    <li><a class="dropdown-item" href="index-2.html">Home Two</a></li>
-                                    <li><a class="dropdown-item" href="index-3.html">Home Three</a></li>
-                                    <li><a class="dropdown-item" href="index-4.html">Home Four</a></li>
-                                    <li><a class="dropdown-item" href="index-5.html">Home Five</a></li>
-                                </ul> -->
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/about">About</a></li>
-                            <!-- <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">All Ads</a>
-                                <ul class="dropdown-menu fade-down">
-                                    <li><a class="dropdown-item" href="ad-grid.html">Ads Grid One</a></li>
-                                    <li><a class="dropdown-item" href="ad-grid-2.html">Ads Grid Two</a></li>
-                                    <li><a class="dropdown-item" href="ad-grid-3.html">Ads Grid Three</a></li>
-                                    <li><a class="dropdown-item" href="ad-list.html">Ads List One</a></li>
-                                    <li><a class="dropdown-item" href="ad-list-2.html">Ads List Two</a></li>
-                                    <li><a class="dropdown-item" href="ad-list-3.html">Ads List Three</a></li>
-                                    <li><a class="dropdown-item" href="ad-single.html">Ads Single One</a></li>
-                                    <li><a class="dropdown-item" href="ad-single-2.html">Ads Single Two</a></li>
-                                </ul>
-                            </li> -->
+                           
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/service">Services</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/location">Location</a></li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
-                                <ul class="dropdown-menu fade-down">
-                                    <li><a class="dropdown-item" href="about.html">About Us</a></li>
-                                    <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="#">My Account</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="dashboard.html">Dashboard</a>
-                                            <li><a class="dropdown-item" href="profile.html">My Profile</a>
-                                            <li><a class="dropdown-item" href="profile-ad.html">My Ads</a>
-                                            <li><a class="dropdown-item" href="post-ad.html">Post Ads</a>
-                                            <li><a class="dropdown-item" href="profile-ad-setting.html">Ads Settings</a>
-                                            <li><a class="dropdown-item" href="profile-favorite.html">My Favorites</a>
-                                            <li><a class="dropdown-item" href="profile-message.html">Messages</a>
-                                            <li><a class="dropdown-item" href="profile-payment.html">Payments</a>
-                                            <li><a class="dropdown-item" href="profile-setting.html">Settings</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="#">Authentication</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="login.html">Sign In</a></li>
-                                            <li><a class="dropdown-item" href="register.html">Sign Up</a></li>
-                                            <li><a class="dropdown-item" href="forgot-password.html">Forgot Password</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="<?php echo site_url(); ?>/service">Services</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="service.html">Services</a></li>
-                                            <li><a class="dropdown-item" href="service-single.html">Service Single</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="#">Stores</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="store.html">All Stores</a></li>
-                                            <li><a class="dropdown-item" href="store-single.html">Store Single</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="#">Extra Pages</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="coming-soon.html">Coming Soon</a></li>
-                                            <li><a class="dropdown-item" href="terms.html">Terms Of Service</a></li>
-                                            <li><a class="dropdown-item" href="privacy.html">Privacy Policy</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="dropdown-item" href="team.html">Our Team</a></li>
-                                    <li><a class="dropdown-item" href="pricing.html">Pricing Plan</a></li>
-                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/faqs">Faq</a></li>
-                                    <li><a class="dropdown-item" href="testimonial.html">Testimonials</a></li>
-                                    <li><a class="dropdown-item" href="404.html">404 Error</a></li>
-                                </ul>
-                            </li>
+                           
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs">FAQs</a></li>
-                            <!-- <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="<?php echo site_url(); ?>/blog" data-bs-toggle="dropdown">Blog</a>
-                                <ul class="dropdown-menu fade-down">
-                                    <li><a class="dropdown-item" href="blog.html">Blog One</a></li>
-                                    <li><a class="dropdown-item" href="blog-2.html">Blog Two</a></li>
-                                    <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
-                                </ul>
-                            </li> -->
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact">Contact</a></li>
                         </ul>
 						<!-- <?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'menu-1',
-					'menu_id'        => 'primary-menu',
-				)
-			);
-			?> -->
+                            wp_nav_menu(
+                                array(
+                                    'theme_location' => 'menu-1',
+                                    'menu_id'        => 'primary-menu',
+                                )
+                            );
+                            ?> -->
+                                    
+
                         <div class="header-nav-right">
-                        <?php if ( is_user_logged_in() ) { ?>
-    <div class="header-account">
-        <a href="<?php echo esc_url( get_edit_profile_url() ); ?>" class="header-account-link">
-            <?php echo get_avatar( get_current_user_id(), 40 ); ?>
-            <?php $current_user = wp_get_current_user(); ?>
-            <?php echo esc_html( $current_user->display_name ); ?>
-        </a>
-    </div>
-<?php } else { ?>
-    <div class="header-account">
-        <a href="<?php echo esc_url( wp_login_url() ); ?>" class="header-account-link">
-            <i class="far fa-user-circle"></i> Sign In
-        </a>
-    </div>
-<?php } ?>
+                            <div class="header-account">
+                                <div class="dropdown">
+                                    <?php if ( is_user_logged_in() ) : ?>
+                                        <?php
+                                        $current_user = wp_get_current_user();
+                                        $user_profile_link = get_author_posts_url( $current_user->ID );
+                                        $user_profile_image = get_avatar( $current_user->ID, 32 );
+                                        ?>
+                                        <div data-bs-toggle="dropdown" aria-expanded="false">
+                                            <?php echo $user_profile_image; ?>
+                                        </div>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard"><i class="far fa-user"></i> My Profile</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/products"><i class="far fa-layer-group"></i> My Ads</a></li>
+                                            <?php
+                                                if ( is_user_logged_in() ) {
+                                                    // User is logged in, redirect to the product dashboard page
+                                                    $dashboard_url = site_url( '/dashboard/products' );
+                                                    ?>
+                                                    <li><a class="dropdown-item" href="<?php echo $dashboard_url; ?>"><i class="far fa-layer-group"></i> My Ads</a></li>
+                                                    <?php
+                                                } else {
+                                                    // User is not logged in, redirect to the login page
+                                                    $login_url = wp_login_url( get_permalink() );
+                                                    ?>
+                                                    <li><a class="dropdown-item" href="<?php echo $login_url; ?>"><i class="fas fa-sign-in-alt"></i> <?php esc_html_e( 'Login', 'text-domain' ); ?></a></li>
+                                                    <?php
+                                                }
+                                                ?>
+
+                                            <li><a class="dropdown-item" href="<?php echo $user_profile_link; ?>?type=favorite"><i class="far fa-heart"></i> My Favorites</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo $user_profile_link; ?>?type=settings"><i class="far fa-cog"></i> Settings</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo wp_logout_url(); ?>"><i class="far fa-sign-out"></i> Log Out</a></li>
+                                        </ul>
+                                    <?php else : ?>
+                                        <div class="header-account">
+                                            <a href="<?php echo site_url(); ?>/dashboard" class="header-account-link"><i class="far fa-user-circle"></i> Sign
+                                                In</a>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
 
                             <div class="header-btn">
-                                <a href="post-ad.html" class="theme-btn mt-2"><span
+                                <a href="<?php echo site_url(); ?>/my-account" class="theme-btn mt-2"><span
                                         class="far fa-plus-circle"></span>Post Your Ads</a>
                             </div>
                         </div>
