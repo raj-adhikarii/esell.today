@@ -126,32 +126,6 @@ get_header();
 </div>
 <?php endif; ?>
 <!-- hero area end -->
-<?php $args = array(
-    'post_type'      => 'product',
-    'posts_per_page' => 10,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-);
-
-$products = new WP_Query( $args );
-
-if ( $products->have_posts() ) {
-    while ( $products->have_posts() ) {
-        $products->the_post();
-        $product = wc_get_product( get_the_ID() );
-        
-        // Display the product information
-        echo 'Product Name: ' . $product->get_name() . '<br>';
-        echo 'Product Price: ' . $product->get_price() . '<br>';
-        echo 'Product SKU: ' . $product->get_sku() . '<br>';
-        // and so on...
-    }
-} else {
-    echo 'No products found';
-}
-
-wp_reset_postdata();
-?>
 
 <!-- process area -->
 
@@ -217,8 +191,6 @@ wp_reset_postdata();
 
 <!-- process area end -->
 
-
-
 <!-- product area -->
 <div class="product-area py-120">
     <div class="container">
@@ -226,425 +198,169 @@ wp_reset_postdata();
             <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Popular Ads</span>
-                    <h2 class="site-title">Explore Our Popular Ads</h2>
+                    <h2 class="section-title">Explore Our Popular Ads</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.
                     </p>
                 </div>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="product-img">
-                        <span class="product-status trending"><i class="fas fa-bolt-lightning"></i></span>
-                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-tv"></i>
+            <?php
+                $args = array(
+                    'post_type'      => 'product',
+                    'posts_per_page' => 8,
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                );
+
+                $products = new WP_Query( $args );
+
+                if ( $products->have_posts() ) :
+                    while ( $products->have_posts() ) : $products->the_post();
+                        global $product;
+                        $product_id   = $product->get_id();
+                        $product_name = $product->get_name();
+                        $product_price = $product->get_price();
+                        $product_sku = $product->get_sku();
+                        $product_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($product_id), 'medium' )[0];
+                        ?>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                                <div class="product-img">
+                                    <span class="product-status trending"><i class="fas fa-bolt-lightning"></i></span>
+                                    <?php if ( $product_image_url ): ?>
+                                        <img src="<?php echo esc_url( $product_image_url ); ?>" alt="<?php echo esc_attr( $product_name ); ?>">
+                                    <?php endif; ?>
+                                    <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
                                 </div>
-                                <h6 class="product-category-title"><a href="#">Electronics</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5><a href="#">Wireless Headphone</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$180</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-watch"></i>
+                                <div class="product-content">
+                                    <div class="product-top">
+                                        <div class="product-category">
+                                            <div class="product-category-icon">
+                                                <i class="far fa-tv"></i>
+                                            </div>
+                                            <h6 class="product-category-title"><a href="#"><?php echo $product->get_categories(); ?></a></h6>
+                                        </div>
+                                        <div class="product-rate">
+                                            <i class="fas fa-star"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5><a href="<?php the_permalink(); ?>"><?php echo $product_name; ?></a></h5>
+                                            <?php
+                                                // Get the vendor ID for the current product
+                                                $vendor_id = get_post_field( 'post_author', get_the_ID() );
+
+                                                // Get the vendor's store info
+                                                $store_info = dokan_get_store_info( $vendor_id );
+
+                                                // Output the store location
+                                                echo '<p><i class="far fa-location-dot"></i> ' . $store_info['address']['city'] . ', ' . $store_info['address']['state'] . ', ' . $store_info['address']['country'] . '</p>';
+                                           
+                                                $posted_time = get_the_time('U'); // get the post published time
+                                                $current_time = current_time('timestamp'); // get the current time
+
+                                                $time_diff = human_time_diff($posted_time, $current_time); // get the time elapsed since post was published
+
+                                                echo ' <div class="product-date"><i class="far fa-clock"></i> ' . $time_diff . ' ago' . ' </div>'; // display the time elapsed
+                                            ?>
+
+                                    </div>
+                                    <div class="product-bottom">
+                                        <div class="product-price"><?php echo wc_price($product_price); ?></div>
+                                        <a href="<?php the_permalink(); ?>" class="product-text-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                                    </div>
                                 </div>
-                                <h6 class="product-category-title"><a href="#">Fashions</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
                             </div>
                         </div>
-                        <div class="product-info">
-                            <h5><a href="#">Men's Golden Watch</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$120</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="product-img">
-                        <span class="product-status new">New</span>
-                        <img src="https://images.unsplash.com/photo-1521566652839-697aa473761a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-mobile-button"></i>
-                                </div>
-                                <h6 class="product-category-title"><a href="#">Mobiles</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5><a href="#">iPhone 12 Pro</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$320</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-laptop"></i>
-                                </div>
-                                <h6 class="product-category-title"><a href="#">Laptops</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5><a href="#">Macbook M2 Pro</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$460</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="product-img">
-                        <span class="product-status featured">Featured</span>
-                        <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-backpack"></i>
-                                </div>
-                                <h6 class="product-category-title"><a href="#">Backpacks</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5><a href="#">School Backpack</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$160</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1477901492169-d59e6428fc90?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-buildings"></i>
-                                </div>
-                                <h6 class="product-category-title"><a href="#">Property</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5><a href="#">Modern Apartment</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$150</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="product-img">
-                        <img src="https://plus.unsplash.com/premium_photo-1661281362580-95188f976fa1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-car-side"></i>
-                                </div>
-                                <h6 class="product-category-title"><a href="#">Vehicles</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5><a href="#">Latest Sports Car</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$9,530</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                        <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                    </div>
-                    <div class="product-content">
-                        <div class="product-top">
-                            <div class="product-category">
-                                <div class="product-category-icon">
-                                    <i class="far fa-door-open"></i>
-                                </div>
-                                <h6 class="product-category-title"><a href="#">Furnitures</a></h6>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5><a href="#">Modern Room Furniture</a></h5>
-                            <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                            <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                        </div>
-                        <div class="product-bottom">
-                            <div class="product-price">$270</div>
-                            <a href="#" class="product-text-btn">View Details <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+                    <?php endwhile;
+                    wp_reset_postdata();
+                else :
+                    echo '<p>No products found</p>';
+            endif; ?>
         </div>
     </div>
 </div>
 <!-- product area end -->
 
-
-
 <!-- category area -->
-<div class="category-area bg py-120">
+<div class="location-area bg py-120">
     <div class="container">
         <div class="row">
             <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Category</span>
-                    <h2 class="site-title">Most Popular Category</h2>
+                    <h2 class="section-title">Most Popular category</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.
                     </p>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-tv"></i>
+            <?php
+            $product_categories = get_terms(array(
+                'taxonomy' => 'product_cat',
+                'hide_empty' => true,
+            ));
+            $delay = 0;
+            foreach ($product_categories as $cat) :
+                $cat_thumb_id = get_term_meta($cat->term_id, 'thumbnail_id', true);
+                $cat_thumb_url = wp_get_attachment_thumb_url($cat_thumb_id);
+                ?>
+                <div class="col-6 col-lg-2">
+                    <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="<?= $delay ?>">
+                        <div class="category-content">
+                            <div class="category-icon">
+                                <?php
+                                $category_icon_class = "";
+                                switch ($cat->name) {
+                                case "Electronics":
+                                    $category_icon_class = "fal fa-tv";
+                                    break;
+                                case "Mobiles":
+                                    $category_icon_class = "fal fa-mobile-button";
+                                    break;
+                                case "Property":
+                                    $category_icon_class = "fal fa-buildings";
+                                    break;
+                                case "Laptops":
+                                    $category_icon_class = "fal fa-laptop";
+                                    break;
+                                case "Vehicles":
+                                    $category_icon_class = "fal fa-car-side";
+                                    break;
+                                case "Furnitures":
+                                    $category_icon_class = "fal fa-door-open";
+                                    break;
+                                case "Educations":
+                                    $category_icon_class = "fal fa-graduation-cap";
+                                    break;
+                                case "Animals":
+                                    $category_icon_class = "fal fa-paw-simple";
+                                    break;
+                                case "Fashions":
+                                    $category_icon_class = "fal fa-watch";
+                                    break;
+                                case "Backpacks":
+                                    $category_icon_class = "fal fa-backpack";
+                                    break;
+                                default:
+                                    $category_icon_class = "fal fa-question-circle";
+                                }
+                                ?>
+                                <i class="<?= $category_icon_class ?>"></i>
+                            </div>
+                            <h4 class="category-title"><?= $cat->name ?></h4>
+                            <span class="category-listing"><?= $cat->count ?> Ads</span>
                         </div>
-                        <h4 class="category-title">Electronics</h4>
-                        <span class="category-listing">15 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-mobile-button"></i>
-                        </div>
-                        <h4 class="category-title">Mobiles</h4>
-                        <span class="category-listing">25 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-buildings"></i>
-                        </div>
-                        <h4 class="category-title">Property</h4>
-                        <span class="category-listing">38 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-laptop"></i>
-                        </div>
-                        <h4 class="category-title">Laptops</h4>
-                        <span class="category-listing">56 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.25s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-car-side"></i>
-                        </div>
-                        <h4 class="category-title">Vehicles</h4>
-                        <span class="category-listing">75 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.50s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-door-open"></i>
-                        </div>
-                        <h4 class="category-title">Furnitures</h4>
-                        <span class="category-listing">29 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-graduation-cap"></i>
-                        </div>
-                        <h4 class="category-title">Educations</h4>
-                        <span class="category-listing">95 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-paw-simple"></i>
-                        </div>
-                        <h4 class="category-title">Animals</h4>
-                        <span class="category-listing">82 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-watch"></i>
-                        </div>
-                        <h4 class="category-title">Fashions</h4>
-                        <span class="category-listing">72 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-backpack"></i>
-                        </div>
-                        <h4 class="category-title">Backpacks</h4>
-                        <span class="category-listing">69 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.25s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-gamepad-modern"></i>
-                        </div>
-                        <h4 class="category-title">Sports & Games</h4>
-                        <span class="category-listing">46 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-2">
-                <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.50s">
-                    <div class="category-content">
-                        <div class="category-icon">
-                            <i class="fal fa-heart"></i>
-                        </div>
-                        <h4 class="category-title">Health & Beauty</h4>
-                        <span class="category-listing">39 Ads</span>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+                <?php $delay += 0.25; ?>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>
@@ -659,80 +375,38 @@ wp_reset_postdata();
             <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Location</span>
-                    <h2 class="site-title">Most Popular Location</h2>
+                    <h2 class="section-title">Most Popular Location</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.
                     </p>
                 </div>
             </div>
         </div>
-        <div class="row align-items-center">
-            <div class="col-md-12 col-lg-6">
-                <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="location-img">
-                        <img src="https://images.unsplash.com/photo-1588992370249-1b0fcaf6249b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
+        <?php
+                $args = array(
+                    'post_type' => 'location',
+                    'posts_per_page' => 6
+                );
+
+                $query = new WP_Query($args); ?>
+
+                <?php if($query->have_posts()) : ?>
+                <div class="row align-items-center">
+                    <?php while($query->have_posts()): $query->the_post(); ?> 
+                    <div class="col-md-12 col-lg-4">
+                        <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                            <div class="location-img">
+                                <img src="https://images.unsplash.com/photo-1588992370249-1b0fcaf6249b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
+                            </div>
+                            <div class="location-info">
+                                <h4>New York <?php the_title(); ?></h4>
+                                <span><i class="far fa-location-dot"></i> 30 Ads</span>
+                            </div>
+                        </a>
                     </div>
-                    <div class="location-info">
-                        <h4>New York</h4>
-                        <span><i class="far fa-location-dot"></i> 30 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                    <div class="location-img">
-                        <img src="https://images.unsplash.com/photo-1513094735237-8f2714d57c13?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80" alt="">
-                    </div>
-                    <div class="location-info">
-                        <h4>San Francisco</h4>
-                        <span><i class="far fa-location-dot"></i> 25 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="location-img">
-                        <img src="https://images.unsplash.com/photo-1555529669-83329d5fac8e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1941&q=80" alt="">
-                    </div>
-                    <div class="location-info">
-                        <h4>Florida</h4>
-                        <span><i class="far fa-location-dot"></i> 15 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
-                    <div class="location-img">
-                        <img src="https://images.unsplash.com/photo-1587141121200-3cdb4c1b78a7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
-                    </div>
-                    <div class="location-info">
-                        <h4>Miami</h4>
-                        <span><i class="far fa-location-dot"></i> 40 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
-                    <div class="location-img">
-                        <img src="https://images.unsplash.com/photo-1603466474065-e91b8dfff202?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
-                    </div>
-                    <div class="location-info">
-                        <h4>London</h4>
-                        <span><i class="far fa-location-dot"></i> 50 Ads</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-12 col-lg-6">
-                <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
-                    <div class="location-img">
-                        <img src="https://images.unsplash.com/photo-1589526174056-2d6960ead9a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
-                    </div>
-                    <div class="location-info">
-                        <h4>Los Angeles</h4>
-                        <span><i class="far fa-location-dot"></i> 45 Ads</span>
-                    </div>
-                </a>
-            </div>
-        </div>
+                    <?php endwhile; ?>
+                </div>
+                <?php wp_reset_postdata(); ?>
+                <?php endif; ?>
     </div>
 </div>
 <!-- location area end -->

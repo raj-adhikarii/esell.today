@@ -247,6 +247,9 @@ preloader
 /* ===================
 theme default css
 ====================== */
+.main {
+  margin-top: -10rem;
+}
 
 img.custom-logo{
   max-width: 140px;
