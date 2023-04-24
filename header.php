@@ -71,7 +71,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="<?php echo site_url(); ?>">Home</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/about">About</a></li>
+                            <li class="nav-item"<?php if (is_page('about')) echo 'class="active"' ?>><a class="nav-link" href="<?php echo site_url(); ?>/about">About</a></li>
                            
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/service">Services</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/location">Location</a></li>
@@ -121,7 +121,7 @@
                                                 ?>
 
                                             <li><a class="dropdown-item" href="<?php echo $user_profile_link; ?>?type=favorite"><i class="far fa-heart"></i> My Favorites</a></li>
-                                            <li><a class="dropdown-item" href="<?php echo $user_profile_link; ?>?type=settings"><i class="far fa-cog"></i> Settings</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/settings/store"><i class="far fa-cog"></i> Settings</a></li>
                                             <li><a class="dropdown-item" href="<?php echo wp_logout_url(); ?>"><i class="far fa-sign-out"></i> Log Out</a></li>
                                         </ul>
                                     <?php else : ?>
