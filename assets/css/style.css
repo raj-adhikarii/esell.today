@@ -247,9 +247,6 @@ preloader
 /* ===================
 theme default css
 ====================== */
-.main {
-  margin-top: -10rem;
-}
 
 img.custom-logo{
   max-width: 140px;
@@ -3525,14 +3522,16 @@ contact us css
   margin-bottom: 25px;
 }
 
-.contact-form .form-group .form-control {
+.contact-form .form-group .form-control, 
+.woocommerce form .form-row input.input-text {
   padding: 15px 18px;
   border-radius: 10px;
   box-shadow: none;
   transition: all .5s ease-in-out;
 }
 
-.contact-form .form-group .form-control:focus {
+.contact-form .form-group .form-control:focus,
+.woocommerce form .form-row input.input-text:focus  {
   border-color: var(--accent-color);
 }
 
@@ -5027,7 +5026,37 @@ user profile css
 
 }
 
+/* =================
+  woocommerce css
+ ================= */
+ input[name=coupon_code] {
+  min-width: 200px;
+}
 
+.contact-form .form-group .form-control, .woocommerce form .form-row input.input-text, 
+.select2-container .select2-selection--single{
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.375rem;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: none;
+  transition: all .5s ease-in-out;
+}
+
+.select2-container .select2-selection--single{
+  height: 52px;
+}
 
 /* ===================
 coming soon css 

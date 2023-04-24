@@ -3,12 +3,12 @@
 <main class="main">
 
         <!-- breadcrumb -->
-        <div class="site-breadcrumb" style="background: url(assets/img/breadcrumb/01.jpg)">
+        <div class="site-breadcrumb" style="background: url(https://tinysol.com.au/esell/wp-content/uploads/2023/04/head.jpeg)">
             <div class="container">
                 <h2 class="breadcrumb-title"><?php the_title(); ?></h2>
                 <ul class="breadcrumb-menu">
-                    <li><a href="<?php echo site_url(); ?>">Home</a></li>
-                    <li class="active">Service Single</li>
+                    <li><a href="<?php echo site_url(); ?>/service">Service</a></li>
+                    <li class="active"><?php the_title(); ?></li>
                 </ul>
             </div>
         </div>
