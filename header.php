@@ -71,13 +71,13 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="<?php echo site_url(); ?>">Home</a>
                             </li>
-                            <li class="nav-item"<?php if (is_page('about')) echo 'class="active"' ?>><a class="nav-link" href="<?php echo site_url(); ?>/about">About</a></li>
+                            <li class="nav-item"<?php if (is_page('about')) echo 'class="active"' ?>><a class="nav-link" href="<?php echo site_url(); ?>/about/">About</a></li>
                            
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/service">Services</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/location">Location</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/service/">Services</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/location/">Location</a></li>
                            
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs">FAQs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs/">FAQs</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Contact</a></li>
                         </ul>
 						<!-- <?php
                             wp_nav_menu(
@@ -102,8 +102,8 @@
                                             <?php echo $user_profile_image; ?>
                                         </div>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard"><i class="far fa-user"></i> My Profile</a></li>
-                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/products"><i class="far fa-layer-group"></i> My Ads</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-user"></i> My Profile</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/products/"><i class="far fa-layer-group"></i> My Ads</a></li>
                                             <?php
                                                 if ( is_user_logged_in() ) {
                                                     // User is logged in, redirect to the product dashboard page
@@ -120,13 +120,13 @@
                                                 }
                                                 ?>
 
-                                            <li><a class="dropdown-item" href="<?php echo $user_profile_link; ?>?type=favorite"><i class="far fa-heart"></i> My Favorites</a></li>
-                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/settings/store"><i class="far fa-cog"></i> Settings</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo $user_profile_link; ?>?type=favorite/"><i class="far fa-heart"></i> My Favorites</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/settings/stor/e"><i class="far fa-cog"></i> Settings</a></li>
                                             <li><a class="dropdown-item" href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Log Out</a></li>
                                         </ul>
                                     <?php else : ?>
                                         <div class="header-account">
-                                            <a href="<?php echo site_url(); ?>/dashboard" class="header-account-link"><i class="far fa-user-circle"></i> Sign
+                                            <a href="<?php echo site_url(); ?>/dashboard/" class="header-account-link"><i class="far fa-user-circle"></i> Sign
                                                 In</a>
                                         </div>
                                     <?php endif; ?>
@@ -134,7 +134,7 @@
                             </div>
 
                             <div class="header-btn">
-                                <a href="<?php echo site_url(); ?>/my-account" class="theme-btn mt-2"><span
+                                <a href="<?php echo site_url(); ?>/esell/dashboard/products/" class="theme-btn mt-2"><span
                                         class="far fa-plus-circle"></span>Post Your Ads</a>
                             </div>
                         </div>
