@@ -78,6 +78,7 @@
                            
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs/">FAQs</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Help</a></li>
                         </ul>
 						<!-- <?php
                             wp_nav_menu(
@@ -90,6 +91,18 @@
                                     
 
                         <div class="header-nav-right">
+                        <!-- <div class="header-cart">
+                            <a href="<?php echo wc_get_cart_url(); ?>"><i class="fa-regular fa-cart-shopping"></i></a>
+                            <span id="cart-item-count-container"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+                        </div> -->
+
+                        <div class="header-cart">
+                        <a href="<?php echo wc_get_cart_url(); ?>"><i class="fa-regular fa-cart-shopping"></i></a>
+                        <span id="cart-item-count-container"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+                    </div>
+
+
+
                             <div class="header-account">
                                 <div class="dropdown">
                                     <?php if ( is_user_logged_in() ) : ?>
@@ -134,9 +147,20 @@
                             </div>
 
                             <div class="header-btn">
-                                <a href="<?php echo site_url(); ?>/esell/dashboard/products/" class="theme-btn mt-2"><span
-                                        class="far fa-plus-circle"></span>Post Your Ads</a>
+                                <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
+                                    <a href="<?php echo site_url(); ?>/dashboard/new-product/?_dokan_add_product_nonce" class="theme-btn mt-2"><span class="far fa-plus-circle"></span>Post Your Ads</a>
+                                <?php } else { ?>
+                                    <a href="<?php echo site_url(); ?>/my-account/" class="theme-btn mt-2">Post Your Ads</a>
+                                <?php } ?>
                             </div>
+
+                            <!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>"><?php echo sprintf ( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count() ), WC()->cart->get_cart_contents_count() ); ?> – <?php echo WC()->cart->get_cart_total(); ?></a> -->
+                            <!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>">
+                                <?php echo sprintf( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count() ), WC()->cart->get_cart_contents_count() ); ?> – <?php echo WC()->cart->get_cart_total(); ?>
+                            </a> -->
+
+
+                            
                         </div>
                     </div>
                 </div>

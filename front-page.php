@@ -310,9 +310,10 @@ get_header();
             foreach ($product_categories as $cat) :
                 $cat_thumb_id = get_term_meta($cat->term_id, 'thumbnail_id', true);
                 $cat_thumb_url = wp_get_attachment_thumb_url($cat_thumb_id);
+                $category_link = get_term_link($cat); 
                 ?>
                 <div class="col-6 col-lg-2">
-                    <a href="#" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="<?= $delay ?>">
+                    <a href="<?php echo $category_link; ?>" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="<?= $delay ?>">
                         <div class="category-content">
                             <div class="category-icon">
                                 <?php
@@ -393,7 +394,7 @@ get_header();
                 <div class="row align-items-center">
                     <?php while($query->have_posts()): $query->the_post(); ?> 
                     <div class="col-md-12 col-lg-4">
-                        <a href="#" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                        <a href="<?php the_permalink(); ?>" class="location-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                             <div class="location-img">
                                 <img src="https://images.unsplash.com/photo-1588992370249-1b0fcaf6249b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
                             </div>

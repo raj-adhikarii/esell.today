@@ -391,6 +391,28 @@ Version         : 1.0
 
 })(jQuery);
 
+// cart auto update
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     var countContainer = document.getElementById('cart-item-count-container');
+
+//     function updateCartItemCount() {
+//         var xhr = new XMLHttpRequest();
+//         xhr.open('GET', '<?php echo admin_url("admin-ajax.php"); ?>?action=update_cart_count', true);
+
+//         xhr.onreadystatechange = function() {
+//             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+//                 countContainer.innerHTML = xhr.responseText;
+//             }
+//         };
+
+//         xhr.send();
+//     }
+
+//     // Update the cart item count every 5 seconds (adjust as needed)
+//     setInterval(updateCartItemCount, 5000);
+// });
+
 
 
 

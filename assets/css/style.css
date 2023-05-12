@@ -731,6 +731,40 @@ nav menu css
   margin-top: -6rem;
 }
 
+/* nav cart */
+.header-cart{
+  position: relative;
+}
+
+.header-cart a{
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 50px;
+    text-align: center;
+    background: var(--blue);
+    color: #ffffff;
+}
+
+.header-cart .fa-regular.fa-cart-shopping {
+  font-size: 14px;
+}
+
+#cart-item-count-container {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  background-color: #f69520;
+  color: white;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 11px;
+  height: 18px;
+  width: 16px;
+  line-height: 12px;
+}
+
+
 @media all and (min-width: 992px) {
   .navbar .nav-item .nav-link {
     margin-right: 25px;
@@ -3876,6 +3910,10 @@ faq css
 
 .accordion-button:not(.collapsed)::after {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.accordion-body {
+  padding-left: 80px;
 }
 
 @media all and (max-width: 991px) {
