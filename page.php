@@ -19,10 +19,10 @@ get_header();
 		 <!-- breadcrumb -->
 		 <div class="site-breadcrumb" style="background: url(https://tinysol.com.au/esell/wp-content/uploads/2023/04/head.jpeg)">
             <div class="container">
-                <h2 class="breadcrumb-title">Services</h2>
+                <h2 class="breadcrumb-title"><?php echo get_the_title(); ?></h2>
                 <ul class="breadcrumb-menu">
                     <li><a href="<?php echo site_url(); ?>">Home</a></li>
-                    <li class="active">Services</li>
+                    <li class="active"><?php echo get_the_title(); ?></li>
                 </ul>
             </div>
         </div>

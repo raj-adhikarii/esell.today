@@ -78,7 +78,7 @@
                            
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs/">FAQs</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Contact</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Help</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/help/">Help</a></li>
                         </ul>
 						<!-- <?php
                             wp_nav_menu(
