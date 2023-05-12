@@ -96,13 +96,6 @@
                             <span id="cart-item-count-container"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
                         </div> -->
 
-                        <div class="header-cart">
-                        <a href="<?php echo wc_get_cart_url(); ?>"><i class="fa-regular fa-cart-shopping"></i></a>
-                        <span id="cart-item-count-container"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
-                    </div>
-
-
-
                             <div class="header-account">
                                 <div class="dropdown">
                                     <?php if ( is_user_logged_in() ) : ?>
@@ -158,6 +151,11 @@
                             <!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>">
                                 <?php echo sprintf( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count() ), WC()->cart->get_cart_contents_count() ); ?> – <?php echo WC()->cart->get_cart_total(); ?>
                             </a> -->
+
+                            <div class="header-cart">
+                                <a href="<?php echo wc_get_cart_url(); ?>"><i class="fa-regular fa-cart-shopping"></i></a>
+                                <span id="cart-item-count-container"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+                            </div>
 
 
                             

@@ -737,9 +737,9 @@ nav menu css
 }
 
 .header-cart a{
-    width: 36px;
-    height: 36px;
-    line-height: 36px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
     border-radius: 50px;
     text-align: center;
     background: var(--blue);
@@ -747,7 +747,7 @@ nav menu css
 }
 
 .header-cart .fa-regular.fa-cart-shopping {
-  font-size: 14px;
+  font-size: 19px;
 }
 
 #cart-item-count-container {
