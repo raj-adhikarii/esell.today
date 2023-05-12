@@ -739,7 +739,7 @@ nav menu css
 .header-cart a{
     width: 45px;
     height: 45px;
-    line-height: 45px;
+    line-height: 55px;
     border-radius: 50px;
     text-align: center;
     background: var(--blue);
