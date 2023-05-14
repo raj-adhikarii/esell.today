@@ -3313,6 +3313,11 @@ blog single css
   border-color: var(--accent-color);
 }
 
+.legal h2 {
+  margin-top: 35px;
+  margin-bottom: 20px;
+}
+
 
 
 @media all and (max-width: 767px) {

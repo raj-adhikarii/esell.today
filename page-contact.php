@@ -22,7 +22,32 @@
     <div class="contact-area py-120">
         <div class="container">
             <div class="contact-wrapper">
-                <div class="row">
+                <?php if(have_rows('contact_top')): ?>
+                    <div class="row">
+                        <?php while(have_rows('contact_top')): the_row(); ?>
+                            <div class="col-lg-9 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
+                                <div class="site-heading text-center">
+                                    <?php $tag= get_sub_field('tag'); ?>
+                                        <?php if(!empty($tag)): ?>
+                                            <span class="site-title-tagline"><?php echo($tag); ?></span>
+                                        <?php endif; ?>
+
+                                    <?php $title = get_sub_field('title'); ?>
+                                        <?php if(!empty($title)): ?>
+                                            <h2 class="section-title"><?php echo ($title); ?></h2>
+                                        <?php endif; ?>
+
+                                    <?php $desc = get_sub_field('desc'); ?>
+                                        <?php if(!empty($desc)): ?>
+                                            <?php echo ($desc); ?>
+                                        <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    </div>
+                <?php endif; ?>
+                
+                <div class="row mt-40">
                     <div class="col-lg-4">
                         <div class="contact-content">
                             <div class="contact-info">
