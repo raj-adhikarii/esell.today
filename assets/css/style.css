@@ -2030,7 +2030,9 @@ ul.flex-direction-nav {
 }
 
 .flex-nav-prev a, 
-.flex-nav-next a{
+.flex-nav-next a, 
+.flex-prev.flex-disabled, 
+.flex-next.flex-disabled{
   background-color: #f69520;
   color: #ffffff;
   padding: 0 12px;
