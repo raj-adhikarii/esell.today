@@ -3318,6 +3318,32 @@ blog single css
   margin-bottom: 20px;
 }
 
+/* Products */
+.regular-price span.woocommerce-Price-amount.amount {
+  color: #394358;
+  text-decoration: line-through;
+  font-size: 22px;
+  margin-left: 30px;
+}
+
+/* .regular-price.variable-product span.woocommerce-Price-amount.amount {
+  color: #394358;
+  text-decoration: line-through;
+  font-size: 22px;
+  margin-left: 30px;
+} */
+
+/* .regular-price.variable-product {
+  color: #394358;
+  text-decoration: line-through;
+  font-size: 22px;
+  margin-left: 30px;
+} */
+
+/* .regular-price {
+ font-size: 30px;
+} */
+
 
 
 @media all and (max-width: 767px) {
