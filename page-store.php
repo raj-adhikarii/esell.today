@@ -28,7 +28,7 @@ get_header(); ?>
             if ( $store_name ) {
     ?>
                 <div class="col-md-2">
-                    <a href="#" class="store-item">
+                    <a href="<?php the_permalink(); ?>" class="store-item">
                         <div class="store-img">
                             <?php if ( $store_banner_url ): ?>
                                 <img src="<?php echo dokan_get_no_seller_image(); ?>" alt="<?php echo esc_attr( $store_info['store_name'] ); ?>">

@@ -319,34 +319,40 @@ get_header();
                                 <?php
                                 $category_icon_class = "";
                                 switch ($cat->name) {
+                                case "Watches":
+                                    $category_icon_class = "fal fa-watch";
+                                    break;
                                 case "Electronics":
                                     $category_icon_class = "fal fa-tv";
                                     break;
                                 case "Mobiles":
                                     $category_icon_class = "fal fa-mobile-button";
                                     break;
-                                case "Property":
+                                case "Men's Fashion":
                                     $category_icon_class = "fal fa-buildings";
                                     break;
-                                case "Laptops":
+                                case "TV & Home Appliances":
                                     $category_icon_class = "fal fa-laptop";
                                     break;
                                 case "Vehicles":
                                     $category_icon_class = "fal fa-car-side";
                                     break;
-                                case "Furnitures":
+                                case "Electronic Devices":
                                     $category_icon_class = "fal fa-door-open";
                                     break;
-                                case "Educations":
-                                    $category_icon_class = "fal fa-graduation-cap";
+                                case "Women's Fashion":
+                                    $category_icon_class = "fa-solid fa-spray-can";
                                     break;
-                                case "Animals":
-                                    $category_icon_class = "fal fa-paw-simple";
+                                case "Bags":
+                                    $category_icon_class = "fa-solid fa-icons";
                                     break;
-                                case "Fashions":
-                                    $category_icon_class = "fal fa-watch";
+                                case "Bags":
+                                    $category_icon_class = "fal fa-buildings";
                                     break;
-                                case "Backpacks":
+                                case "Bags":
+                                    $category_icon_class = "fal fa-backpack";
+                                    break;
+                                case "Bags":
                                     $category_icon_class = "fal fa-backpack";
                                     break;
                                 default:
