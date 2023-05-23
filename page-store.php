@@ -19,6 +19,7 @@ get_header(); ?>
         <div class="store-area py-120">
             <div class="container">
             <div class="row">
+                <h1>test</h1>
     <?php
         $vendors = dokan()->vendor->get_vendors();
         foreach ( $vendors as $vendor ) {

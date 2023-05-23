@@ -42,8 +42,12 @@ get_header();
                                 <?php endif; ?>
                             <div class="hero-btn">
                                 <a href="#" class="theme-btn">Browse Ads <i class="fas fa-arrow-right"></i></a>
-                                <a href="#" class="theme-border-btn text-white">Post Your Ads <i
+                                <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
+                                <a href="<?php echo site_url(); ?>/dashboard/new-product/?_dokan_add_product_nonce" class="theme-border-btn text-white">Post Your Ads <i
                                         class="fas fa-arrow-right"></i></a>
+                                        <?php } else { ?>
+                                            <a href="<?php echo site_url(); ?>/my-account/" class="theme-btn mt-2">Post Your Ads</a>
+                                <?php } ?>
                             </div>
                         </div>
                         <?php endwhile; ?>

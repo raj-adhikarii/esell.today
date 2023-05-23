@@ -2025,6 +2025,12 @@ woocommerce css
   margin-bottom: 20px;
 }
 
+.woocommerce ul.products li.product a img{
+  height: 256px;
+  width: 256px;
+  object-fit: cover;
+}
+
 /* ===================
 dokan css
 ====================== */
@@ -2032,6 +2038,7 @@ dokan css
 input[type='submit'].dokan-btn-theme, a.dokan-btn-theme, .dokan-btn-theme {
   background-color: var(--accent-color) !important;
   border: none !important;
+  padding: 10px !important;
 }
 
 .dokan-single-store .profile-frame .profile-info-box .profile-info-summery-wrapper .profile-info-summery {
@@ -2052,6 +2059,58 @@ input[type='submit'].dokan-btn-theme, a.dokan-btn-theme, .dokan-btn-theme {
 .dokan-store-menu {
     padding: 30px 10px !important;
 }
+
+.user-profile-img img {
+  border: 3px solid var(--accent-color);
+}
+
+.dokan-dashboard .dokan-dashboard-content{
+  width: 100% !important;
+}
+
+.dokan-form-control{
+  padding: 12px !important;
+}
+
+select.dokan-form-control {
+  height: 46px !important;
+}
+
+.dokan-form-horizontal .dokan-control-label {
+  text-align: left !important;
+}
+
+.dokan-text-left {
+  width: 100% !important;
+}
+
+.dokan-btn:hover{
+  background-color: var(--blue);
+}
+
+/* ===================
+ACF map 
+====================== */
+.acf-map {
+  width: 100%;
+  height: 400px;
+  border: #ccc solid 1px;
+  margin: 20px 0;
+}
+
+.acf-map img {
+ max-width: inherit !important;
+}
+
+.widget .category-list i {
+  margin-top: 6px;
+}
+
+.widget .category-list span {
+  display: flex;
+  gap: 5px;
+}
+
 /* ===================
 product single css 
 ====================== */
@@ -5728,6 +5787,10 @@ home 2
 
   .home-2 .header-account-link:hover{
     color: var(--accent-color);
+  }
+
+  .navbar-expand-lg .navbar-nav {
+    margin: 0 auto;
   }
 
 }

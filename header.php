@@ -139,19 +139,19 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="header-btn">
+                            <div class="header-btn">
                                 <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
                                     <a href="<?php echo site_url(); ?>/dashboard/new-product/?_dokan_add_product_nonce" class="theme-btn mt-2"><span class="far fa-plus-circle"></span>Post Your Ads</a>
                                 <?php } else { ?>
                                     <a href="<?php echo site_url(); ?>/my-account/" class="theme-btn mt-2">Post Your Ads</a>
                                 <?php } ?>
-                            </div> -->
+                            </div>
 
-                            <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
+                            <!-- <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
                                 <div class="header-btn">
                                     <a href="<?php echo site_url(); ?>/dashboard/new-product/?_dokan_add_product_nonce" class="theme-btn mt-2"><span class="far fa-plus-circle"></span>Post Your Ads</a>
                                 </div>
-                            <?php } ?>
+                            <?php } ?> -->
 
                             <!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>"><?php echo sprintf ( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count() ), WC()->cart->get_cart_contents_count() ); ?> – <?php echo WC()->cart->get_cart_total(); ?></a> -->
                             <!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>">

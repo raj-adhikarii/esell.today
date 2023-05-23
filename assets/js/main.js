@@ -391,6 +391,8 @@ Version         : 1.0
 
 })(jQuery);
 
+
+
 // cart auto update
 
 // document.addEventListener('DOMContentLoaded', function() {
@@ -412,13 +414,3 @@ Version         : 1.0
 //     // Update the cart item count every 5 seconds (adjust as needed)
 //     setInterval(updateCartItemCount, 5000);
 // });
-
-
-
-
-
-
-
-
-
-
