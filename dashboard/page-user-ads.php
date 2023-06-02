@@ -67,11 +67,14 @@ get_header(); ?>
                                         <i class="far fa-search"></i>
                                     </div>
                                 </div>
-                                <a href="#" class="theme-btn"><span class="far fa-plus-circle"></span>Post Ads</a>
+                                <a href="<?php echo site_url(); ?>/post-ad/" class="theme-btn"><span class="far fa-plus-circle"></span>Post Ads</a>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="table-responsive">
+                                <?php $wpdbs; 
+                                    $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}posts WHERE post_type = 'product'");
+                                ?>
                                 <table class="table text-nowrap">
                                     <thead>
                                         <tr>
@@ -81,125 +84,78 @@ get_header(); ?>
                                             <th>Price</th>
                                             <th>Views</th>
                                             <th>Status</th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <?php foreach($results as $product) {?>
                                         <tr>
                                             <td>
                                                 <div class="table-ad-info">
                                                     <a href="#">
-                                                        <img src="<?php echo esc_url(get_theme_file_uri('assets/img/product/01.jpg')); ?>" alt="<?php _e( 'Asset description' ) ?>">
+                                                    <img src="<?php echo get_the_post_thumbnail_url($product->ID); ?>" class="img-responsive" alt="<?php the_title(); ?>"/>
                                                         <div class="table-ad-content">
-                                                            <h6>Men's Golden Watch</h6>
+                                                            <h6><?php echo get_the_title($product->ID); ?></h6>
                                                             <span>Ad ID: #123456</span>
                                                         </div>
                                                     </a>
                                                 </div>
                                             </td>
-                                            <td>Fashion</td>
-                                            <td>5 days ago</td>
-                                            <td>$150</td>
-                                            <td>350k+</td>
-                                            <td><span class="badge badge-success">Active</span></td>
-                                            <td>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Details"><i class="far fa-eye"></i></a>
-                                                <a href="<?php echo site_url(); ?>/post-ad/" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
-                                                <a href="#" class="btn btn-outline-danger btn-sm rounded-2" data-bs-toggle="tooltip" title="Delete"><i class="far fa-trash-can"></i></a>
+                                            <td style="max-width:200px;overflow:hidden;">
+                                                <?php
+                                                    $categories = get_the_terms($product->ID, 'product_cat');
+                                                    if ($categories && !is_wp_error($categories)) {
+                                                        $category_names = array();
+                                                        foreach ($categories as $category) {
+                                                            $category_names[] = $category->name;
+                                                        }
+                                                        echo implode(', ', $category_names);
+                                                    }
+                                                ?>
                                             </td>
+                                            <td>
+                                            <?php
+                                                $publish_date = get_post_field('post_date', $product->ID);
+                                                $days_ago = human_time_diff(strtotime($publish_date), current_time('timestamp')) . ' ago';
+                                                echo $days_ago;
+                                            ?>
+
+                                            </td>
+                                            <td>
+                                                <?php
+                                                    $product = wc_get_product($product->ID);
+                                                    if ($product->is_on_sale()) {
+                                                        $regular_price = $product->get_regular_price();
+                                                        $sale_price = $product->get_sale_price();
+                                                        echo '<del>' . wc_price($regular_price) . '</del> ' . wc_price($sale_price);
+                                                    } else {
+                                                        $price = $product->get_price();
+                                                        echo wc_price($price);
+                                                    }
+                                                ?>
+                                            </td>
+                                                <td>
+                                                    <?php
+                                                    // Get the current view count
+                                                    $view_count = get_post_meta($product->get_id(), 'view_count', true);
+
+                                                    // Increment the view count by 1
+                                                    $view_count++;
+                                                    update_post_meta($product->get_id(), 'view_count', $view_count);
+
+                                                    // Display the view count
+                                                    echo 'Views: ' . $view_count;
+                                                ?>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-success">
+                                            <?php
+                                                $product_status = get_post_status($product->get_id());
+                                                echo $product_status;
+                                            ?>
+                                            </span>
+                                        </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="table-ad-info">
-                                                    <a href="#">
-                                                        <img src="<?php echo esc_url(get_theme_file_uri('assets/img/product/01.jpg')); ?>" alt="<?php _e( 'Asset description' ) ?>">
-                                                        <div class="table-ad-content">
-                                                            <h6>Men's Golden Watch</h6>
-                                                            <span>Ad ID: #123456</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>Fashion</td>
-                                            <td>5 days ago</td>
-                                            <td>$150</td>
-                                            <td>0</td>
-                                            <td><span class="badge badge-info">Pending</span></td>
-                                            <td>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Details"><i class="far fa-eye"></i></a>
-                                                <a href="<?php echo site_url(); ?>/post-ad/" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
-                                                <a href="#" class="btn btn-outline-danger btn-sm rounded-2" data-bs-toggle="tooltip" title="Delete"><i class="far fa-trash-can"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="table-ad-info">
-                                                    <a href="#">
-                                                        <img src="<?php echo esc_url(get_theme_file_uri('assets/img/product/01.jpg')); ?>" alt="<?php _e( 'Asset description' ) ?>">
-                                                        <div class="table-ad-content">
-                                                            <h6>Men's Golden Watch</h6>
-                                                            <span>Ad ID: #123456</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>Fashion</td>
-                                            <td>5 days ago</td>
-                                            <td>$150</td>
-                                            <td>350k+</td>
-                                            <td><span class="badge badge-primary">Sold</span></td>
-                                            <td>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Details"><i class="far fa-eye"></i></a>
-                                                <a href="<?php echo site_url(); ?>/post-ad/" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
-                                                <a href="#" class="btn btn-outline-danger btn-sm rounded-2" data-bs-toggle="tooltip" title="Delete"><i class="far fa-trash-can"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="table-ad-info">
-                                                    <a href="#">
-                                                        <img src="<?php echo esc_url(get_theme_file_uri('assets/img/product/01.jpg')); ?>" alt="<?php _e( 'Asset description' ) ?>">
-                                                        <div class="table-ad-content">
-                                                            <h6>Men's Golden Watch</h6>
-                                                            <span>Ad ID: #123456</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>Fashion</td>
-                                            <td>5 days ago</td>
-                                            <td>$150</td>
-                                            <td>0</td>
-                                            <td><span class="badge badge-danger">Expired</span></td>
-                                            <td>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Details"><i class="far fa-eye"></i></a>
-                                                <a href="<?php echo site_url(); ?>/post-ad/" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
-                                                <a href="#" class="btn btn-outline-danger btn-sm rounded-2" data-bs-toggle="tooltip" title="Delete"><i class="far fa-trash-can"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="table-ad-info">
-                                                    <a href="#">
-                                                        <img src="<?php echo esc_url(get_theme_file_uri('assets/img/product/01.jpg')); ?>" alt="<?php _e( 'Asset description' ) ?>">
-                                                        <div class="table-ad-content">
-                                                            <h6>Men's Golden Watch</h6>
-                                                            <span>Ad ID: #123456</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>Fashion</td>
-                                            <td>5 days ago</td>
-                                            <td>$150</td>
-                                            <td>350k+</td>
-                                            <td><span class="badge badge-success">Active</span></td>
-                                            <td>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Details"><i class="far fa-eye"></i></a>
-                                                <a href="<?php echo site_url(); ?>/post-ad/" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
-                                                <a href="#" class="btn btn-outline-danger btn-sm rounded-2" data-bs-toggle="tooltip" title="Delete"><i class="far fa-trash-can"></i></a>
-                                            </td>
-                                        </tr>
+                                        <?php  } ?>
                                     </tbody>
                                 </table>
                             </div>

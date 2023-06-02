@@ -182,7 +182,6 @@ get_header() ?>
                                                 <?php  } ?>
                                             </tbody>
                                         </table>
-
                                     </div>
                                 </div>
                             </div>

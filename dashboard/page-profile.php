@@ -65,36 +65,31 @@ get_header(); ?>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>First Name</label>
-                                                            <input type="text" class="form-control" value="Admin"
-                                                                placeholder="First Name">
+                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'first_name', true)); ?>" placeholder="First Name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Last Name</label>
-                                                            <input type="text" class="form-control" value="Admin"
-                                                                placeholder="Last Name">
+                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'last_name', true)); ?>" placeholder="Last Name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Email</label>
-                                                            <input type="text" class="form-control"
-                                                                value="admin@admin.com" placeholder="Email">
+                                                            <input type="text" class="form-control" value="<?php echo esc_attr(wp_get_current_user()->user_email); ?>" placeholder="Email">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Phone</label>
-                                                            <input type="text" class="form-control"
-                                                                value="+977 9808009469" placeholder="Phone">
+                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'phone', true)) ?: 'Phone not available'; ?>" placeholder="Phone">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label>Address</label>
-                                                            <input type="text" class="form-control"
-                                                                value="New York, USA" placeholder="Address">
+                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'address', true)) ?: 'Address not available'; ?>" placeholder="Address">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -138,7 +133,8 @@ get_header(); ?>
                                                 <form action="#">
                                                     <div class="form-group">
                                                         <div class="store-logo-preview">
-                                                            <img src="<?php echo esc_url(get_theme_file_uri('assets/img/store/01.jpg')); ?>" alt="<?php _e('Asset description'); ?>">
+                                                            
+                                                        <?php echo get_avatar(get_current_user_id(), 150); ?>
                                                         </div>
                                                         <input type="file" class="store-file">
                                                         <button type="button" class="theme-btn store-upload"><span class="far fa-upload"></span> Upload Logo</button>

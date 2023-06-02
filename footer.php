@@ -104,16 +104,6 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="footer-payment-method">
-                                <h6>We Accept</h6>
-                                <div class="payment-method-img">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/visa.svg" alt="">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/paypal-1.svg" alt="">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/discover.svg" alt="">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/mastercard.svg" alt="">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/american-express.svg" alt="">
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
