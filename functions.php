@@ -186,3 +186,119 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+// woocommerce support
+// function eselltoday_add_woocommerce_support() {
+// 	add_theme_support( 'woocommerce' );
+// }
+// add_action( 'after_setup_theme', 'eselltoday_add_woocommerce_support' );
+
+// Update product views count
+function update_product_views_count() {
+    if (is_singular('product')) {
+        global $post;
+        $product_id = $post->ID;
+
+        $views = (int) get_post_meta($product_id, 'product_views', true);
+        $views++;
+
+        update_post_meta($product_id, 'product_views', $views);
+    }
+}
+add_action('wp', 'update_product_views_count');
+
+// Display product views count
+function display_product_views_count() {
+    if (is_singular('product')) {
+        global $post;
+        $product_id = $post->ID;
+
+        $views = (int) get_post_meta($product_id, 'product_views', true);
+        echo 'Views: ' . $views;
+    }
+}
+
+// disable aad to cart from store
+function disable_add_to_cart() {
+    remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+}
+add_action( 'init', 'disable_add_to_cart' );
+
+
+// Add filter to modify the product query for vendors
+add_filter('dokan_product_listing_query', 'restrict_vendor_product_images', 10, 2);
+
+function restrict_vendor_product_images($args, $query) {
+    // Check if the current user is a vendor
+    if (dokan_is_user_seller(get_current_user_id())) {
+        // Get the current vendor ID
+        $vendor_id = dokan_get_current_user_id();
+
+        // Modify the query to exclude product images from other vendors
+        $args['meta_query'][] = array(
+            'key'     => '_vendor_id',
+            'value'   => $vendor_id,
+            'compare' => '=',
+        );
+    }
+
+    return $args;
+}
+//acf map
+// Method 2: Setting.
+function my_acf_init() {
+    acf_update_setting('google_api_key', 'AIzaSyC72HFD7TrxeGNFn3z-J_VDkReXJCQK95I');
+}
+add_action('acf/init', 'my_acf_init');
+
+//redirect annomous user to login page 
+function redirect_unlogged_users() {
+    // Define the restricted pages slugs
+    $restricted_pages = array( 'my-ads', 'post-ad', 'profile-setting', 'profile-setting', 'profile' );
+
+    // Check if the user is not logged in and trying to access a restricted page
+    if ( ! is_user_logged_in() && in_array( get_post_field( 'post_name' ), $restricted_pages ) ) {
+        // Redirect to the register page
+        wp_redirect( site_url( '/login/' ) );
+        exit;
+    }
+}
+add_action( 'template_redirect', 'redirect_unlogged_users' );
+
+// credentials verification
+// function custom_login_authentication_handler() {
+//     // Verify the nonce and retrieve the submitted email and password
+//     $nonce = $_POST['custom_login_nonce'];
+//     if (!wp_verify_nonce($nonce, 'custom_login_nonce_action')) {
+//         // Invalid nonce, handle the error or redirect as needed
+//     }
+
+//     $email = sanitize_email($_POST['email']);
+//     $password = $_POST['password'];
+
+//     // Check if the user already exists
+//     $user = get_user_by('email', $email);
+//     if ($user) {
+//         // User already exists, display error message or redirect as needed
+//         wp_redirect(home_url('/login/?signup=exists'));
+//         exit;
+//     }
+
+//     // Create a new user
+//     $user_id = wp_create_user($email, $password, $email);
+//     if (is_wp_error($user_id)) {
+//         // Error creating user, handle the error or redirect as needed
+//         wp_redirect(home_url('/login/?signup=error'));
+//         exit;
+//     }
+
+//     // User created successfully, log in the user
+//     wp_set_auth_cookie($user_id);
+//     // Redirect the user to the desired page
+//     wp_redirect(home_url('/dashboard/'));
+//     exit;
+// }
+
+
+
+

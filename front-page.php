@@ -41,13 +41,9 @@ get_header();
                                     <?php echo ($banner_desc); ?>
                                 <?php endif; ?>
                             <div class="hero-btn">
-                                <a href="#" class="theme-btn">Browse Ads <i class="fas fa-arrow-right"></i></a>
-                                <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
-                                <a href="<?php echo site_url(); ?>/dashboard/new-product/?_dokan_add_product_nonce" class="theme-border-btn text-white">Post Your Ads <i
+                                <a href="<?php echo site_url(); ?>/shop/" class="theme-btn">Browse Ads <i class="fas fa-arrow-right"></i></a>
+                                <a href="#" class="theme-border-btn text-white">Post Your Ads <i
                                         class="fas fa-arrow-right"></i></a>
-                                        <?php } else { ?>
-                                            <a href="<?php echo site_url(); ?>/my-account/" class="theme-btn mt-2">Post Your Ads</a>
-                                <?php } ?>
                             </div>
                         </div>
                         <?php endwhile; ?>
@@ -259,10 +255,10 @@ get_header();
                                                 $vendor_id = get_post_field( 'post_author', get_the_ID() );
 
                                                 // Get the vendor's store info
-                                                $store_info = dokan_get_store_info( $vendor_id );
+                                                // $store_info = dokan_get_store_info( $vendor_id );
 
                                                 // Output the store location
-                                                echo '<p><i class="far fa-location-dot"></i> ' . $store_info['address']['city'] . ', ' . $store_info['address']['state'] . ', ' . $store_info['address']['country'] . '</p>';
+                                                // echo '<p><i class="far fa-location-dot"></i> ' . $store_info['address']['city'] . ', ' . $store_info['address']['state'] . ', ' . $store_info['address']['country'] . '</p>';
                                            
                                                 $posted_time = get_the_time('U'); // get the post published time
                                                 $current_time = current_time('timestamp'); // get the current time
@@ -308,13 +304,17 @@ get_header();
             <?php
             $product_categories = get_terms(array(
                 'taxonomy' => 'product_cat',
-                'hide_empty' => true,
+                'hide_empty' => false,
             ));
             $delay = 0;
-            foreach ($product_categories as $cat) :
+            foreach ($product_categories as $cat) {
+                if ($cat->name === 'Uncategorized') {
+                    continue; // Skip the Uncategorized category
+                }
+
                 $cat_thumb_id = get_term_meta($cat->term_id, 'thumbnail_id', true);
                 $cat_thumb_url = wp_get_attachment_thumb_url($cat_thumb_id);
-                $category_link = get_term_link($cat); 
+                $category_link = get_term_link($cat);
                 ?>
                 <div class="col-6 col-lg-2">
                     <a href="<?php echo $category_link; ?>" class="category-item wow fadeInUp" data-wow-duration="1s" data-wow-delay="<?= $delay ?>">
@@ -323,44 +323,44 @@ get_header();
                                 <?php
                                 $category_icon_class = "";
                                 switch ($cat->name) {
-                                case "Watches":
-                                    $category_icon_class = "fal fa-watch";
-                                    break;
-                                case "Electronics":
-                                    $category_icon_class = "fal fa-tv";
-                                    break;
-                                case "Mobiles":
-                                    $category_icon_class = "fal fa-mobile-button";
-                                    break;
-                                case "Men's Fashion":
-                                    $category_icon_class = "fal fa-buildings";
-                                    break;
-                                case "TV & Home Appliances":
-                                    $category_icon_class = "fal fa-laptop";
-                                    break;
-                                case "Vehicles":
-                                    $category_icon_class = "fal fa-car-side";
-                                    break;
-                                case "Electronic Devices":
-                                    $category_icon_class = "fal fa-door-open";
-                                    break;
-                                case "Women's Fashion":
-                                    $category_icon_class = "fa-solid fa-spray-can";
-                                    break;
-                                case "Bags":
-                                    $category_icon_class = "fa-solid fa-icons";
-                                    break;
-                                case "Bags":
-                                    $category_icon_class = "fal fa-buildings";
-                                    break;
-                                case "Bags":
-                                    $category_icon_class = "fal fa-backpack";
-                                    break;
-                                case "Bags":
-                                    $category_icon_class = "fal fa-backpack";
-                                    break;
-                                default:
-                                    $category_icon_class = "fal fa-question-circle";
+                                    case "Watches":
+                                        $category_icon_class = "fal fa-watch";
+                                        break;
+                                    case "Electronics":
+                                        $category_icon_class = "fal fa-tv";
+                                        break;
+                                    case "Mobiles":
+                                        $category_icon_class = "fal fa-mobile-button";
+                                        break;
+                                    case "Men's Fashion":
+                                        $category_icon_class = "fal fa-buildings";
+                                        break;
+                                    case "TV & Home Appliances":
+                                        $category_icon_class = "fal fa-laptop";
+                                        break;
+                                    case "Vehicles":
+                                        $category_icon_class = "fal fa-car-side";
+                                        break;
+                                    case "Electronic Devices":
+                                        $category_icon_class = "fal fa-door-open";
+                                        break;
+                                    case "Women's Fashion":
+                                        $category_icon_class = "fa-solid fa-spray-can";
+                                        break;
+                                    case "Bags":
+                                        $category_icon_class = "fa-solid fa-icons";
+                                        break;
+                                    case "Bags":
+                                        $category_icon_class = "fal fa-buildings";
+                                        break;
+                                    case "Bags":
+                                        $category_icon_class = "fal fa-backpack";
+                                        break;
+                                    case "Bags":
+                                        $category_icon_class = "fal fa-backpack";
+                                        break;
+                                    default:
+                                        $category_icon_class = "fal fa-question-circle";
                                 }
                                 ?>
                                 <i class="<?= $category_icon_class ?>"></i>
@@ -370,8 +370,9 @@ get_header();
                         </div>
                     </a>
                 </div>
-                <?php $delay += 0.25; ?>
-            <?php endforeach; ?>
+                <?php $delay += 0.25;
+            }
+            ?>
         </div>
     </div>
 </div>
@@ -546,7 +547,10 @@ get_header();
                                     <?php echo ($marketplace_desc); ?>
                                 <?php endif; ?>
                         </div>
-                        <a href="#" class="theme-btn mt-30">Get Started Now<i class="fas fa-arrow-right"></i></a>
+
+                                <a href="#" class="theme-btn mt-30">Get Started Now <i
+                                        class="fas fa-arrow-right"></i></a>
+                        <!-- <a href="#" class="theme-btn mt-30">Get Started Now<i class="fas fa-arrow-right"></i></a> -->
                     </div>
                 <?php endwhile; ?>
             </div>

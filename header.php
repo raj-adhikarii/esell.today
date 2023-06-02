@@ -79,6 +79,21 @@
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs/">FAQs</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Contact</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/help/">Help</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?php echo site_url('/wishlist/'); ?>">
+                                    <i class="far fa-heart" id="wishlist-icon"></i>
+                                    <?php
+                                    // Get the wishlist count
+                                    $wishlist_count = YITH_WCWL()->count_products();
+
+                                    // Display the wishlist count if it's greater than 0
+                                    if ($wishlist_count > 0) {
+                                        echo '<span class="wishlist-count">' . $wishlist_count . '</span>';
+                                    }
+                                    ?>
+                                </a>
+                            </li>
+
                         </ul>
 						<!-- <?php
                             wp_nav_menu(
@@ -91,11 +106,6 @@
                                     
 
                         <div class="header-nav-right">
-                        <!-- <div class="header-cart">
-                            <a href="<?php echo wc_get_cart_url(); ?>"><i class="fa-regular fa-cart-shopping"></i></a>
-                            <span id="cart-item-count-container"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
-                        </div> -->
-
                             <div class="header-account">
                                 <div class="dropdown">
                                     <?php if ( is_user_logged_in() ) : ?>
@@ -108,63 +118,26 @@
                                             <?php echo $user_profile_image; ?>
                                         </div>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-user"></i> My Profile</a></li>
-                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/products/"><i class="far fa-layer-group"></i> My Ads</a></li>
-                                            <?php
-                                                if ( is_user_logged_in() ) {
-                                                    // User is logged in, redirect to the product dashboard page
-                                                    $dashboard_url = site_url( '/dashboard/products' );
-                                                    ?>
-                                                    <li><a class="dropdown-item" href="<?php echo $dashboard_url; ?>"><i class="far fa-layer-group"></i> My Ads</a></li>
-                                                    <?php
-                                                } else {
-                                                    // User is not logged in, redirect to the login page
-                                                    $login_url = wp_login_url( get_permalink() );
-                                                    ?>
-                                                    <li><a class="dropdown-item" href="<?php echo $login_url; ?>"><i class="fas fa-sign-in-alt"></i> <?php esc_html_e( 'Login', 'text-domain' ); ?></a></li>
-                                                    <?php
-                                                }
-                                                ?>
-
-                                            <li><a class="dropdown-item" href="<?php echo $user_profile_link; ?>?type=favorite/"><i class="far fa-heart"></i> My Favorites</a></li>
-                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/settings/store"><i class="far fa-cog"></i> Settings</a></li>
-                                            <li><a class="dropdown-item" href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Log Out</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
+                                            <li><a class="dropdown-item" class="active" href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
                                         </ul>
                                     <?php else : ?>
                                         <div class="header-account">
-                                            <a href="<?php echo site_url(); ?>/dashboard/" class="header-account-link"><i class="far fa-user-circle"></i> Sign
+                                            <a href="<?php echo site_url(); ?>/login/" class="header-account-link"><i class="far fa-user-circle"></i> Sign
                                                 In</a>
-                                        </div>
+                                        </div> 
                                     <?php endif; ?>
                                 </div>
                             </div>
 
                             <div class="header-btn">
-                                <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
-                                    <a href="<?php echo site_url(); ?>/dashboard/new-product/?_dokan_add_product_nonce" class="theme-btn mt-2"><span class="far fa-plus-circle"></span>Post Your Ads</a>
-                                <?php } else { ?>
-                                    <a href="<?php echo site_url(); ?>/my-account/" class="theme-btn mt-2">Post Your Ads</a>
-                                <?php } ?>
+                                <a href="<?php echo site_url(); ?>/post-ad/" class="theme-btn mt-2">Post Your Ads</a>
+                                
                             </div>
-
-                            <!-- <?php if (is_user_logged_in() && dokan_is_user_seller(get_current_user_id())) { ?>
-                                <div class="header-btn">
-                                    <a href="<?php echo site_url(); ?>/dashboard/new-product/?_dokan_add_product_nonce" class="theme-btn mt-2"><span class="far fa-plus-circle"></span>Post Your Ads</a>
-                                </div>
-                            <?php } ?> -->
-
-                            <!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>"><?php echo sprintf ( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count() ), WC()->cart->get_cart_contents_count() ); ?> – <?php echo WC()->cart->get_cart_total(); ?></a> -->
-                            <!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>">
-                                <?php echo sprintf( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count() ), WC()->cart->get_cart_contents_count() ); ?> – <?php echo WC()->cart->get_cart_total(); ?>
-                            </a> -->
-
-                            <!-- <div class="header-cart">
-                                <a href="<?php echo wc_get_cart_url(); ?>"><i class="fa-regular fa-cart-shopping"></i></a>
-                                <span id="cart-item-count-container"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
-                            </div> -->
-
-
-                            
+                          
                         </div>
                     </div>
                 </div>

@@ -18,8 +18,6 @@
         </div>
     <?php endif; ?>
 
-
-
 <!-- register area -->
 <div class="login-area py-120">
     <div class="container">
@@ -48,7 +46,7 @@
                     <div class="form-check form-group">
                         <input class="form-check-input" type="checkbox" value="" id="agree">
                         <label class="form-check-label" for="agree">
-                           I agree with the <a href="#">Terms Of Service.</a>
+                           I agree with the <a href="<?php echo site_url(); ?>/terms-condition">Terms Of Service.</a>
                         </label>
                     </div>
                     <div class="d-flex align-items-center">
@@ -61,7 +59,7 @@
                         <a href="#" class="btn-fb"><i class="fab fa-facebook"></i> Login With Facebook</a>
                         <a href="#" class="btn-gl"><i class="fab fa-google"></i> Login With Google</a>
                     </div>
-                    <p>Already have an account? <a href="<?php site_url(); ?>/login/">Sign In.</a></p>
+                    <p>Already have an account? <a href="<?php echo site_url(); ?>/login/">Sign In.</a></p>
                 </div>
             </div>
         </div>

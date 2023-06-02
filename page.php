@@ -18,7 +18,7 @@ get_header();
 	<main id="primary" class="site-main" style="margin-top: -10rem;">
 		 <!-- breadcrumb -->
 		 <div class="site-breadcrumb" style="background: url(https://tinysol.com.au/esell/wp-content/uploads/2023/04/head.jpeg)">
-            <div class="container">
+            <div class="container mt-5">
                 <h2 class="breadcrumb-title"><?php echo get_the_title(); ?></h2>
                 <ul class="breadcrumb-menu">
                     <li><a href="<?php echo site_url(); ?>">Home</a></li>

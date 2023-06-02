@@ -391,26 +391,37 @@ Version         : 1.0
 
 })(jQuery);
 
+  // Get the icon element
+  const wishlistIcon = document.getElementById('wishlist-icon');
 
+  // Check if there is at least one wishlist item
+  if (wishlistItemCount > 0) {
+    // Update the class to switch to the filled heart icon
+    wishlistIcon.className = 'fas fa-heart';
+  }
 
-// cart auto update
+  jQuery(document).ready(function($) {
+    startGoogleSignin();
+});
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     var countContainer = document.getElementById('cart-item-count-container');
+function googleSigninCallback(response) {
+    // Process the user data or send it to the server for further handling
+    console.log(response);
+}
 
-//     function updateCartItemCount() {
-//         var xhr = new XMLHttpRequest();
-//         xhr.open('GET', '<?php echo admin_url("admin-ajax.php"); ?>?action=update_cart_count', true);
+function startGoogleSignin() {
+    gapi.load('auth2', function() {
+        gapi.auth2.init({
+            client_id: '792576410732-pcmcg976a9dl5mc4t3mv241ugsfiscin.apps.googleusercontent.com',
+        }).then(function(auth2) {
+            auth2.attachClickHandler('google-signin-button', {}, googleSigninCallback, function(error) {
+                console.error(error);
+            });
+        });
+    });
+}
 
-//         xhr.onreadystatechange = function() {
-//             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-//                 countContainer.innerHTML = xhr.responseText;
-//             }
-//         };
-
-//         xhr.send();
-//     }
-
-//     // Update the cart item count every 5 seconds (adjust as needed)
-//     setInterval(updateCartItemCount, 5000);
-// });
+// Call the startGoogleSignin function when the document is ready
+document.addEventListener("DOMContentLoaded", function(event) {
+    startGoogleSignin();
+});

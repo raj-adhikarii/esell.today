@@ -34,14 +34,13 @@
                                 <p class="site-description"><?php echo $esell_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
                             <?php endif; ?>
                             <p class="mb-4">
-                                We are many variations passages available have suffered alteration
-                                in some form by injected humour.
+                               Buy, sell, rent, & exchange in one go at E-Sell Today - online shopping nepal
                             </p>
-                            <ul class="footer-contact">
-                                <li><a href="tel:+21236547898"><i class="far fa-phone"></i>+2 123 654 7898</a></li>
-                                <li><i class="far fa-map-marker-alt"></i>25/B Milford Road, New York</li>
+                             <ul class="footer-contact">
+                                <li><a href="tel:+21236547898"><i class="far fa-phone"></i>984-5294919</a></li>
+                                <li><i class="far fa-map-marker-alt"></i>Ratopul, Gyaneshwor, KTM Nepal</li>
                                 <li><a href="mailto:info@example.com"><i
-                                            class="far fa-envelope"></i>info@example.com</a></li>
+                                            class="far fa-envelope"></i>info@e-sell.today</a></li>
                             </ul>
                         </div>
                     </div>
@@ -49,12 +48,12 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Company</h4>
                             <ul class="footer-list">
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> About Us</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Our Team</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Contact Us</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Terms Of Service</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Privacy policy</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Careers</a></li>
+                                <li><a href="<?php echo site_url(); ?>"><i class="fas fa-angle-double-right"></i> Home</a></li>
+                                <li><a href="<?php echo site_url(); ?>/about"><i class="fas fa-angle-double-right"></i> About Us</a></li>
+                                <li><a href="<?php echo site_url(); ?>/contact"><i class="fas fa-angle-double-right"></i> Contact Us</a></li>
+                                <li><a href="<?php echo site_url(); ?>/service"><i class="fas fa-angle-double-right"></i> Our Services</a></li>
+                               
+                                <!-- <li><a href="#"><i class="fas fa-angle-double-right"></i> Careers</a></li> -->
                             </ul>
                         </div>
                     </div>
@@ -62,12 +61,12 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Quick Links</h4>
                             <ul class="footer-list">
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Membership</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Buy and Sell Quickly</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Banner Advertising</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Promote Your Ads</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Our Partners</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Latest Blog</a></li>
+                                <!-- <li><a href="#"><i class="fas fa-angle-double-right"></i> Post your AD</a></li> -->
+                                <li><a href="<?php echo site_url(); ?>/buy-and-sell"><i class="fas fa-angle-double-right"></i> Buy and Sell Quickly</a></li>
+                                <!-- <li><a href="#"><i class="fas fa-angle-double-right"></i> Banner Advertising</a></li> -->
+                                <li><a href="<?php echo site_url(); ?>/dashboard"><i class="fas fa-angle-double-right"></i> Post Your Ads</a></li>
+                                <li><a href="<?php echo site_url(); ?>#"><i class="fas fa-angle-double-right"></i> Our Partners</a></li>
+                                <li><a href="<?php echo site_url(); ?>/blog"><i class="fas fa-angle-double-right"></i> Latest Blog</a></li>
                             </ul>
                         </div>
                     </div>
@@ -75,13 +74,15 @@
                         <div class="footer-widget-box list">
                             <h4 class="footer-widget-title">Help & Support</h4>
                             <ul class="footer-list">
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> FAQ's</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Live Chat</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> How Stay Safe</a></li>
-                                <li><a href="#"><i class="fas fa-angle-double-right"></i> Selling Tips</a></li>
+                                <li><a href="<?php echo site_url(); ?>/faqs"><i class="fas fa-angle-double-right"></i> FAQ's</a></li>
+                                <li><a href="<?php echo site_url(); ?>/help"><i class="fas fa-angle-double-right"></i> Help</a></li>
+                                <li><a href="<?php echo site_url(); ?>/privacy-policy"><i class="fas fa-angle-double-right"></i> Privacy policy</a></li>
+                                <li><a href="<?php echo site_url(); ?>/refund_returns"><i class="fas fa-angle-double-right"></i> Terms Of Service</a></li>
+                                <!-- <li><a href="#"><i class="fas fa-angle-double-right"></i> Live Chat</a></li> -->
+                                <!-- <li><a href="#"><i class="fas fa-angle-double-right"></i> Selling Tips</a></li>
                                 <li><a href="#"><i class="fas fa-angle-double-right"></i> Community</a></li>
                                 <li><a href="#"><i class="fas fa-angle-double-right"></i> Sitemap</a></li>
-                            </ul>
+                            </ul> -->
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
@@ -106,11 +107,11 @@
                             <div class="footer-payment-method">
                                 <h6>We Accept</h6>
                                 <div class="payment-method-img">
-                                    <img src="assets/img/payment/paypal.svg" alt="">
-                                    <img src="assets/img/payment/mastercard.svg" alt="">
-                                    <img src="assets/img/payment/visa.svg" alt="">
-                                    <img src="assets/img/payment/discover.svg" alt="">
-                                    <img src="assets/img/payment/american-express.svg" alt="">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/visa.svg" alt="">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/paypal-1.svg" alt="">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/discover.svg" alt="">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/mastercard.svg" alt="">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/payment/american-express.svg" alt="">
                                 </div>
                             </div>
                         </div>

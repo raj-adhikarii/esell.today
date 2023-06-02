@@ -1,5 +1,5 @@
 <?php 
-// Template Name: Post Ad Template
+/* Template Name: Post Ad Template */
 get_header(); ?>
 
 <main class="main">
@@ -9,10 +9,10 @@ get_header(); ?>
         ?>
         <div class="site-breadcrumb" style="background: url(<?php echo $image[0]; ?>)">
             <div class="container">
-                <h2 class="breadcrumb-title">My Profile</h2>
+                <h2 class="breadcrumb-title"><?php echo get_the_title(); ?></h2>
                 <ul class="breadcrumb-menu">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">My Profile</li>
+                    <li><a href="<?php echo site_url(); ?>">Home</a></li>
+                    <li class="active"><?php echo get_the_title(); ?></li>
                 </ul>
             </div>
         </div>
@@ -27,28 +27,28 @@ get_header(); ?>
                 <div class="col-lg-3">
                     <div class="user-profile-sidebar">
                         <div class="user-profile-sidebar-top">
-                            <div class="user-profile-img">
-                                <?php if ( is_user_logged_in() ) : ?>
-                                    <?php
-                                        $current_user = wp_get_current_user();
-                                        $user_profile_link = get_author_posts_url( $current_user->ID );
-                                        $user_profile_image = get_avatar( $current_user->ID, 32 );
-                                    ?>
+                            <?php if ( is_user_logged_in() ) : ?>
+                                <?php
+                                    $current_user = wp_get_current_user();
+                                    $user_profile_link = get_author_posts_url( $current_user->ID );
+                                    $user_profile_image = get_avatar( $current_user->ID, 32 );
+                                ?>
+                                <div class="user-profile-img">
 
-                                    <?php echo $user_profile_image; ?>
-                                <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
-                                <input type="file" class="profile-img-file">
-                                <?php endif; ?>
-                            </div>
-                            <h5>Antoni Jonson</h5>
-                            <p>antoni@example.com</p>
+                                        <?php echo $user_profile_image; ?>
+                                        <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
+                                        <input type="file" class="profile-img-file">
+                                </div>
+                                <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
+                                <p><?php echo esc_html( $current_user->user_email ); ?></p>
+                            <?php endif; ?>
                         </div>
                         <ul class="user-profile-sidebar-list">
-                            <li><a href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
-                            <li><a class="active" href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
-                            <li><a href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
-                            <li><a href="<?php echo site_url(); ?>/post-ad/"><i class="far fa-plus-circle"></i> Post Ads</a></li>
-                            <li><a href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
+                            <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
+                            <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
+                            <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
+                            <li><a <?php echo is_page(sanitize_title('post-ad')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/post-ad/"><i class="far fa-plus-circle"></i> Post Ads</a></li>
+                            <li><a <?php echo is_page(sanitize_title('profile-setting')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
                             <li><a href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
                         </ul>
                     </div>

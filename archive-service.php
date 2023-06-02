@@ -41,8 +41,8 @@
                                         <i class="fal fa-dolly-flatbed"></i>
                                     </div>
                                     <div class="service-content">
-                                        <h4> <?php the_title(); ?></h4>
-                                        <p>It is a long established fact that readable content of a page when looking at its layout.</p>
+                                        <h4 class="mb-3"> <?php the_title(); ?></h4>
+                                            <p><?php echo wp_trim_words( get_the_content(), 50 ); ?></p>
                                         <a href="<?php the_permalink(); ?>" class="theme-border-btn">Read More<i class="fas fa-arrow-right"></i></a>
                                     </div>
                                 </div>

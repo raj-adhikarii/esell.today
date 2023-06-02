@@ -45,7 +45,7 @@ body {
   font-style: normal;
   font-size: 16px;
   font-weight: normal;
-  color: #757F95;
+  color: #1e1b18;
   line-height: 1.8;
 }
 
@@ -2032,60 +2032,11 @@ woocommerce css
 }
 
 /* ===================
-dokan css
+Auth page css
 ====================== */
-
-input[type='submit'].dokan-btn-theme, a.dokan-btn-theme, .dokan-btn-theme {
-  background-color: var(--accent-color) !important;
-  border: none !important;
-  padding: 10px !important;
-}
-
-.dokan-single-store .profile-frame .profile-info-box .profile-info-summery-wrapper .profile-info-summery {
-    background-color: var(--accent-color) !important;
-    border-radius: 12px;
-}
-
-#dokan-form-contact-seller .dokan-btn-theme{
-    background-color: var(--accent-color) !important;
-    border-color: var(--accent-color) !important;
-    padding: 13px !important;
-    border-radius: 12px !important;
-    margin-top: 20px !important;
-    float: left !important;
-}
-
-.dokan-store-contact, 
-.dokan-store-menu {
-    padding: 30px 10px !important;
-}
-
 .user-profile-img img {
-  border: 3px solid var(--accent-color);
-}
-
-.dokan-dashboard .dokan-dashboard-content{
-  width: 100% !important;
-}
-
-.dokan-form-control{
-  padding: 12px !important;
-}
-
-select.dokan-form-control {
-  height: 46px !important;
-}
-
-.dokan-form-horizontal .dokan-control-label {
-  text-align: left !important;
-}
-
-.dokan-text-left {
-  width: 100% !important;
-}
-
-.dokan-btn:hover{
-  background-color: var(--blue);
+  height: 100%;
+  width: 100%;
 }
 
 /* ===================
@@ -3129,6 +3080,27 @@ blog css
   transition: all .5s ease-in-out;
 }
 
+.blog-single-area h2 {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 42px;
+}
+
+.blog-single-area h3 {
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 36px;
+}
+
+.blog-single-area li {
+  list-style: disc;
+  margin-left: 20px;
+}
+
+.blog-single-area p {
+  margin: 30px 0 20px 0;
+}
+
 .blog-item-img {
   overflow: hidden;
   border-radius: 15px;
@@ -3196,6 +3168,47 @@ blog css
 
 img#preview{
   width: 100%;
+}
+
+
+.center {
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+  margin: 0 4px;
+  border-radius: 8px;
+}
+
+.pagination span.current {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  margin: 0 4px;
+  border-radius: 8px;
+  border: 1px solid var(--accent-color);
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.search-form label{
+  width: 100%;
+}
+
+.search-form [type="text"] {
+  border-radius: 10px !important;
 }
 
 /* ===========================
@@ -3456,9 +3469,77 @@ blog single css
 /* Products */
 .regular-price span.woocommerce-Price-amount.amount {
   color: #394358;
-  text-decoration: line-through;
   font-size: 22px;
-  margin-left: 30px;
+  /* text-decoration: line-through;*/
+  margin-left: 10px; 
+}
+
+li.flex-active-slide img, li.clone {
+  width: 100%;
+  height: 864px;
+  object-fit: cover;
+}
+
+.woocommerce span.onsale{
+  background-color: var(--accent-color);
+}
+
+.woocommerce ul.products li.product .price{
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.woocommerce ul.products li.product .price del{
+  color: #394358;
+}
+
+form.woocommerce-ordering select {
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.woocommerce-Reviews-title {
+  color: #394358;
+  margin: 0px;
+  margin-bottom: 0px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.2;
+  font-size: 22px;
+}
+
+#reviews {
+  background: #ebe9eb;
+  padding: 40px;
+  border-radius: 12px;
+}
+
+#respond input#submit{
+  background-color: var(--accent-color) !important;
+  color: #ffffff !important;
+}
+
+#respond input#submit:hover {
+  background: var(--blue) !important;
+}
+.stars span a{
+  color: var(--accent-color);
+}
+
+/* yith shortcode */
+.yith_wcwl_wishlist_footer .yith-wcwl-share {
+  float: none;
+  clear: both;
+}
+
+.wishlist-count {
+    position: absolute;
+    top: 16px;
+    color: #fff;
+    background: #f69520;
+    border-radius: 130px;
+    padding: 0px 10px;
+
 }
 
 /* .regular-price.variable-product span.woocommerce-Price-amount.amount {
@@ -3735,8 +3816,17 @@ contact us css
 }
 
 .contact-form .form-group .form-control:focus,
-.woocommerce form .form-row input.input-text:focus  {
+.woocommerce form .form-row input.input-text:focus, 
+body textarea:focus, body input[type="text"]:focus,
+body input[type="email"]:focus  {
   border-color: var(--accent-color);
+  border-width: 1px;
+}
+
+body input[type="text"]:focus-visible,
+body input[type="email"]:focus-visible,
+body textarea:focus-visible{
+  outline: none;
 }
 
 .contact-map {
@@ -4645,7 +4735,8 @@ user profile css
 
 /* dashboard */
 .dashboard-widget {
-  display: flex;
+  /* display: flex; */
+  display: block;
   align-items: center;
   justify-content: space-between;
   padding: 30px 20px;
@@ -5242,7 +5333,9 @@ user profile css
 }
 
 .contact-form .form-group .form-control, .woocommerce form .form-row input.input-text, 
-.select2-container .select2-selection--single{
+.select2-container .select2-selection--single, 
+body textarea, body input[type="text"],
+body input[type="email"]{
   display: block;
   width: 100%;
   font-size: 1rem;

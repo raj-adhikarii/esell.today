@@ -56,7 +56,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Office Address</h5>
-                                    <p>25/B Milford, New York, USA</p>
+                                    <p>Ratopul, Gyaneshwor, KTM Nepal</p>
                                 </div>
                             </div>
                             <div class="contact-info">
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Call Us</h5>
-                                    <p>+2 123 4565 789</p>
+                                    <p>+977 9845294919</p>
                                 </div>
                             </div>
                             <div class="contact-info">
@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Email Us</h5>
-                                    <p>info@example.com</p>
+                                    <p>info@e-sell.today</p>
                                 </div>
                             </div>
                             <div class="contact-info">
@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="contact-info-content">
                                     <h5>Open Time</h5>
-                                    <p>Mon - Sat (10.00AM - 05.30PM)</p>
+                                    <p>Sun - Sat (10.00AM - 08.00PM)</p>
                                 </div>
                             </div>
                         </div>
