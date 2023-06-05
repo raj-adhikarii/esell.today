@@ -229,11 +229,13 @@ get_header();
                         <div class="col-md-6 col-lg-3">
                             <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
                                 <div class="product-img">
-                                    <span class="product-status trending"><i class="fas fa-bolt-lightning"></i></span>
-                                    <?php if ( $product_image_url ): ?>
-                                        <img src="<?php echo esc_url( $product_image_url ); ?>" alt="<?php echo esc_attr( $product_name ); ?>">
-                                    <?php endif; ?>
-                                    <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
+                                    <a href="<?php the_permalink(); ?>">
+                                        <span class="product-status trending"><i class="fas fa-bolt-lightning"></i></span>
+                                        <?php if ( $product_image_url ): ?>
+                                            <img src="<?php echo esc_url( $product_image_url ); ?>" alt="<?php echo esc_attr( $product_name ); ?>">
+                                        <?php endif; ?>
+                                        <a href="#" class="product-favorite" data-product-id="<?php echo get_the_ID(); ?>"><i class="far fa-heart"></i></a>
+                                    </a>
                                 </div>
                                 <div class="product-content">
                                     <div class="product-top">
@@ -542,10 +544,10 @@ get_header();
                                             <?php echo ($down_desc); ?>
                                         <?php endif; ?>
                             </div>
-                            <div class="download-btn">
+                            <!-- <div class="download-btn">
                                 <a href="#"><img src="assets/img/download/google-play.png" alt=""></a>
                                 <a href="#"><img src="assets/img/download/app-store.png" alt=""></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 <?php endwhile; ?> 

@@ -1676,13 +1676,6 @@ product css
   position: relative;
 }
 
-.product-img img{
-  border-radius: 10px;
-  height: 262px;
-  width: 262px;
-  object-fit: cover;
-}
-
 .product-favorite{
   position: absolute;
   width: 35px;
@@ -1836,8 +1829,8 @@ product css
   padding: 3px 5px;
 }
 
-.product-category-title a:first-child {
-  display: none;
+.product-category-title a:empty {
+  display: none !important;
 }
 
 .product-slider .owl-dots .owl-dot span {
@@ -1986,7 +1979,6 @@ product css
   color: #757F95;
 }
 
-
 @media all and (min-width: 992px) {
   .product-list .product-item {
     display: flex;
@@ -2000,6 +1992,14 @@ product css
   .product-list .product-content {
     flex: 1;
   }
+
+  .product-img img{
+    border-radius: 10px;
+    height: 262px;
+    width: 262px;
+    object-fit: cover;
+  }
+
 }
 
 @media all and (max-width: 767px) {
@@ -3540,6 +3540,14 @@ form.woocommerce-ordering select {
     border-radius: 130px;
     padding: 0px 10px;
 
+}
+
+.wishlist_table tr td, .wishlist_table tr th.product-checkbox, .wishlist_table tr th.wishlist-delete {
+  text-align: start;
+}
+
+.wishlist_table .product-stock-status span.wishlist-in-stock{
+  color: var(--accent-color);
 }
 
 /* .regular-price.variable-product span.woocommerce-Price-amount.amount {

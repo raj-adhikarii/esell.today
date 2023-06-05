@@ -61,6 +61,34 @@
 						<p class="site-description"><?php echo $esell_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 					<?php endif; ?>
                     <div class="mobile-menu-right">
+                        <div class="md-block sm-d-none">
+                        <div class="header-account">
+                                <div class="dropdown">
+                                    <?php if ( is_user_logged_in() ) : ?>
+                                        <?php
+                                        $current_user = wp_get_current_user();
+                                        $user_profile_link = get_author_posts_url( $current_user->ID );
+                                        $user_profile_image = get_avatar( $current_user->ID, 32 );
+                                        ?>
+                                        <div data-bs-toggle="dropdown" aria-expanded="false">
+                                            <?php echo $user_profile_image; ?>
+                                        </div>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
+                                            <li><a class="dropdown-item" class="active" href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
+                                            <li><a class="dropdown-item" href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
+                                        </ul>
+                                    <?php else : ?>
+                                        <div class="header-account">
+                                            <a href="<?php echo site_url(); ?>/login/" class="header-account-link"><i class="far fa-user-circle"></i> Sign
+                                                In</a>
+                                        </div> 
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-btn-icon"><i class="far fa-bars"></i></span>

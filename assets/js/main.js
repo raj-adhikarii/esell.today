@@ -391,6 +391,18 @@ Version         : 1.0
 
 })(jQuery);
 
+jQuery(document).ready(function($) {
+    $('.product-favorite').on('click', function(e) {
+        e.preventDefault();
+        
+        var productId = $(this).data('product-id');
+        
+        // Trigger YITH Wishlist functionality
+        yith_wcwl_add_to_wishlist(productId);
+    });
+});
+
+
   // Get the icon element
   const wishlistIcon = document.getElementById('wishlist-icon');
 

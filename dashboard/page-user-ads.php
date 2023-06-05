@@ -75,7 +75,7 @@ get_header(); ?>
                                 <?php $wpdbs; 
                                     $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}posts WHERE post_type = 'product'");
                                 ?>
-                                <table class="table text-nowrap">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Ads Info</th>
