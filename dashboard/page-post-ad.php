@@ -65,7 +65,7 @@ get_header(); ?>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label>Title</label>
-                                                    <input type="text" class="form-control" placeholder="Enter title">
+                                                    <input type="text" id="product-title" class="form-control" placeholder="Enter title">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -93,13 +93,13 @@ get_header(); ?>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Price (USD)</label>
-                                                    <input type="text" class="form-control" placeholder="Enter price">
+                                                    <input type="text" id="product-price" class="form-control" placeholder="Enter price">
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label>Tags or keyword</label>
-                                                    <input type="text" class="form-control" placeholder="Enter tags ex: watch,laptop">
+                                                    <input type="text" id="product-tag" class="form-control" placeholder="Enter tags ex: watch,laptop">
                                                 </div>
                                             </div>
                                             <h6 class="fw-bold my-4">Upload Images</h6>
@@ -117,51 +117,51 @@ get_header(); ?>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Address</label>
-                                                    <input type="text" class="form-control" placeholder="Enter address">
+                                                    <input type="text" id="user-location" class="form-control" placeholder="Enter address">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>City</label>
-                                                    <input type="text" class="form-control" placeholder="Enter city">
+                                                    <input type="text" id="user-city" class="form-control" placeholder="Enter city">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>State</label>
-                                                    <input type="text" class="form-control" placeholder="Enter state">
+                                                    <input type="text" id="user-state" class="form-control" placeholder="Enter state">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Zip Code</label>
-                                                    <input type="text" class="form-control" placeholder="Enter zip code">
+                                                    <input type="text" id="user-zip" class="form-control" placeholder="Enter zip code">
                                                 </div>
                                             </div>
                                             <h6 class="fw-bold my-4">Detailed Information</h6>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label>Description</label>
-                                                    <textarea class="form-control" placeholder="Write description" cols="30" rows="5"></textarea>
+                                                    <textarea class="form-control" id="product-description" placeholder="Write description" cols="30" rows="5"></textarea>
                                                 </div>
                                             </div>
                                             <h6 class="fw-bold my-4">Contact Information</h6>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label>Name</label>
-                                                    <input type="text" class="form-control" placeholder="Enter name">
+                                                    <input type="text" id="contact-name" class="form-control" placeholder="Enter name">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label>Email</label>
-                                                    <input type="text" class="form-control" placeholder="Enter email">
+                                                    <input type="text" id="contact-email" class="form-control" placeholder="Enter email">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label>Phone</label>
-                                                    <input type="text" class="form-control" placeholder="Enter phone">
+                                                    <input type="text" id="contact-phone" class="form-control" placeholder="Enter phone">
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-4">
@@ -172,7 +172,7 @@ get_header(); ?>
                                                     </label>
                                                   </div>
                                             </div>
-                                            <div class="col-lg-12 my-4">
+                                            <div class="col-lg-12 my-4 ads">
                                                 <button type="submit" class="theme-btn">Post Your Ads</button>
                                             </div>
                                         </div>

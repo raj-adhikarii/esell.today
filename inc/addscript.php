@@ -34,5 +34,16 @@ function esell_scripts() {
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+
+	if( is_page( array( 'post-ad', 'profile' ) ) ){
+        wp_enqueue_script( 'woocommerce-script', get_template_directory_uri() . '/assets/js/rest.js', array('jquery'), '1.0', true );
+
+		wp_localize_script('woocommerce-script', 'params', array(
+
+			'nonce' => wp_create_nonce('wp-rest')
+			// 'consumer_key'=> 'ck_2bfdecd44427762646b056a79035f944fa22c88c',
+			// 'consumer_secret' => 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3'
+		));
+    }
 }
 add_action( 'wp_enqueue_scripts', 'esell_scripts' );

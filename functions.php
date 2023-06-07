@@ -186,12 +186,6 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
-// woocommerce support
-// function eselltoday_add_woocommerce_support() {
-// 	add_theme_support( 'woocommerce' );
-// }
-// add_action( 'after_setup_theme', 'eselltoday_add_woocommerce_support' );
-
 // Update product views count
 function update_product_views_count() {
     if (is_singular('product')) {
@@ -266,38 +260,48 @@ function redirect_unlogged_users() {
 add_action( 'template_redirect', 'redirect_unlogged_users' );
 
 // credentials verification
-// function custom_login_authentication_handler() {
-//     // Verify the nonce and retrieve the submitted email and password
-//     $nonce = $_POST['custom_login_nonce'];
-//     if (!wp_verify_nonce($nonce, 'custom_login_nonce_action')) {
-//         // Invalid nonce, handle the error or redirect as needed
-//     }
+function create_product_via_api($product_data) {
+    // WooCommerce API credentials
+    $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
+    $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
 
-//     $email = sanitize_email($_POST['email']);
-//     $password = $_POST['password'];
+    // WooCommerce API URL
+    $api_url = 'https://staging.e-sell.today/wp-json/wc/v3/products';
 
-//     // Check if the user already exists
-//     $user = get_user_by('email', $email);
-//     if ($user) {
-//         // User already exists, display error message or redirect as needed
-//         wp_redirect(home_url('/login/?signup=exists'));
-//         exit;
-//     }
+    // Prepare the authentication parameters
+    $auth_params = [
+        'consumer_key' => $consumer_key,
+        'consumer_secret' => $consumer_secret,
+    ];
 
-//     // Create a new user
-//     $user_id = wp_create_user($email, $password, $email);
-//     if (is_wp_error($user_id)) {
-//         // Error creating user, handle the error or redirect as needed
-//         wp_redirect(home_url('/login/?signup=error'));
-//         exit;
-//     }
+    // Make the API request
+    $response = wp_remote_post(
+        $api_url,
+        [
+            'method' => 'POST',
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'body' => wp_json_encode($product_data),
+            'timeout' => 45,
+            'sslverify' => false,
+            'authentication' => 'basic',
+            'auth' => $auth_params,
+        ]
+    );
 
-//     // User created successfully, log in the user
-//     wp_set_auth_cookie($user_id);
-//     // Redirect the user to the desired page
-//     wp_redirect(home_url('/dashboard/'));
-//     exit;
-// }
+    // Check the response status
+    $response_code = wp_remote_retrieve_response_code($response);
+    if ($response_code === 201) {
+        // Product created successfully
+        return true;
+    } else {
+        // Error creating product
+        $error_message = wp_remote_retrieve_response_message($response);
+        return new WP_Error($response_code, $error_message);
+    }
+}
+
 
 
 
