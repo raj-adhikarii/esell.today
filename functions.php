@@ -160,6 +160,12 @@ require get_template_directory() . '/inc/theme-option.php';
 require get_template_directory() . '/inc/addscript.php';
 
 /**
+ * Enqueue wp rest php file.
+ */
+
+ require get_template_directory() . '/inc/jwt-rest.php';
+
+/**
  * Implement the Custom Header feature.
  */
 require get_template_directory() . '/inc/custom-header.php';
