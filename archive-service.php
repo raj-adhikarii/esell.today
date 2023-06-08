@@ -19,8 +19,8 @@
                             <div class="col-lg-7 mx-auto">
                                 <div class="site-heading text-center">
                                     <span class="site-title-tagline">Services</span>
-                                            <h2 class="section-title">Our Popular Services </h2>
-                                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+                                        <h2 class="section-title">Our Popular Services </h2>
+                                        <p>Read our our popular services to know more about what we buy and sell here.</p>
                                 </div>
                             </div>
                     </div>

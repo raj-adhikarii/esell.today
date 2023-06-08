@@ -1,5 +1,9 @@
 <?php
 /* Template Name: Login Template */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 get_header(); ?>
 
 <main class="main">
@@ -9,10 +13,10 @@ get_header(); ?>
             $image = wp_get_attachment_image_src(get_post_thumbnail_id($post -> ID), 'single-post-thumbnail'); ?>
         <div class="site-breadcrumb" style="background: url(<?php echo $image[0]; ?>)">
             <div class="container">
-                <h2 class="breadcrumb-title">My Profile</h2>
+                <h2 class="breadcrumb-title"><?php echo get_the_title(); ?></h2>
                 <ul class="breadcrumb-menu">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">My Profile</li>
+                    <li><a href="<?php echo site_url(); ?>">Home</a></li>
+                    <li class="active"><?php echo get_the_title(); ?></li>
                 </ul>
             </div>
         </div>
@@ -29,15 +33,16 @@ get_header(); ?>
                             <img src="<?php echo esc_url(get_theme_file_uri('assets/img/logo/logo.png')); ?>" alt="<?php _e('Asset description'); ?>">
                             <p>Login with your account</p>
                         </div>
-                        <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
+                        <form class="" method="POST">
+                            <?php do_action('woocommerce_login_form_start'); ?>
                             <div class="form-group">
                                 <label>Email Address</label>
-                                <input type="email" class="form-control" name="email" placeholder="Your Email">
+                                <input type="text" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="username" id="username" placeholder="Your Email">
                                 <i class="far fa-envelope"></i>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" name="password" placeholder="Your Password">
+                                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" type="password" name="password" id="password" autocomplete="current-password" placeholder="Your Password">
                                 <i class="far fa-lock"></i>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
@@ -51,11 +56,22 @@ get_header(); ?>
                             </div>
                             <div class="d-flex align-items-center">
                                 <input type="hidden" name="action" value="custom_login_authentication">
-                                <?php wp_nonce_field( 'custom_login_nonce', 'custom_login_nonce' ); ?>
-                                <button type="submit" class="theme-btn"><i class="far fa-sign-in"></i> Sign In</button>
+                                <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
+                                <button type="submit" class="theme-btn" name="login" value="<?php esc_attr_e('Log in', 'woocommerce'); ?>"><i class="far fa-sign-in"></i> Sign In</button>
                             </div>
+                            <?php do_action('woocommerce_login_form_end'); ?>
                         </form>
 
+                        <?php
+                        // Redirect user to dashboard after login
+                        function custom_login_redirect($redirect, $user) {
+                            $dashboard_url = home_url('/dashboard/'); // Replace with your desired dashboard URL
+                            return $dashboard_url;
+                        }
+                        add_filter('woocommerce_login_redirect', 'custom_login_redirect', 10, 2);
+                        ?>
+
+                     
                         <div class="login-footer">
                             <div class="login-divider"><span>Or</span></div>
                             <div class="social-login">
@@ -71,8 +87,5 @@ get_header(); ?>
             </div>
         </div>
         <!-- login area end -->
-
-
     </main>
-    <script src="https://accounts.google.com/gsi/client"></script>
 <?php get_footer(); 

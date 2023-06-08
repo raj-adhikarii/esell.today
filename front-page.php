@@ -635,7 +635,7 @@ get_header();
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Our Blog</span>
                     <h2 class="section-title">Our Latest News & Blog</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+                    <p>Read out our latest news and blogs to explore more about our products and services.</p>
                 </div>
             </div>
         </div>

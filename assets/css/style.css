@@ -3568,7 +3568,12 @@ form.woocommerce-ordering select {
  font-size: 30px;
 } */
 
-
+@media all and (max-width: 992px){
+  .header-account a {
+      color: #f69520;
+      font-weight: bold;
+  }
+}
 
 @media all and (max-width: 767px) {
   .blog-meta {
