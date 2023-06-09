@@ -24,35 +24,37 @@ get_header(); ?>
         <div class="user-profile py-120">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-3">
-                        <div class="user-profile-sidebar">
-                            <div class="user-profile-sidebar-top">
-                                <?php if ( is_user_logged_in() ) : ?>
-                                    <?php
-                                        $current_user = wp_get_current_user();
-                                        $user_profile_link = get_author_posts_url( $current_user->ID );
-                                        $user_profile_image = get_avatar( $current_user->ID, 32 );
-                                    ?>
-                                    <div class="user-profile-img">
+                <div class="col-lg-3">
+                    <div class="user-profile-sidebar">
+                        <div class="user-profile-sidebar-top">
+                            <?php if ( is_user_logged_in() ) : ?>
+                                <?php
+                                    $current_user = wp_get_current_user();
+                                    $user_profile_link = get_author_posts_url( $current_user->ID );
+                                    $user_profile_image = get_avatar( $current_user->ID, 32 );
+                                ?>
+                                <div class="user-profile-img">
 
-                                            <?php echo $user_profile_image; ?>
-                                            <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
-                                            <input type="file" class="profile-img-file">
-                                    </div>
-                                    <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
-                                    <p><?php echo esc_html( $current_user->user_email ); ?></p>
-                                <?php endif; ?>
-                            </div>
-                            <ul class="user-profile-sidebar-list">
-                                <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
-                                <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
-                                <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
-                                <li><a <?php echo is_page(sanitize_title('post-ad')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/post-ad/"><i class="far fa-plus-circle"></i> Post Ads</a></li>
-                                <li><a <?php echo is_page(sanitize_title('profile-setting')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
-                                <li><a href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
-                            </ul>
+                                        <?php echo $user_profile_image; ?>
+                                        <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
+                                        <input type="file" class="profile-img-file">
+                                </div>
+                                <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
+                                <p><?php echo esc_html( $current_user->user_email ); ?></p>
+                            <?php endif; ?>
                         </div>
+                        <ul class="user-profile-sidebar-list">
+                        <ul>
+                            <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
+                            <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
+                            <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
+                            <li><a <?php echo is_page(sanitize_title('post-ad')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/post-ad/"><i class="far fa-plus-circle"></i> Post Ads</a></li>
+                            <li><a <?php echo is_page(sanitize_title('profile-setting')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
+                            <li><a <?php echo is_page(sanitize_title('favorite')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/favorite/"><i class="far fa-heart"></i> Wishlist</a></li>
+                            <li><a href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
+                        </ul>
                     </div>
+                </div>
                     <div class="col-lg-9">
                         <div class="user-profile-wrapper">
                             <div class="user-profile-card profile-setting">
