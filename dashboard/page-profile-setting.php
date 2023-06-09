@@ -43,20 +43,7 @@ get_header(); ?>
                                 <p><?php echo esc_html( $current_user->user_email ); ?></p>
                             <?php endif; ?>
                         </div>
-                        <div class="user-profile-sidebar-top">
-    <?php if ( is_user_logged_in() ) : ?>
-        <div class="user-profile-img">
-            <?php echo $user_profile_image; ?>
-            <form method="POST" enctype="multipart/form-data">
-                <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
-                <input type="file" class="profile-img-file" name="profile_image">
-                <input type="submit" value="Upload" name="submit">
-            </form>
-        </div>
-        <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
-        <p><?php echo esc_html( $current_user->user_email ); ?></p>
-    <?php endif; ?>
-</div>
+                        
                         <ul class="user-profile-sidebar-list">
                         <ul>
                             <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>

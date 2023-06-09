@@ -4,29 +4,29 @@ define('WP_INSTALL_PATH', dirname(__FILE__) . '/'); // Adjust the path if needed
 
 
 // Redirect user after registration
-function custom_registration_redirect($redirect) {
-    $custom_url = 'https://google.com'; // Replace with your desired URL
-    return $custom_url;
-}
-add_filter('woocommerce_registration_redirect', 'custom_registration_redirect');
+// function custom_registration_redirect($redirect) {
+//     $custom_url = 'https://google.com'; // Replace with your desired URL
+//     return $custom_url;
+// }
+// add_filter('woocommerce_registration_redirect', 'custom_registration_redirect');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = sanitize_user($_POST['username']);
-    $email = sanitize_email($_POST['email']);
-    $password = $_POST['password'];
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $username = sanitize_user($_POST['username']);
+//     $email = sanitize_email($_POST['email']);
+//     $password = $_POST['password'];
 
-    // Perform form validation and error handling as needed
+//     // Perform form validation and error handling as needed
 
-    // Register the user using WooCommerce registration function
-    $user_id = wc_create_new_customer($email, $username, $password);
+//     // Register the user using WooCommerce registration function
+//     $user_id = wc_create_new_customer($email, $username, $password);
 
-    if (is_wp_error($user_id)) {
-        // Registration failed
-        $error_message = $user_id->get_error_message();
-        // Display or handle the error as needed
-    }
-}
-?>
+//     if (is_wp_error($user_id)) {
+//         // Registration failed
+//         $error_message = $user_id->get_error_message();
+//         // Display or handle the error as needed
+//     }
+// }
+// ?>
 
 <main class="main">
 
