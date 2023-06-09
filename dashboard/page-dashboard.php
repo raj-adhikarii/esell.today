@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header() ?>
 
-
 <main class="main">
 
         <!-- breadcrumb -->
@@ -201,3 +200,4 @@ get_header() ?>
 </main>
 
 <?php get_footer(); 
+// endif; ?>
