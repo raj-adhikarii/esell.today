@@ -254,7 +254,7 @@ add_action('acf/init', 'my_acf_init');
 //redirect annomous user to login page 
 function redirect_unlogged_users() {
     // Define the restricted pages slugs
-    $restricted_pages = array( 'my-ads', 'post-ad', 'profile-setting', 'profile-setting', 'profile' );
+    $restricted_pages = array( 'dashboard', 'my-ads', 'post-ad', 'profile-setting', 'profile-setting', 'profile' );
 
     // Check if the user is not logged in and trying to access a restricted page
     if ( ! is_user_logged_in() && in_array( get_post_field( 'post_name' ), $restricted_pages ) ) {
