@@ -3550,6 +3550,12 @@ form.woocommerce-ordering select {
   color: var(--accent-color);
 }
 
+.wcpv-sold-by-loop {
+  margin: 5px 0;
+  font-style: normal;
+  font-size: 13px;
+}
+
 /* .regular-price.variable-product span.woocommerce-Price-amount.amount {
   color: #394358;
   text-decoration: line-through;
