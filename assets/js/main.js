@@ -437,3 +437,8 @@ function startGoogleSignin() {
 document.addEventListener("DOMContentLoaded", function(event) {
     startGoogleSignin();
 });
+
+// hide error message
+setTimeout(function() {
+    jQuery('#error-message').fadeOut('slow');
+}, 4000);

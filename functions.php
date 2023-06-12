@@ -337,7 +337,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
 
 
 //signup validation
-
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     $username = sanitize_user( $_POST['username'] );
     $email = sanitize_email( $_POST['email'] );
@@ -373,9 +372,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         if ( ! is_wp_error( $user_id ) ) {
             // Registration successful
             // You can perform additional actions here, such as sending a confirmation email, redirecting the user, etc.
-
-			wp_redirect( site_url( '/login/' ) );
-        exit;
+            wp_redirect( site_url( '/login/' ) );
+            exit;
         } else {
             // Registration failed
             $errors[] = $user_id->get_error_message();
@@ -383,14 +381,87 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     }
 
     // Display error messages, if any
-    if ( ! empty( $errors ) ) {
-        echo '<ul>';
-        foreach ( $errors as $error ) {
-            echo '<li>' . $error . '</li>';
-        }
-        echo '</ul>';
-    }
+    // if ( ! empty( $errors ) ) {
+    //     echo '<div class="alert alert-danger" role="alert">';
+    //     echo '<ul>';
+    //     foreach ( $errors as $error ) {
+    //         echo '<li>' . esc_html( $error ) . '</li>';
+    //     }
+    //     echo '</ul>';
+    //     echo '</div>';
+    // }
 }
+
+// Server-side validation for forget password page 
+function custom_lost_password_validation($errors, $username) {
+    if (empty($username)) {
+        $errors->add('empty_username', __('Please enter your email address.', 'woocommerce'));
+    } elseif (!is_email($username)) {
+        $errors->add('invalid_username', __('Invalid email address.', 'woocommerce'));
+    } elseif (!email_exists($username)) {
+        $errors->add('email_not_found', __('The provided email address is not registered.', 'woocommerce'));
+    }
+
+    return $errors;
+}
+add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
+
+
+// custom login endpoint
+add_action('rest_api_init', 'custom_user_login_endpoint');
+
+function custom_user_login_endpoint() {
+  register_rest_route('user/v1', '/login', array(
+    'methods' => 'POST',
+    'callback' => 'custom_user_login',
+  ));
+}
+
+function custom_user_login($request) {
+    $username = $request->get_param('username');
+    $password = $request->get_param('password');
+  
+    // Perform validation on the input data
+  
+    $user = wp_authenticate($username, $password);
+  
+    if (is_wp_error($user)) {
+      return new WP_REST_Response(array('error' => $user->get_error_message()), 401);
+    }
+  
+    wp_set_current_user($user->ID);
+    wp_set_auth_cookie($user->ID);
+  
+    return new WP_REST_Response(array('message' => 'User logged in successfully'), 200);
+}
+
+
+//custom user register endpoint
+add_action('rest_api_init', 'custom_user_registration_endpoint');
+
+function custom_user_registration_endpoint() {
+  register_rest_route('user/v1', '/register', array(
+    'methods' => 'POST',
+    'callback' => 'custom_user_registration',
+  ));
+}
+
+function custom_user_registration($request) {
+    $username = $request->get_param('username');
+    $email = $request->get_param('email');
+    $password = $request->get_param('password');
+  
+    // Perform validation on the input data
+  
+    $user_id = wp_create_user($username, $password, $email);
+  
+    if (is_wp_error($user_id)) {
+      return new WP_REST_Response(array('error' => $user_id->get_error_message()), 500);
+    }
+  
+    return new WP_REST_Response(array('message' => 'User registered successfully'), 200);
+  }
+  
 
 
 

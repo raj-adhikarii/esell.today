@@ -78,6 +78,16 @@ define('WP_INSTALL_PATH', dirname(__FILE__) . '/'); // Adjust the path if needed
                     <div class="d-flex align-items-center">
                         <button type="submit" class="theme-btn"><i class="far fa-paper-plane"></i> Sign Up</button>
                     </div>
+
+                    <?php if ( ! empty( $errors ) ) : ?>
+                        <div class="alert alert-danger mt-3" id="error-message" role="alert">
+                            <ul>
+                                <?php foreach ( $errors as $error ) : ?>
+                                    <li><?php echo esc_html( $error ); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
                 </form>
                 <div class="login-footer">
                     <div class="login-divider"><span>Or</span></div>
