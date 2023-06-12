@@ -36,11 +36,11 @@ get_header(); ?>
                                 $user_profile_image = get_avatar( $current_user->ID, 32 );
                             ?>
                             <div class="user-profile-img">
-
-                                    <?php echo $user_profile_image; ?>
-                                    <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
-                                    <input type="file" class="profile-img-file">
+                                <?php echo $user_profile_image; ?>
+                                <button type="button" class="profile-img-btn"><a  class="active" href="<?php echo site_url(); ?>/profile"><i class="far fa-camera"></i></a></button>
+                                <!-- <input type="file" class="profile-img-file"> -->
                             </div>
+
                             <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
                             <p><?php echo esc_html( $current_user->user_email ); ?></p>
                         <?php endif; ?>

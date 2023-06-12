@@ -34,17 +34,17 @@ get_header(); ?>
                                     $user_profile_image = get_avatar( $current_user->ID, 32 );
                                 ?>
                                 <div class="user-profile-img">
-
-                                        <?php echo $user_profile_image; ?>
-                                        <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
-                                        <input type="file" class="profile-img-file">
+                                    <?php echo $user_profile_image; ?>
+                                    <button type="button" class="profile-img-btn"><a  class="active" href="<?php echo site_url(); ?>/profile"><i class="far fa-camera"></i></a></button>
+                                    <!-- <input type="file" class="profile-img-file"> -->
                                 </div>
+
                                 <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
                                 <p><?php echo esc_html( $current_user->user_email ); ?></p>
                             <?php endif; ?>
                         </div>
+
                         <ul class="user-profile-sidebar-list">
-                        <ul>
                             <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
                             <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
                             <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
@@ -85,13 +85,21 @@ get_header(); ?>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Phone</label>
-                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'phone', true)) ?: 'Phone not available'; ?>" placeholder="Phone">
+                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'billing_phone', true)) ?: 'Phone not available'; ?>" placeholder="Phone">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label>Address</label>
-                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'address', true)) ?: 'Address not available'; ?>" placeholder="Address">
+                                                            <?php
+                                                            $user_id = get_current_user_id();
+                                                            $address = get_user_meta($user_id, 'billing_address_1', true);
+                                                            $city = get_user_meta($user_id, 'billing_city', true);
+                                                            $country = get_user_meta($user_id, 'billing_country', true);
+                                                            $postcode = get_user_meta($user_id, 'billing_postcode', true);
+                                                            $full_address = $address . ', ' . $city . ', ' . $country . ', ' . $postcode;
+                                                            ?>
+                                                            <input type="text" class="form-control" value="<?php echo esc_attr($full_address); ?>" placeholder="Address">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -105,24 +113,24 @@ get_header(); ?>
                                         <h4 class="user-profile-card-title">Change Password</h4>
                                         <div class="col-lg-12">
                                             <div class="user-profile-form">
-                                                <form action="#">
-                                                    <div class="form-group">
-                                                        <label>Old Password</label>
-                                                        <input type="password" class="form-control"
-                                                            placeholder="Old Password">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>New Password</label>
-                                                        <input type="password" class="form-control"
-                                                            placeholder="New Password">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Re-Type Password</label>
-                                                        <input type="password" class="form-control"
-                                                            placeholder="Re-Type Password">
-                                                    </div>
-                                                    <button type="button" class="theme-btn my-3"><span class="far fa-key"></span> Change Password</button>
-                                                </form>
+                                            <form action="<?php echo esc_url( wp_lostpassword_url() ); ?>" method="post">
+                                                <div class="form-group">
+                                                    <label>Old Password</label>
+                                                    <input type="password" class="form-control" name="old_password" placeholder="Old Password" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>New Password</label>
+                                                    <input type="password" class="form-control" name="new_password" placeholder="New Password" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Re-Type Password</label>
+                                                    <input type="password" class="form-control" name="confirm_password" placeholder="Re-Type Password" required>
+                                                </div>
+                                                <button type="submit" class="theme-btn my-3" name="change_password_submit">
+                                                    <span class="far fa-key"></span> Change Password
+                                                </button>
+                                            </form>
+
                                             </div>
                                         </div>
                                     </div>
@@ -133,34 +141,84 @@ get_header(); ?>
                                         <div class="col-lg-12">
                                             <div class="user-profile-form">
                                                 <form action="#">
-                                                    <div class="form-group">
+                                                    <!-- <div class="form-group">
                                                         <div class="store-logo-preview">
                                                             
                                                         <?php echo get_avatar(get_current_user_id(), 150); ?>
                                                         </div>
                                                         <input type="file" class="store-file">
                                                         <button type="button" class="theme-btn store-upload"><span class="far fa-upload"></span> Upload Logo</button>
+                                                    </div> -->
+
+                                                    <div class="form-group">
+                                                        <div class="store-logo-preview">
+                                                            <?php echo get_avatar(get_current_user_id(), 150); ?>
+                                                        </div>
+                                                        <input type="file" id="store-logo-upload" class="store-file" accept="image/*">
+                                                        <button type="button" class="theme-btn store-upload"><span class="far fa-upload"></span> Upload Logo</button>
                                                     </div>
+
+                                                    <script>
+                                                        // JavaScript code to handle file input change event and preview the selected image
+                                                        const fileInput = document.getElementById('store-logo-upload');
+                                                        const previewImage = document.querySelector('.store-logo-preview img');
+                                                        
+                                                        fileInput.addEventListener('change', function() {
+                                                            const file = fileInput.files[0];
+                                                            const reader = new FileReader();
+                                                            
+                                                            reader.addEventListener('load', function() {
+                                                                previewImage.src = reader.result;
+                                                            });
+                                                            
+                                                            if (file) {
+                                                                reader.readAsDataURL(file);
+                                                            }
+                                                        });
+                                                    </script>
+
+                                                    <?php
+                                                    if (isset($_FILES['store_logo']) && !empty($_FILES['store_logo']['name'])) {
+                                                        $file = $_FILES['store_logo'];
+                                                        $upload_dir = wp_upload_dir();
+                                                        $file_name = basename($file['name']);
+                                                        $file_path = $upload_dir['path'] . '/' . $file_name;
+
+                                                        // Move the uploaded file to the destination directory
+                                                        if (move_uploaded_file($file['tmp_name'], $file_path)) {
+                                                            // Update the user's meta data with the file path
+                                                            update_user_meta(get_current_user_id(), 'store_logo', $file_path);
+                                                        }
+                                                    }
+                                                    ?>
+
                                                     <div class="form-group">
                                                         <div class="store-banner-preview">
-                                                            <img src="<?php echo esc_url(get_theme_file_uri('assets/img/store/banner.jpg')); ?>" alt="<?php _e('Asset description'); ?>">
+                                                            <?php
+                                                            $banner_image_id = get_user_meta(get_current_user_id(), 'banner_image', true);
+                                                            $banner_image_url = $banner_image_id ? wp_get_attachment_url($banner_image_id) : get_theme_file_uri('assets/img/store/banner.jpg');
+                                                            ?>
+                                                            <img src="<?php echo esc_url($banner_image_url); ?>" alt="<?php esc_attr_e('Banner Image', 'text-domain'); ?>">
                                                         </div>
                                                         <input type="file" class="store-file">
                                                         <button type="button" class="theme-btn store-upload mb-4"><span class="far fa-upload"></span> Upload Banner</button>
                                                     </div>
+
                                                     <div class="form-group">
                                                         <label>Store Name</label>
-                                                        <input type="text" class="form-control" value="Ritro Fashion"
+                                                        <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'store_name', true)); ?>"
                                                             placeholder="Store Name">
                                                     </div>
+
                                                     <div class="form-group">
                                                         <label>Contact Phone Number</label>
-                                                        <input type="text" class="form-control" value="+977 9808009469"
+                                                        <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'billing_phone', true)) ?: 'Phone not available'; ?>"
                                                             placeholder="Contact Phone Number">
                                                     </div>
+
                                                     <div class="form-group">
                                                         <label>Contact Email</label>
-                                                        <input type="text" class="form-control" value="Admin@admin.com"
+                                                        <input type="text" class="form-control" value="<?php echo esc_attr(wp_get_current_user()->user_email); ?>"
                                                             placeholder="Contact Email">
                                                     </div>
                                                     <button type="button" class="theme-btn my-3"><span class="far fa-save"></span> Save Changes</button>

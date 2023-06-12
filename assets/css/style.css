@@ -4750,9 +4750,10 @@ user profile css
   color: #EF4444;
 }
 
+/*==================
+      Dashboard
+===================*/
 
-
-/* dashboard */
 .dashboard-widget {
   /* display: flex; */
   display: block;
@@ -4762,6 +4763,10 @@ user profile css
   border-radius: 10px;
   margin-bottom: 30px;
   box-shadow: 0 0 40px 5px rgb(0 0 0 / 3%);
+}
+
+.profile-img-btn a.active i {
+  color: #fff;
 }
 
 .dashboard-widget-info span {
@@ -5351,6 +5356,15 @@ user profile css
   min-width: 200px;
 }
 
+.woocommerce-message {
+  border-top-color: var(--accent-color);
+}
+
+.woocommerce-message::before {
+  content: "\e015";
+  color: var(--accent-color);
+}
+
 .contact-form .form-group .form-control, .woocommerce form .form-row input.input-text, 
 .select2-container .select2-selection--single, 
 body textarea, body input[type="text"],
@@ -5377,124 +5391,6 @@ body input[type="email"]{
 .select2-container .select2-selection--single{
   height: 52px;
 }
-
-/* ===================
-coming soon css 
-====================== */
-
-.coming-soon {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
-  width: 100%;
-  top: 0;
-  left: 0;
-  position: relative;
-}
-
-.coming-soon .container {
-  position: relative;
-}
-
-.coming-soon:before {
-  position: absolute;
-  content: '';
-  background: rgba(0, 0, 0, .7);
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-.coming-soon .newsletter-form {
-  position: relative;
-  margin-top: 30px;
-}
-
-.coming-soon .newsletter-form .input-newsletter {
-  height: 55px;
-  display: block;
-  width: 100%;
-  border: none;
-  border-radius: 50px;
-  font-size: 14px;
-  padding-top: 0;
-  padding-right: 0;
-  padding-bottom: 0;
-  padding-left: 25px;
-  box-shadow: none;
-}
-
-.coming-soon .newsletter-form button {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  bottom: 4px;
-  height: auto;
-  border: none;
-  border-radius: 50px;
-  background: var(--accent-color);
-  display: inline-block;
-  color: #fff;
-  padding-left: 30px;
-  padding-right: 30px;
-  font-weight: 500;
-  transition: .5s;
-}
-
-.coming-soon .newsletter-form button:hover {
-  background-color: var(--accent-color);
-  color: #fff;
-}
-
-.coming-social {
-  margin-top: 30px;
-  text-align: center;
-}
-
-.coming-social a {
-  color: #fff;
-  margin: 5px;
-  width: 40px;
-  height: 40px;
-  line-height: 36px;
-  text-align: center;
-  border-radius: 50px;
-  border: 2px solid #fff;
-  display: inline-block;
-  transition: .5s;
-}
-
-.coming-social a:hover {
-  background: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-.countdown-wrap {
-  margin-top: 30px;
-}
-
-.countdown-single {
-  background: var(--accent-color);
-  padding: 20px;
-  margin: 10px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 50px;
-  box-shadow: 0 3px 24px rgb(0 0 0 / 10%);
-}
-
-.countdown-single h2 {
-  color: #fff;
-}
-
-.countdown-single h5 {
-  color: #fff;
-}
-
-
-
 
 /* ===================
 error css 
@@ -5864,7 +5760,7 @@ footer css
 /* ======================
 home 2
 ====================== */
-
+/* 
 .home-2 .main{
   margin-top: 0;
 }
@@ -5905,13 +5801,13 @@ home 2
     margin: 0 auto;
   }
 
-}
+} */
 
 
 /* ======================
 home 3
 ====================== */
-
+/* 
 .home-3 .main{
   margin-top: 0;
 }
@@ -5967,13 +5863,13 @@ home 3
   }
 
 }
-
+ */
 
 
 /* ======================
 home 5
-====================== */
-
+/* ====================== */
+/*
 .home-5 .main{
   margin-top: 0;
 }
@@ -6082,7 +5978,7 @@ home 5
   }
 }
 
-
+ */
 
 
 

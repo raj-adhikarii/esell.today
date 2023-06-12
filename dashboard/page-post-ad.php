@@ -34,17 +34,16 @@ get_header(); ?>
                                     $user_profile_image = get_avatar( $current_user->ID, 32 );
                                 ?>
                                 <div class="user-profile-img">
-
-                                        <?php echo $user_profile_image; ?>
-                                        <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
-                                        <input type="file" class="profile-img-file">
+                                    <?php echo $user_profile_image; ?>
+                                    <button type="button" class="profile-img-btn"><a  class="active" href="<?php echo site_url(); ?>/profile"><i class="far fa-camera"></i></a></button>
+                                    <!-- <input type="file" class="profile-img-file"> -->
                                 </div>
+                                
                                 <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
                                 <p><?php echo esc_html( $current_user->user_email ); ?></p>
                             <?php endif; ?>
                         </div>
                         <ul class="user-profile-sidebar-list">
-                        <ul>
                             <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
                             <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
                             <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
@@ -74,27 +73,23 @@ get_header(); ?>
                                                 <div class="form-group">
                                                     <label>Category</label>
                                                     <select class="select">
-                                                        <option value="">Category</option>
-                                                        <option value="1">All Category</option>
-                                                        <option value="2">Electronics</option>
-                                                        <option value="3">Laptops & PCs</option>
-                                                        <option value="4">Mobiles</option>
-                                                        <option value="5">Property</option>
-                                                        <option value="6">Vehicles</option>
-                                                        <option value="7">Fashions</option>
-                                                        <option value="8">Animals</option>
-                                                        <option value="9">Furnitures</option>
-                                                        <option value="10">Educations</option>
-                                                        <option value="11">Jobs</option>
-                                                        <option value="12">Sports & Games</option>
-                                                        <option value="13">Health & Beauty</option>
-                                                        <option value="14">Matrimony</option>
+                                                    <option value="">Category</option>
+                                                    <?php
+                                                    $product_categories = get_terms(array(
+                                                        'taxonomy' => 'product_cat',
+                                                        'hide_empty' => false,
+                                                    ));
+
+                                                    foreach ($product_categories as $category) {
+                                                        echo '<option value="' . $category->term_id . '">' . $category->name . '</option>';
+                                                    }
+                                                    ?>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label>Price (USD)</label>
+                                                    <label>Price (NPR)</label>
                                                     <input type="text" id="product-price" class="form-control" placeholder="Enter price">
                                                 </div>
                                             </div>

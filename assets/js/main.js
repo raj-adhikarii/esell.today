@@ -442,3 +442,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
 setTimeout(function() {
     jQuery('#error-message').fadeOut('slow');
 }, 4000);
+

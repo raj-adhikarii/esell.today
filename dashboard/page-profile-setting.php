@@ -37,7 +37,7 @@ get_header(); ?>
 
                                         <?php echo $user_profile_image; ?>
                                         <button type="button" class="profile-img-btn"><i class="far fa-camera"></i></button>
-                                        <input type="file" class="profile-img-file">
+                                        <!-- <input type="file" class="profile-img-file"> -->
                                 </div>
                                 <h5><?php echo esc_html( $current_user->display_name ); ?></h5>
                                 <p><?php echo esc_html( $current_user->user_email ); ?></p>
@@ -45,7 +45,6 @@ get_header(); ?>
                         </div>
                         
                         <ul class="user-profile-sidebar-list">
-                        <ul>
                             <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
                             <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
                             <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
