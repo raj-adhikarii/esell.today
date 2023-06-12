@@ -379,17 +379,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
             $errors[] = $user_id->get_error_message();
         }
     }
-
-    // Display error messages, if any
-    // if ( ! empty( $errors ) ) {
-    //     echo '<div class="alert alert-danger" role="alert">';
-    //     echo '<ul>';
-    //     foreach ( $errors as $error ) {
-    //         echo '<li>' . esc_html( $error ) . '</li>';
-    //     }
-    //     echo '</ul>';
-    //     echo '</div>';
-    // }
 }
 
 // Server-side validation for forget password page 
@@ -462,7 +451,3 @@ function custom_user_registration($request) {
     return new WP_REST_Response(array('message' => 'User registered successfully'), 200);
   }
   
-
-
-
-

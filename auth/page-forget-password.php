@@ -51,7 +51,7 @@ get_header(); ?>
                                 
                                 <div class="d-flex align-items-center">
                                     <input type="hidden" name="wc_reset_password" value="true" />
-                                    <button type="submit" class="theme-btn woocommerce-Button button" value="<?php esc_attr_e('Send Reset Link', 'woocommerce'); ?>"><i class="far fa-key"></i> <?php esc_html_e('Send Reset Link', 'woocommerce'); ?></button>
+                                    <button type="submit" class="theme-btn" value="<?php esc_attr_e('Send Reset Link', 'woocommerce'); ?>"><i class="far fa-key"></i> <?php esc_html_e('Send Reset Link', 'woocommerce'); ?></button>
                                 </div>
                                 
                                 <?php wp_nonce_field('lost_password', 'woocommerce-lost-password-nonce'); ?>
