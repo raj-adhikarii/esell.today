@@ -75,7 +75,7 @@ get_header(); ?>
                         <div class="login-footer">
                             <div class="login-divider"><span>Or</span></div>
                             <div class="social-login">
-                                <a href="#" class="btn-fb"><i class="fab fa-facebook"></i> Login With Facebook</a>
+                                <!-- <a href="#" class="btn-fb"><i class="fab fa-facebook"></i> Login With Facebook</a> -->
                                 <a href="#" class="btn-gl"><i class="fab fa-google"></i> Login With Google</a>
                                 <div id="google-signin-button"></div>
 

@@ -186,6 +186,11 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+function mytheme_add_woocommerce_support() {
+	add_theme_support( 'woocommerce' );
+}
+add_action( 'after_setup_theme', 'mytheme_add_woocommerce_support' );
+
 // Update product views count
 function update_product_views_count() {
     if (is_singular('product')) {
@@ -262,8 +267,8 @@ add_action( 'template_redirect', 'redirect_unlogged_users' );
 // credentials verification
 function create_product_via_api($product_data) {
     // WooCommerce API credentials
-    $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
-    $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
+    $consumer_key = 'ck_3b1cfe2add0a1811720f3c5acc7abd65ad78efd6';
+    $consumer_secret = 'cs_6e6c98a2393bd22820507d4b540e56d1d1d8b32c';
 
     // WooCommerce API URL
     $api_url = 'https://staging.e-sell.today/wp-json/wc/v3/products';
@@ -302,3 +307,79 @@ function create_product_via_api($product_data) {
     }
 }
 
+
+//transfer data from frontend
+function publish_product() {
+    if (isset($_POST['submit'])) {
+        $title = sanitize_text_field($_POST['product-title']);
+        $category = intval($_POST['product-category']);
+        $price = floatval($_POST['product-price']);
+        $tags = sanitize_text_field($_POST['product-tag']);
+        $images = $_FILES['product-images'];
+        $location = array(
+            'address' => sanitize_text_field($_POST['user-location']),
+            'city' => sanitize_text_field($_POST['user-city']),
+            'state' => sanitize_text_field($_POST['user-state']),
+            'zip' => sanitize_text_field($_POST['user-zip'])
+        );
+        $description = sanitize_textarea_field($_POST['product-description']);
+        $contactName = sanitize_text_field($_POST['contact-name']);
+        $contactEmail = sanitize_email($_POST['contact-email']);
+        $contactPhone = sanitize_text_field($_POST['contact-phone']);
+
+        // Create a new post of 'product' post type
+        $newProduct = array(
+            'post_title' => $title,
+            'post_content' => $description,
+            'post_status' => 'publish',
+            'post_type' => 'product'
+        );
+        $productID = wp_insert_post($newProduct);
+
+        // Set product category
+        wp_set_object_terms($productID, $category, 'product_cat');
+
+        // Set product price as a meta field
+        update_post_meta($productID, 'product_price', $price);
+
+        // Set product tags
+        wp_set_post_tags($productID, $tags);
+
+        // Upload and attach product images
+        $attachmentIDs = array();
+        foreach ($images['name'] as $key => $image) {
+            if ($images['error'][$key] === UPLOAD_ERR_OK) {
+                $uploadFile = wp_handle_upload($images, array('test_form' => false));
+                if ($uploadFile && !isset($uploadFile['error'])) {
+                    $attachment = array(
+                        'post_mime_type' => $uploadFile['type'],
+                        'post_title' => sanitize_file_name($uploadFile['file']),
+                        'post_content' => '',
+                        'post_status' => 'inherit'
+                    );
+                    $attachmentID = wp_insert_attachment($attachment, $uploadFile['file'], $productID);
+                    if (!is_wp_error($attachmentID)) {
+                        require_once(ABSPATH . 'wp-admin/includes/image.php');
+                        $attachmentData = wp_generate_attachment_metadata($attachmentID, $uploadFile['file']);
+                        wp_update_attachment_metadata($attachmentID, $attachmentData);
+                        $attachmentIDs[] = $attachmentID;
+                    }
+                }
+            }
+        }
+        // Set featured image (first uploaded image)
+        if (!empty($attachmentIDs)) {
+            set_post_thumbnail($productID, $attachmentIDs[0]);
+        }
+
+        // Set product location as meta fields
+        update_post_meta($productID, 'product_location', $location);
+
+        // Set contact information as meta fields
+        update_post_meta($productID, 'contact_name', $contactName);
+        update_post_meta($productID, 'contact_email', $contactEmail);
+        update_post_meta($productID, 'contact_phone', $contactPhone);
+    }
+}
+
+add_action('init', 'publish_product');

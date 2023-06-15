@@ -61,7 +61,7 @@ get_header(); ?>
                             <div class="col-lg-12">
                                 <div class="post-ad-form">
                                     <h6 class="mb-4">Basic Information</h6>
-                                    <form action="#">
+                                    <form  id="publish-product-form" method="POST">
                                         <div class="row align-items-center">
                                             <div class="col-lg-12">
                                                 <div class="form-group">

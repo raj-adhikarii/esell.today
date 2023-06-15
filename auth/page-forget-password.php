@@ -50,7 +50,7 @@ get_header(); ?>
                                 <?php do_action('woocommerce_lostpassword_form'); ?>
                                 
                                 <div class="d-flex align-items-center">
-                                    <input type="hidden" name="wc_reset_password" value="true" />
+                                    <input type="hidden" name="wc_reset_password"  value="true" />
                                     <button type="submit" class="theme-btn" value="<?php esc_attr_e('Send Reset Link', 'woocommerce'); ?>"><i class="far fa-key"></i> <?php esc_html_e('Send Reset Link', 'woocommerce'); ?></button>
                                 </div>
                                 
