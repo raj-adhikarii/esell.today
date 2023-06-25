@@ -108,7 +108,7 @@
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Contact</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/help/">Help</a></li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?php echo site_url('/wishlist/'); ?>">
+                                <a class="nav-link" href="<?php echo site_url(); ?>/wishlist/">
                                     <i class="far fa-heart" id="wishlist-icon"></i>
                                     <?php
                                     // Get the wishlist count

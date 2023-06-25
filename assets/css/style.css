@@ -5412,6 +5412,10 @@ error css
   color: #394358;
 }
 
+#error-message:empty {
+  display: none;
+}
+
 .error-wrapper h2 {
   margin-top: 30px;
   margin-bottom: 10px;

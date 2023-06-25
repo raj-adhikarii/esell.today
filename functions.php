@@ -264,50 +264,6 @@ function redirect_unlogged_users() {
 }
 add_action( 'template_redirect', 'redirect_unlogged_users' );
 
-// credentials verification
-function create_product_via_api($product_data) {
-    // WooCommerce API credentials
-    $consumer_key = 'ck_3b1cfe2add0a1811720f3c5acc7abd65ad78efd6';
-    $consumer_secret = 'cs_6e6c98a2393bd22820507d4b540e56d1d1d8b32c';
-
-    // WooCommerce API URL
-    $api_url = 'https://staging.e-sell.today/wp-json/wc/v3/products';
-
-    // Prepare the authentication parameters
-    $auth_params = [
-        'consumer_key' => $consumer_key,
-        'consumer_secret' => $consumer_secret,
-    ];
-
-    // Make the API request
-    $response = wp_remote_post(
-        $api_url,
-        [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-            'body' => wp_json_encode($product_data),
-            'timeout' => 45,
-            'sslverify' => false,
-            'authentication' => 'basic',
-            'auth' => $auth_params,
-        ]
-    );
-
-    // Check the response status
-    $response_code = wp_remote_retrieve_response_code($response);
-    if ($response_code === 201) {
-        // Product created successfully
-        return true;
-    } else {
-        // Error creating product
-        $error_message = wp_remote_retrieve_response_message($response);
-        return new WP_Error($response_code, $error_message);
-    }
-}
-
-
 //transfer data from frontend
 function publish_product() {
     if (isset($_POST['submit'])) {
@@ -383,3 +339,443 @@ function publish_product() {
 }
 
 add_action('init', 'publish_product');
+
+function handle_custom_post_ads() {
+    $ad_title = $_POST['post_title'];
+    $ad_content = $_POST['description'];
+    $price = $_POST['product_price'];
+    $category = $_POST['post_category'];
+    $tags_keyword = $_POST['tags_keyword'];
+    $ad_images = $_FILES['product_images'];
+	 //print_r($ad_images);
+	// exit;
+    $post_data = array(
+        'post_title'   => $ad_title,
+        'post_content' => $ad_content,
+        'post_type'    => 'product',
+        'post_status'  => 'draft'
+    );
+	$post_id=" ";
+	// print_r($_POST);
+	if(isset($_POST['edit_field'])){
+		$post_id=$_POST['edit_field'];
+		$post_data['ID']=$post_id;
+		//print_r($post_data);
+		wp_update_post($post_data);
+	}else{
+		$post_id = wp_insert_post($post_data);
+	}
+    if ($post_id) {
+        // Set the category for the post
+		$category = wp_set_object_terms($post_id, $category, 'product_cat');
+        // Set the tags for the post
+       $tags= wp_set_post_tags($post_id, $tags_keyword);
+
+        // Add the product price as custom meta data
+       $price_meta= update_post_meta($post_id, '_price', $price);
+        // Upload and attach the images to the post
+		// Check if any images were uploaded
+		if (!empty($ad_images['tmp_name'])) {
+			// print_r("temp name are not empty");
+			$uploaded_images = $ad_images;
+			
+			// Store the first image as the featured image
+			$featured_image = $uploaded_images['tmp_name'][0];
+			$featured_image_name = $uploaded_images['name'][0];
+			$featured_image_type = $uploaded_images['type'][0];
+
+			// Upload the featured image to the WordPress media library
+			$upload_featured = wp_upload_bits($featured_image_name, null, file_get_contents($featured_image));
+
+			if (isset($upload_featured['error']) && !empty($upload_featured['error'])) {
+				// Error occurred while uploading the featured image
+				echo 'Error uploading the featured image: ' . $upload_featured['error'];
+			} else {
+				// File uploaded successfully, proceed to set it as the featured image
+
+				// Get the attachment file path
+				$featured_image_path = $upload_featured['file'];
+
+				// Prepare the attachment data
+				$featured_attachment_data = array(
+					'post_mime_type' => $featured_image_type,
+					'post_title'     => sanitize_file_name($featured_image_name),
+					'post_content'   => '',
+					'post_status'    => 'inherit',
+				);
+				print_r($featured_attachment_data);
+				// Insert the attachment into the media library
+				$featured_attachment_id = wp_insert_attachment($featured_attachment_data, $featured_image_path);
+
+				if (!is_wp_error($featured_attachment_id)) {
+					// Set the attachment as the featured image for a specific post
+					set_post_thumbnail($post_id, $featured_attachment_id);
+					echo "Image Update".$attachmentID;
+				} else {
+					// Error occurred while inserting the featured attachment
+					echo 'Error setting the featured image: ' . $featured_attachment_id->get_error_message();
+				}
+			}
+
+			// Process the remaining images as gallery images
+			$gallery_images = array_slice($uploaded_images['tmp_name'], 1); // Remove the first image
+
+			foreach ($gallery_images as $key => $gallery_image) {
+				$gallery_image_name = $uploaded_images['name'][$key + 1];
+				$gallery_image_type = $uploaded_images['type'][$key + 1];
+
+				// Upload each gallery image to the WordPress media library
+				$upload_gallery = wp_upload_bits($gallery_image_name, null, file_get_contents($gallery_image));
+
+				if (isset($upload_gallery['error']) && !empty($upload_gallery['error'])) {
+					// Error occurred while uploading a gallery image
+					echo 'Error uploading gallery image: ' . $upload_gallery['error'];
+				} else {
+					// File uploaded successfully, proceed to add it to the product's gallery
+
+					// Get the attachment file path
+					$gallery_image_path = $upload_gallery['file'];
+
+					// Prepare the attachment data
+					$gallery_attachment_data = array(
+						'post_mime_type' => $gallery_image_type,
+						'post_title'     => sanitize_file_name($gallery_image_name),
+						'post_content'   => '',
+						'post_status'    => 'inherit',
+					);
+
+					// Insert the attachment into the media library
+					$gallery_attachment_id = wp_insert_attachment($gallery_attachment_data, $gallery_image_path);
+
+					if (!is_wp_error($gallery_attachment_id)) {
+						// Add the attachment to the product's gallery
+						add_post_meta($post_id, '_product_image_gallery', $gallery_attachment_id, false);
+					} else {
+						// Error occurred while inserting a gallery attachment
+						echo 'Error adding gallery image: ' . $gallery_attachment_id->get_error_message();
+					}
+				}
+			}
+		}
+	
+    } else {
+        echo json_encode(array('success' => false, 'message' => 'Failed to create ad post.'));
+    }
+	if(isset($_POST['edit_field'])){
+		echo "Product Ad Updated Succesfully";
+	}else{
+		echo  "Product Ad Added Succesfully";
+	}
+	
+    wp_die();
+}
+add_action('wp_ajax_custom_post_ads', 'handle_custom_post_ads');
+add_action('wp_ajax_nopriv_custom_post_ads', 'handle_custom_post_ads');
+
+function my_handle_attachment($file_handler,$post_id,$set_thu=false) {
+	// check to make sure its a successful upload
+	if ($_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK) __return_false();
+  
+	require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+	require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+	require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+  
+	$attach_id = media_handle_upload( $file_handler, $post_id );
+	if ( is_numeric( $attach_id ) ) {
+	  update_post_meta( $post_id, '_my_file_upload', $attach_id );
+	}
+	return $attach_id;
+  }
+
+function add_custom_menu_item_link( $items ) {
+    $items['post-ads'] = esc_html__('Post Ad', 'text-domain');
+	$items['my-ads'] = esc_html__('My Ads', 'text-domain');
+    return $items;
+}
+
+add_filter( 'woocommerce_account_menu_items', 'add_custom_menu_item_link' );
+
+// Add phone and address fields to the WooCommerce "Edit Account" form
+function add_custom_fields_to_edit_account_form() {
+    $user_id = get_current_user_id();
+
+    $phone = get_user_meta( $user_id, 'billing_phone', true );
+    echo '<div class="col-md-6">
+	<div class="form-group">
+	<label>Phone</label>
+	<input type="tel" class="form-control" name="billing_phone" id="billing_phone" placeholder="" value="'.$phone.'">
+	</div>
+	</div>';
+
+    $address = get_user_meta( $user_id, 'billing_address_1', true );
+    echo '<div class="col-md-12">
+	<div class="form-group">';
+    woocommerce_form_field( 'billing_address_1', array(
+        'type'        => 'text',
+        'label'       => __( 'Address', 'text-domain' ),
+        'required'    => true,
+        'class'       => array( 'woocommerce-Input woocommerce-Input--text input-text' ),
+        'value'       => $address,
+    ), $address );
+    echo '</div>
+	</div>';
+}
+add_action( 'woocommerce_edit_account_form', 'add_custom_fields_to_edit_account_form',5 );
+
+
+// Add phone and address fields to the WooCommerce "Edit Account" form
+function add_custom_fields_to_edit_store_information() {
+    $user_id = get_current_user_id();
+	$store_logo = get_user_meta( $user_id, 'store_logo', true );
+
+	?>
+		<div class="user-profile-card profile-store">
+			<h4 class="user-profile-card-title">Personal Info</h4>
+			<div class="col-lg-12">
+				<div class="user-profile-form">
+                                            
+
+					<div class="form-group">
+						<div class="store-logo-preview">
+							<?php if ( $store_logo ) : ?>
+								<img src="<?php echo esc_url( $store_logo ); ?>" alt="Store Logo" id="profile-image-preview" class="store-logo-preview" height="100px" width="100px">
+							<?php endif; ?>
+						</div>
+						<input type="file" class="woocommerce-Input woocommerce-Input--file input-file" id="profile-image-upload" name="store_logo">
+						<button type="button" class="theme-btn store-upload" id="profile-image-upload-button"><span class="far fa-upload"></span> Upload Profile Image</button>
+					</div>
+
+					<script>
+						document.getElementById('profile-image-upload').addEventListener('change', function (e) {
+							var reader = new FileReader();
+							reader.onload = function (event) {
+								document.getElementById('profile-image-preview').src = event.target.result;
+							}
+							reader.readAsDataURL(e.target.files[0]);
+						});
+					</script>
+
+
+                    <?php  
+						$store_phone_number = get_user_meta( $user_id, 'store_phone_number', true );
+					?>                 
+					<div class="form-group">
+						<label>Contact Phone Number</label>
+						<input type="text" name="store_phone_number" class="form-control" value="<?php echo $store_phone_number ?>"
+							placeholder="Contact Phone Number">
+					</div>
+					
+					<?php  
+						$store_name = get_user_meta( $user_id, 'store_name', true );
+					?>
+					<div class="form-group">
+						<label>Store Name</label>
+						<input type="text" name="store_name" class="form-control" value="<?php echo $store_name  ?>"
+							placeholder="Store Name">
+					</div>
+					<?php $contact_email = get_user_meta( $user_id, 'contact_email', true ); ?>
+					<div class="form-group">
+						<label>Contact Email</label>
+						<input type="email" name="contact_email" class="form-control" value="<?php echo $contact_email  ?>"
+							placeholder="Contact Email">
+					</div>
+					<?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
+					<button type="submit" class="theme-btn my-3" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><span class="far fa-save"></span><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
+					<input type="hidden" name="action" value="save_account_details" />	
+				</div>
+			</div>
+		</div>
+	<?php
+}
+add_action( 'woocommerce_edit_account_form_end', 'add_custom_fields_to_edit_store_information',10 );
+
+// Save phone and address fields data
+function save_custom_user_fields_on_edit_account( $user_id ) {
+    if ( isset( $_POST['billing_phone'] ) ) {
+        $phone = sanitize_text_field( $_POST['billing_phone'] );
+        update_user_meta( $user_id, 'billing_phone', $phone );
+    }
+
+    if ( isset( $_POST['billing_address_1'] ) ) {
+        $address = sanitize_text_field( $_POST['billing_address_1'] );
+        update_user_meta( $user_id, 'billing_address_1', $address );
+    }
+
+	if ( isset( $_POST['store_phone_number'] ) ) {
+        $store_phone_number = sanitize_text_field( $_POST['store_phone_number'] );
+        update_user_meta( $user_id, 'store_phone_number', $store_phone_number );
+    }
+
+	if ( isset( $_POST['store_name'] ) ) {
+        $store_name = sanitize_text_field( $_POST['store_name'] );
+        update_user_meta( $user_id, 'store_name', $store_name );
+    }
+
+	if ( isset( $_POST['contact_email'] ) ) {
+        $contact_email = sanitize_text_field( $_POST['contact_email'] );
+        update_user_meta( $user_id, 'contact_email', $contact_email );
+    }
+	// var_dump($_FILES );exit;
+	if ( isset( $_FILES['store_logo'] ) && ! empty( $_FILES['store_logo']['tmp_name'] ) ) {
+        $uploaded_file = wp_handle_upload( $_FILES['store_logo'], array( 'test_form' => false ) );
+        if ( isset( $uploaded_file['url'] ) ) {
+            $store_logo = $uploaded_file['url'];
+            update_user_meta( $user_id, 'store_logo', $store_logo );
+        }
+    }
+
+	if ( isset( $_FILES['upload_banner'] ) && ! empty( $_FILES['upload_banner']['tmp_name'] ) ) {
+        $uploaded__banner_file = wp_handle_upload( $_FILES['upload_banner'], array( 'test_form' => false ) );
+        if ( isset( $uploaded__banner_file['url'] ) ) {
+            $upload_banner = $uploaded__banner_file['url'];
+            update_user_meta( $user_id, 'upload_banner', $upload_banner );
+        }
+    }
+}
+add_action( 'woocommerce_save_account_details', 'save_custom_user_fields_on_edit_account' );
+
+function  fetch_my_ads(){
+	$search_text = $_POST['search_text'];
+	$current_user = wp_get_current_user();
+    $user_id = $current_user->ID;
+	$args = array(
+		'author'         => $user_id,
+		'post_type'      => 'product',
+		'post_status'    => array('publish', 'draft'),
+		's'              => $search_text, // Search text
+	);
+
+	$product_query = new WP_Query($args);
+	print_r($product_query->found_posts);
+	if(!empty($product_query->have_posts())){
+		while($product_query->have_posts()){
+			$product_query->the_post();
+			$product_id = get_the_ID();
+			$product=wc_get_product($product_id);
+	?>
+		<tr>
+			<td>
+				<div class="table-ad-info">
+					<a href="<?php the_permalink($product->ID) ?>">
+					<img src="<?php echo get_the_post_thumbnail_url($product->ID); ?>" class="img-responsive" alt="<?php the_title($product->ID); ?>"/>
+						<div class="table-ad-content">
+							<h6><?php echo get_the_title($product->ID); ?></h6>
+							<span>Ad ID: #<?php echo $product_id ?></span>
+						</div>
+					</a>
+				</div>
+			</td>
+			<td style="max-width:200px;overflow:hidden;">
+				<?php
+					$categories = get_the_terms($product->ID, 'product_cat');
+					if ($categories && !is_wp_error($categories)) {
+						$category_names = array();
+						foreach ($categories as $category) {
+							$category_names[] = $category->name;
+						}
+						echo implode(', ', $category_names);
+					}
+				?>
+			</td>
+			<td>
+				<?php
+					$publish_date = get_post_field('post_date', $product->ID);
+					$days_ago = human_time_diff(strtotime($publish_date), current_time('timestamp')) . ' ago';
+					echo $days_ago;
+				?>
+
+			</td>
+			<td>
+				<?php
+					if ($product->is_on_sale()) {
+						$regular_price = $product->get_regular_price();
+						$sale_price = $product->get_sale_price();
+						echo '<del>' . wc_price($regular_price) . '</del> ' . wc_price($sale_price);
+					} else {
+						$price = $product->get_price();
+						echo wc_price($price);
+					}
+				?>
+			</td>
+			<td>
+				<?php
+					// Get the current view count
+					$view_count = get_post_meta($product->get_id(), 'view_count', true);
+					if(empty($view_count)):
+						$view_count=0;
+					endif;  
+					// Display the view count
+					echo 'Views: ' . $view_count;
+				?>
+			</td>
+			<td>
+				<span class="badge badge-success">
+				<?php
+					$product_status = get_post_status($product->get_id());
+					echo $product_status;
+				?>
+				</span>
+			</td>
+		</tr>
+	<?php
+		}
+	}
+}
+add_action('wp_ajax_fetch_my_ads', 'fetch_my_ads');
+add_action('wp_ajax_nopriv_fetch_my_ads', 'fetch_my_ads');
+
+function redirect_my_account() {
+    if (is_account_page()) {
+        wp_redirect('/dashboard');
+        exit;
+    }
+}
+add_action('template_redirect', 'redirect_my_account');
+
+// password
+function change_password_endpoint_init() {
+    register_rest_route('user/v2', '/change-password', array(
+        'methods' => 'POST',
+        'callback' => 'change_password_callback',
+        'permission_callback' => 'change_password_permission_callback',
+    ));
+}
+add_action('rest_api_init', 'change_password_endpoint_init');
+
+function change_password_permission_callback() {
+    return current_user_can('edit_users');
+}
+
+function change_password_callback($request) {
+    $user = wp_get_current_user();
+    $user_id = $user->ID;
+
+    $old_password = $request->get_param('old_password');
+    $new_password = $request->get_param('new_password');
+    $user_email = $request->get_param('user_email');
+
+    // Validate user's email
+    if (!is_email($user_email)) {
+        return new WP_Error('invalid_email', 'Invalid email address.', array('status' => 400));
+    }
+
+    // Get user by email
+    $user_by_email = get_user_by('email', $user_email);
+
+    // Check if the provided email matches the current user's email
+    if ($user_by_email && $user_by_email->ID !== $user_id) {
+        return new WP_Error('email_mismatch', 'Email address does not match the current user.', array('status' => 400));
+    }
+
+    // Check if the old password matches the user's current password
+    if (!wp_check_password($old_password, $user->user_pass, $user_id)) {
+        return new WP_Error('invalid_password', 'Invalid password.', array('status' => 400));
+    }
+
+    // Update the user's password
+    wp_set_password($new_password, $user_id);
+
+    return array('message' => 'Password changed successfully.');
+}
+
+

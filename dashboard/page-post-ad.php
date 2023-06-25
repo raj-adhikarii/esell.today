@@ -44,133 +44,145 @@ get_header(); ?>
                             <?php endif; ?>
                         </div>
                         <ul class="user-profile-sidebar-list">
-                            <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
-                            <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
-                            <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
-                            <li><a <?php echo is_page(sanitize_title('post-ad')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/post-ad/"><i class="far fa-plus-circle"></i> Post Ads</a></li>
-                            <li><a <?php echo is_page(sanitize_title('profile-setting')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
-                            <li><a <?php echo is_page(sanitize_title('favorite')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/favorite/"><i class="far fa-heart"></i> Wishlist</a></li>
-                            <li><a href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
+                            <?php  
+                                require get_template_directory() . '/inc/dashboard-sidebar.php'; 
+                            ?>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-9">
                     <div class="user-profile-wrapper">
+                        <div class="ad-success-message"></div>
                         <div class="user-profile-card">
                             <h4 class="user-profile-card-title">Post Ads</h4>
                             <div class="col-lg-12">
                                 <div class="post-ad-form">
                                     <h6 class="mb-4">Basic Information</h6>
-                                    <form  id="publish-product-form" method="POST">
+                                    <form id="custom_post_ads_form" method="POST" enctype="multipart/form-data">
+                                        <?php
+                                            $product_id=" ";  
+                                            $product_title=" ";
+                                            if(isset($_GET['edit'])):
+                                                $product_id=$_GET['product_id'];
+                                                $product=wc_get_product( $product_id );
+                                                
+                                                $product_title=$product->get_title();
+                                                $category=get_the_terms($product_id,'product_cat');
+                                                $price=get_post_meta($product_id,'_price',true);
+                                                $tags=get_the_terms($product_id,'post_tag');
+                                                $description=$product->description;
+                                            endif;
+                                            
+
+                                        ?>
                                         <div class="row align-items-center">
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label>Title</label>
-                                                    <input type="text" id="product-title" class="form-control" placeholder="Enter title">
+                                                    <input type="text"  name="post_title" class="form-control" placeholder="Enter title" value="<?php echo $product_title ?>">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Category</label>
-                                                    <select class="select">
-                                                    <option value="">Category</option>
-                                                    <?php
-                                                    $product_categories = get_terms(array(
-                                                        'taxonomy' => 'product_cat',
-                                                        'hide_empty' => false,
-                                                    ));
-
-                                                    foreach ($product_categories as $category) {
-                                                        echo '<option value="' . $category->term_id . '">' . $category->name . '</option>';
-                                                    }
+                                                    
+                                                    <?php 
+                                                        $terms = get_terms( array(
+                                                            'taxonomy'   => 'product_cat',
+                                                            'hide_empty' => false, // Set to true if you want to exclude empty categories
+                                                        ) );
                                                     ?>
+                                                    <select class="select" name="post_category">
+                                                        <option value="">Select Category</option>
+                                                        <?php	
+                                                            if(isset($_GET['edit'])){
+                                                        ?>
+                                                                <option value="<?php echo $category[0]->slug ?>" selected><?php echo $category[0]->name ?></option>
+                                                        <?php
+                                                            }else{
+                                                            if(!empty($terms)){
+                                                                foreach($terms as $item){
+                                                        ?>
+                                                            <option value="<?php echo $item->slug  ?>"><?php echo $item->name ?></option>
+                                                        <?php 
+                                                                }
+                                                            }else{
+                                                        ?>
+                                                            <option value="uncategorized">Uncategorized</option>
+                                                        <?php  
+                                                            }
+                                                        }
+                                                        ?>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label>Price (NPR)</label>
-                                                    <input type="text" id="product-price" class="form-control" placeholder="Enter price">
+                                                    <label>Price (USD)</label>
+                                                    <input type="text" name="product_price" class="form-control" placeholder="Enter price" value="<?php echo $price ?>">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-12 tags-keyword">
                                                 <div class="form-group">
                                                     <label>Tags or keyword</label>
-                                                    <input type="text" id="product-tag" class="form-control" placeholder="Enter tags ex: watch,laptop">
+                                                    <input type="text" name="tags_keyword" class="form-control" placeholder="Enter tags ex: watch,laptop">
                                                 </div>
                                             </div>
-                                            <h6 class="fw-bold my-4">Upload Images</h6>
+                                            <?php 
+                                                $toggle_id=" ";
+                                                if(isset($_GET['edit'])){
+                                                    $toggle_id='id="upload-images-section"';
+                                                    $edit_ad="data-edit='edit-ad'"; 
+        
+                                            ?>  
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <div class="product-upload-wrapper">
-                                                        <div class="product-img-upload">
-                                                            <span><i class="far fa-images"></i> Upload Product Images</span>
+                                                    <label>
+                                                        <input type="checkbox" class="form-check-input" id="change-images-checkbox"> Change Images
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                            <div class="images-section" <?php echo $edit_ad ?>>
+                                                <h6 class="fw-bold my-4">Upload Images</h6>
+                                            
+                                                <div class="col-lg-12" <?php echo $toggle_id ?>>
+                                                    <div class="form-group">
+                                                        <div class="product-upload-wrapper">
+                                                            <div class="product-img-upload">
+                                                                <span><i class="far fa-images"></i> Upload Product Images</span>
+                                                            </div>
+                                                            <input type="file" name="product_images[]" class="product-img-file" multiple>
+                                                            <div class="alert alert-danger mt-2" id="error-message"></div>
                                                         </div>
-                                                        <input type="file" class="product-img-file" multiple>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <h6 class="fw-bold my-4">Location</h6>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Address</label>
-                                                    <input type="text" id="user-location" class="form-control" placeholder="Enter address">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>City</label>
-                                                    <input type="text" id="user-city" class="form-control" placeholder="Enter city">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>State</label>
-                                                    <input type="text" id="user-state" class="form-control" placeholder="Enter state">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Zip Code</label>
-                                                    <input type="text" id="user-zip" class="form-control" placeholder="Enter zip code">
-                                                </div>
-                                            </div>
+                                            
+                                            
                                             <h6 class="fw-bold my-4">Detailed Information</h6>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label>Description</label>
-                                                    <textarea class="form-control" id="product-description" placeholder="Write description" cols="30" rows="5"></textarea>
-                                                </div>
-                                            </div>
-                                            <h6 class="fw-bold my-4">Contact Information</h6>
-                                            <div class="col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Name</label>
-                                                    <input type="text" id="contact-name" class="form-control" placeholder="Enter name">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Email</label>
-                                                    <input type="text" id="contact-email" class="form-control" placeholder="Enter email">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Phone</label>
-                                                    <input type="text" id="contact-phone" class="form-control" placeholder="Enter phone">
+                                                    <textarea name="description" class="form-control" placeholder="Write description" cols="30" rows="5" ><?php echo  $description ?></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-4">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" name="agree" type="checkbox" value="" id="agree">
+                                                    <input class="form-check-input" name="agree" type="checkbox" value="" id="agree" required checked>
                                                     <label class="form-check-label" for="agree">
                                                         I Agree With Your Terms Of Services And Privacy Policy.
                                                     </label>
                                                   </div>
                                             </div>
-                                            <div class="col-lg-12 my-4 ads">
-                                                <button type="submit" class="theme-btn">Post Your Ads</button>
+                                            <div class="col-lg-12 my-4">
+                                                <?php  
+                                                    if(isset($_GET['edit'])){
+                                                    ?>
+                                                    <input type="hidden" name="edit_field" value="<?php echo $_GET['product_id'];  ?>">
+                                                   <?php }
+                                                ?>
+                                                <button type="submit" id="custom_post_ads" class="theme-btn">Post Your Ads</button>
                                             </div>
                                         </div>
                                     </form>
@@ -183,5 +195,8 @@ get_header(); ?>
         </div>
     </div>
     <!-- user-profile end -->
+    
 </main>
 <?php get_footer(); 
+   
+

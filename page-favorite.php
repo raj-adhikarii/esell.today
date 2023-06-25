@@ -43,13 +43,9 @@ get_header(); ?>
                         </div>
                         <ul class="user-profile-sidebar-list">
                         <ul>
-                            <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
-                            <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
-                            <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
-                            <li><a <?php echo is_page(sanitize_title('post-ad')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/post-ad/"><i class="far fa-plus-circle"></i> Post Ads</a></li>
-                            <li><a <?php echo is_page(sanitize_title('profile-setting')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
-                            <li><a <?php echo is_page(sanitize_title('favorite')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/favorite/"><i class="far fa-heart"></i> Wishlist</a></li>
-                            <li><a href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
+                            <?php  
+                                require get_template_directory() . '/inc/dashboard-sidebar.php'; 
+                            ?>
                         </ul>
                     </div>
                 </div>
@@ -57,205 +53,97 @@ get_header(); ?>
                         <div class="user-profile-wrapper">
                             <div class="user-profile-card profile-favorite">
                                 <h4 class="user-profile-card-title">My Favorites</h4>
+                                <?php  
+                                    $products         = array();
+                                    $default_wishlist = YITH_WCWL_Wishlist_Factory::get_default_wishlist();
+                                    // print
+                                    if(!empty($default_wishlist)):
+
+                                ?>
                                 <div class="row">
+                                    <?php  
+                                        $items = $default_wishlist->get_items();
+                                        if ( ! empty( $items ) ):
+                                            $count=1;
+                                            foreach ( $items as $item ):
+                                              $product_id=$item->get_product()->get_id();
+                                              $product=wc_get_product( $product_id );
+                                    ?>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="product-item">
                                             <div class="product-img">
                                                 <span class="product-status trending"><i class="fas fa-bolt-lightning"></i></span>
-                                                <img src="http://localhost/esell.today/wp-content/uploads/2023/04/beanie-with-logo-1.jpg" alt="">
+                                                <?php  
+                                                    if(has_post_thumbnail($product_id)):
+                                                ?>
+                                                <img src="<?php echo get_the_post_thumbnail_url($product_id) ?>" alt="<?php echo get_the_title($product_id) ?>">
                                                 <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
+                                                <?php endif; ?>
+
                                             </div>
                                             <div class="product-content">
+                                                <?php  
+                                                    $categories = get_the_terms($product_id, 'product_cat');    
+                                                    //var_dump($categories);
+                                                    if(!empty($categories)):
+                                                ?>
                                                 <div class="product-top">
                                                     <div class="product-category">
                                                         <div class="product-category-icon">
                                                             <i class="far fa-tv"></i>
                                                         </div>
-                                                        <h6 class="product-category-title"><a href="#">Electronics</a></h6>
+                                                        
+                                                        <h6 class="product-category-title"><a href="<?php echo get_category_link($categories[0]->term_id) ?>"><?php echo $categories[0]->name;  ?></a></h6>
                                                     </div>
-                                                    <div class="product-rate">
+                                                    <!-- <div class="product-rate">
                                                         <i class="fas fa-star"></i>
                                                         <span>4.5</span>
+                                                    </div> -->
+                                                </div>
+                                                <?php endif; ?>
+                                                <div class="product-info">
+                                                    <h5><a href="<?php the_permalink($product_id) ?>"> <?php echo get_the_title($product_id) ?> </a></h5>
+                                                    <!-- <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p> -->
+                                                    <div class="product-date">
+                                                        <i class="far fa-clock"></i> 
+                                                        <?php
+                                                            $publish_date = get_post_field('post_date', $product->ID);
+                                                            $days_ago = human_time_diff(strtotime($publish_date), current_time('timestamp')) . ' ago';
+                                                            echo $days_ago;
+                                                        ?>
                                                     </div>
                                                 </div>
-                                                <div class="product-info">
-                                                    <h5><a href="#">Wireless Headphone</a></h5>
-                                                    <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                                                    <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                                                </div>
                                                 <div class="product-bottom">
-                                                    <div class="product-price">$180</div>
-                                                    <a href="#" class="product-text-btn">View Details <i
+                                                    <div class="product-price">
+                                                        <?php
+                                                            if ($product->is_on_sale()) {
+                                                                $regular_price = $product->get_regular_price();
+                                                                $sale_price = $product->get_sale_price();
+                                                                echo '<del>' . wc_price($regular_price) . '</del> ' . wc_price($sale_price);
+                                                            } else {
+                                                                $price = $product->get_price();
+                                                                echo wc_price($price);
+                                                            }
+                                                        ?>    
+                                                    </div>
+                                                    <a href="<?php  the_permalink($product_id) ?>" class="product-text-btn">View Details <i
                                                             class="fas fa-arrow-right"></i></a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="product-item">
-                                            <div class="product-img">
-                                                <img src="http://localhost/esell.today/wp-content/uploads/2023/04/beanie-2.jpg" alt="">
-                                                <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                                            </div>
-                                            <div class="product-content">
-                                                <div class="product-top">
-                                                    <div class="product-category">
-                                                        <div class="product-category-icon">
-                                                            <i class="far fa-watch"></i>
-                                                        </div>
-                                                        <h6 class="product-category-title"><a href="#">Fashions</a></h6>
-                                                    </div>
-                                                    <div class="product-rate">
-                                                        <i class="fas fa-star"></i>
-                                                        <span>4.5</span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-info">
-                                                    <h5><a href="#">Men's Golden Watch</a></h5>
-                                                    <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                                                    <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                                                </div>
-                                                <div class="product-bottom">
-                                                    <div class="product-price">$120</div>
-                                                    <a href="#" class="product-text-btn">View Details <i
-                                                            class="fas fa-arrow-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="product-item">
-                                            <div class="product-img">
-                                                <span class="product-status new">New</span>
-                                                <img src="http://localhost/esell.today/wp-content/uploads/2023/04/sunglasses-2.jpg" alt="">
-                                                <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                                            </div>
-                                            <div class="product-content">
-                                                <div class="product-top">
-                                                    <div class="product-category">
-                                                        <div class="product-category-icon">
-                                                            <i class="far fa-mobile-button"></i>
-                                                        </div>
-                                                        <h6 class="product-category-title"><a href="#">Mobiles</a></h6>
-                                                    </div>
-                                                    <div class="product-rate">
-                                                        <i class="fas fa-star"></i>
-                                                        <span>4.5</span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-info">
-                                                    <h5><a href="#">iPhone 12 Pro</a></h5>
-                                                    <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                                                    <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                                                </div>
-                                                <div class="product-bottom">
-                                                    <div class="product-price">$320</div>
-                                                    <a href="#" class="product-text-btn">View Details <i
-                                                            class="fas fa-arrow-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="product-item">
-                                            <div class="product-img">
-                                                <img src="http://localhost/esell.today/wp-content/uploads/2023/04/tshirt-2.jpg" alt="">
-                                                <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                                            </div>
-                                            <div class="product-content">
-                                                <div class="product-top">
-                                                    <div class="product-category">
-                                                        <div class="product-category-icon">
-                                                            <i class="far fa-laptop"></i>
-                                                        </div>
-                                                        <h6 class="product-category-title"><a href="#">Laptops</a></h6>
-                                                    </div>
-                                                    <div class="product-rate">
-                                                        <i class="fas fa-star"></i>
-                                                        <span>4.5</span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-info">
-                                                    <h5><a href="#">Macbook M2 Pro</a></h5>
-                                                    <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                                                    <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                                                </div>
-                                                <div class="product-bottom">
-                                                    <div class="product-price">$460</div>
-                                                    <a href="#" class="product-text-btn">View Details <i
-                                                            class="fas fa-arrow-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="product-item">
-                                            <div class="product-img">
-                                                <span class="product-status featured">Featured</span>
-                                                <img src="http://localhost/esell.today/wp-content/uploads/2023/04/cap-2.jpg" alt="">
-                                                <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                                            </div>
-                                            <div class="product-content">
-                                                <div class="product-top">
-                                                    <div class="product-category">
-                                                        <div class="product-category-icon">
-                                                            <i class="far fa-backpack"></i>
-                                                        </div>
-                                                        <h6 class="product-category-title"><a href="#">Backpacks</a></h6>
-                                                    </div>
-                                                    <div class="product-rate">
-                                                        <i class="fas fa-star"></i>
-                                                        <span>4.5</span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-info">
-                                                    <h5><a href="#">School Backpack</a></h5>
-                                                    <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                                                    <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                                                </div>
-                                                <div class="product-bottom">
-                                                    <div class="product-price">$160</div>
-                                                    <a href="#" class="product-text-btn">View Details <i
-                                                            class="fas fa-arrow-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="product-item">
-                                            <div class="product-img">
-                                                <img src="http://localhost/esell.today/wp-content/uploads/2023/04/long-sleeve-tee-2.jpg" alt="">
-                                                <a href="#" class="product-favorite"><i class="far fa-heart"></i></a>
-                                            </div>
-                                            <div class="product-content">
-                                                <div class="product-top">
-                                                    <div class="product-category">
-                                                        <div class="product-category-icon">
-                                                            <i class="far fa-buildings"></i>
-                                                        </div>
-                                                        <h6 class="product-category-title"><a href="#">Property</a></h6>
-                                                    </div>
-                                                    <div class="product-rate">
-                                                        <i class="fas fa-star"></i>
-                                                        <span>4.5</span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-info">
-                                                    <h5><a href="#">Modern Apartment</a></h5>
-                                                    <p><i class="far fa-location-dot"></i> 25/A Road New York, USA</p>
-                                                    <div class="product-date"><i class="far fa-clock"></i> 10 Days Ago</div>
-                                                </div>
-                                                <div class="product-bottom">
-                                                    <div class="product-price">$150</div>
-                                                    <a href="#" class="product-text-btn">View Details <i
-                                                            class="fas fa-arrow-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
+                                    <?php 
+                                            $count++; 
+                                            endforeach;
+                                        endif;
+                                    ?>
                                 </div>
+                                <?php  
+                                    endif;
+                                ?>
                                 <!-- pagination -->
-                                <div class="pagination-area">
+                                <!-- <div class="pagination-area">
                                     <div aria-label="Page navigation example">
                                         <ul class="pagination my-3">
                                             <li class="page-item">
@@ -273,7 +161,7 @@ get_header(); ?>
                                             </li>
                                         </ul>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

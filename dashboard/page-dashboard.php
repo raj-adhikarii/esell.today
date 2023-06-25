@@ -59,11 +59,69 @@ get_header() ?>
                 </div>
                 <div class="col-lg-9">
                     <div class="user-profile-wrapper">
+                        <?php  
+                            $current_user = wp_get_current_user();
+                            $author_id   = $current_user->ID;
+
+                            /**
+                             * Get all Posted Ads By Author
+                             */
+                            $args = array(
+                                'post_type'      => 'product',
+                                'author'         => $author_id,
+                                'post_status'    => array('publish','draft'),
+                                'posts_per_page' => -1, // Retrieve all products
+                            );
+                            
+                            $ads_query = new WP_Query($args);
+                            $total_ads=$ads_query->found_posts;
+                            wp_reset_postdata(  );
+                            wp_reset_query(  );
+
+                            /**
+                             * Get All PUblished Ads By Author
+                             */
+
+                            global $wpdb;
+
+                            $query = "SELECT COUNT(*) as product_count
+                                    FROM {$wpdb->prefix}posts
+                                    WHERE post_type = 'product'
+                                    AND post_status = 'publish'
+                                    AND post_author = %d";
+
+                            $publish_product_count = $wpdb->get_var($wpdb->prepare($query, $author_id));
+
+                            wp_reset_query();
+                            wp_reset_postdata(  );
+
+                            /**
+                             * Get Total Views of All the Products
+                             */
+                            
+                            $query = "SELECT SUM(meta_value) as total_views
+                            FROM {$wpdb->prefix}posts AS p
+                            INNER JOIN {$wpdb->prefix}postmeta AS pm
+                            ON p.ID = pm.post_id
+                            WHERE p.post_type = 'product'
+                            AND p.post_status = 'publish'
+                            AND pm.meta_key = 'view_count'";
+
+                            $total_views = $wpdb->get_var($wpdb->prepare($query, $author_id));
+                            if($total_views >= 1000){
+                                $total_views.='k';
+                            }
+
+                            wp_reset_query(  );
+                            wp_reset_postdata(  );
+
+                        ?>
                         <div class="row">
                             <div class="col-md-6 col-lg-4">
                                 <div class="dashboard-widget dashboard-widget-color-1">
                                     <div class="dashboard-widget-info">
-                                        <h1>650</h1>
+                                        
+                                        <h1><?php echo $publish_product_count ?></h1>
                                         <span>Active Posted Ads</span>
                                     </div>
                                     <div class="dashboard-widget-icon">
@@ -74,7 +132,7 @@ get_header() ?>
                             <div class="col-md-6 col-lg-4">
                                 <div class="dashboard-widget dashboard-widget-color-2">
                                     <div class="dashboard-widget-info">
-                                        <h1>15.5k</h1>
+                                        <h1><?php echo $total_views ?></h1>
                                         <span>Total Ads Views</span>
                                     </div>
                                     <div class="dashboard-widget-icon">
@@ -85,7 +143,7 @@ get_header() ?>
                             <div class="col-md-6 col-lg-4">
                                 <div class="dashboard-widget dashboard-widget-color-3">
                                     <div class="dashboard-widget-info">
-                                        <h1>1250</h1>
+                                        <h1><?php echo $total_ads ?></h1>
                                         <span>Total Posted Ads</span>
                                     </div>
                                     <div class="dashboard-widget-icon">
@@ -99,8 +157,17 @@ get_header() ?>
                                 <div class="user-profile-card">
                                     <h4 class="user-profile-card-title">Recent Ads</h4>
                                     <div class="table-responsive">
-                                        <?php $wpdbs; 
-                                            $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}posts WHERE post_type = 'product'");
+                                        <?php 
+                                           $current_user = wp_get_current_user();
+                                           $user_id = $current_user->ID;
+                                           
+                                           $args = array(
+                                               'author'         => $user_id,
+                                               'post_type'      => 'product',
+                                               'post_status'    => array( 'publish', 'draft' ),
+                                               'posts_per_page' => 8,
+                                           );
+                                           $query = new WP_Query( $args );
                                         ?>
                                         <table class="table">
                                             <thead>
@@ -113,77 +180,79 @@ get_header() ?>
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                            <?php foreach($results as $product) {?>
-                                                <tr>
-                                                    <td>
-                                                        <div class="table-ad-info">
-                                                            <a href="#">
-                                                            <img src="<?php echo get_the_post_thumbnail_url($product->ID); ?>" class="img-responsive" alt="<?php the_title(); ?>"/>
-                                                                <div class="table-ad-content">
-                                                                    <h6><?php echo get_the_title($product->ID); ?></h6>
-                                                                    <span>Ad ID: #123456</span>
-                                                                </div>
-                                                            </a>
+                                            <tbody class="product-data">
+                                    <?php 
+                                        while($query->have_posts()):
+                                        $query->the_post();
+                                        $product_id = get_the_ID();
+                                        $product=wc_get_product($product_id);
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <div class="table-ad-info">
+                                                    <a href="<?php the_permalink() ?>">
+                                                    <img src="<?php echo get_the_post_thumbnail_url($product->ID); ?>" class="img-responsive" alt="<?php the_title(); ?>"/>
+                                                        <div class="table-ad-content">
+                                                            <h6><?php echo get_the_title($product_id); ?></h6>
+                                                            <span>Ad ID: #<?php echo $product_id ?></span>
                                                         </div>
-                                                    </td>
-                                                    <td style="max-width:200px;overflow:hidden;">
-                                                        <?php
-                                                            $categories = get_the_terms($product->ID, 'product_cat');
-                                                            if ($categories && !is_wp_error($categories)) {
-                                                                $category_names = array();
-                                                                foreach ($categories as $category) {
-                                                                    $category_names[] = $category->name;
-                                                                }
-                                                                echo implode(', ', $category_names);
-                                                            }
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                    <?php
-                                                        $publish_date = get_post_field('post_date', $product->ID);
-                                                        $days_ago = human_time_diff(strtotime($publish_date), current_time('timestamp')) . ' ago';
-                                                        echo $days_ago;
-                                                    ?>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="max-width:200px;overflow:hidden;">
+                                                <?php
+                                                    $categories = get_the_terms($product->ID, 'product_cat');
+                                                    if ($categories && !is_wp_error($categories)) {
+                                                        $category_names = array();
+                                                        foreach ($categories as $category) {
+                                                            $category_names[] = $category->name;
+                                                        }
+                                                        echo implode(', ', $category_names);
+                                                    }
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                    $publish_date = get_post_field('post_date', $product->ID);
+                                                    $days_ago = human_time_diff(strtotime($publish_date), current_time('timestamp')) . ' ago';
+                                                    echo $days_ago;
+                                                ?>
 
-                                                    </td>
-                                                    <td>
-                                                        <?php
-                                                            $product = wc_get_product($product->ID);
-                                                            if ($product->is_on_sale()) {
-                                                                $regular_price = $product->get_regular_price();
-                                                                $sale_price = $product->get_sale_price();
-                                                                echo '<del>' . wc_price($regular_price) . '</del> ' . wc_price($sale_price);
-                                                            } else {
-                                                                $price = $product->get_price();
-                                                                echo wc_price($price);
-                                                            }
-                                                        ?>
-                                                    </td>
-                                                        <td>
-                                                            <?php
-                                                            // Get the current view count
-                                                            $view_count = get_post_meta($product->get_id(), 'view_count', true);
-
-                                                            // Increment the view count by 1
-                                                            $view_count++;
-                                                            update_post_meta($product->get_id(), 'view_count', $view_count);
-
-                                                            // Display the view count
-                                                            echo 'Views: ' . $view_count;
-                                                        ?>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-success">
-                                                        <?php
-                                                            $product_status = get_post_status($product->ID);
-                                                            echo $product_status;
-                                                        ?>
-                                                    </span>
-                                                </td>
-                                                </tr>
-                                                <?php  } ?>
-                                            </tbody>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                    if ($product->is_on_sale()) {
+                                                        $regular_price = $product->get_regular_price();
+                                                        $sale_price = $product->get_sale_price();
+                                                        echo '<del>' . wc_price($regular_price) . '</del> ' . wc_price($sale_price);
+                                                    } else {
+                                                        $price = $product->get_price();
+                                                        echo wc_price($price);
+                                                    }
+                                                ?>
+                                            </td>
+                                            <td>
+                                            <?php
+                                                // Get the current view count
+                                                $view_count = get_post_meta($product->get_id(), 'view_count', true);
+                                                // Display the view count
+                                                if(empty($view_count)):
+                                                    $view_count=0;
+                                                endif;  
+                                                echo 'Views: ' . $view_count;
+                                            ?>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-success">
+                                                <?php
+                                                    $product_status = get_post_status($product->get_id());
+                                                    echo $product_status;
+                                                ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
                                         </table>
                                     </div>
                                 </div>

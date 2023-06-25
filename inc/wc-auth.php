@@ -1,6 +1,5 @@
 <?php 
-
-//====== loggedin server site validation =======//
+// loggedin server site validation
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
     // Verify the nonce for security
     if ( isset( $_POST['custom_login_nonce'] ) && wp_verify_nonce( $_POST['custom_login_nonce'], 'custom_login_nonce' ) ) {
@@ -13,11 +12,12 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
         if ( ! is_wp_error( $user ) ) {
             // Successful login
             wp_set_auth_cookie( $user->ID );
-            wp_redirect( site_url( '/profile/' ) ); // Redirect to home page after login
+            wp_redirect( site_url( '/dashboard/' ) ); // Redirect to home page after login
             exit;
         } else {
             // Login failed
             $error_message = $user->get_error_message();
+            // Display the error message or perform any other desired action
             echo 'Login failed: ' . $error_message;
         }
     } else {
@@ -26,7 +26,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
     }
 }
 
-//====== signup validation =======//
+
+//signup validation
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     $username = sanitize_user( $_POST['username'] );
     $email = sanitize_email( $_POST['email'] );
@@ -62,7 +63,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         if ( ! is_wp_error( $user_id ) ) {
             // Registration successful
             // You can perform additional actions here, such as sending a confirmation email, redirecting the user, etc.
-            wp_redirect( site_url( '/profile' ) );
+            wp_redirect( site_url( '/login/' ) );
             exit;
         } else {
             // Registration failed
@@ -71,7 +72,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     }
 }
 
-//====== Server-side validation for forget password page ========//
+// Server-side validation for forget password page 
 function custom_lost_password_validation($errors, $username) {
     if (empty($username)) {
         $errors->add('empty_username', __('Please enter your email address.', 'woocommerce'));
@@ -86,7 +87,7 @@ function custom_lost_password_validation($errors, $username) {
 add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
 
 
-//======== custom login endpoint =======//
+// custom login endpoint
 add_action('rest_api_init', 'custom_user_login_endpoint');
 
 function custom_user_login_endpoint() {
@@ -99,23 +100,23 @@ function custom_user_login_endpoint() {
 function custom_user_login($request) {
     $username = $request->get_param('username');
     $password = $request->get_param('password');
-  
+
     // Perform validation on the input data
-  
+
     $user = wp_authenticate($username, $password);
-  
+
     if (is_wp_error($user)) {
-      return new WP_REST_Response(array('error' => $user->get_error_message()), 401);
+        return new WP_REST_Response(array('error' => $user->get_error_message()), 401);
     }
-  
+
     wp_set_current_user($user->ID);
     wp_set_auth_cookie($user->ID);
-  
-    return new WP_REST_Response(array('message' => 'User logged in successfully'), 200);
+
+    return new WP_REST_Response(array('message' => 'User logged in successfully', 'user_id' => $user->ID), 200);
 }
 
 
-//======= custom user register endpoint ========//
+//custom user register endpoint
 add_action('rest_api_init', 'custom_user_registration_endpoint');
 
 function custom_user_registration_endpoint() {
@@ -140,8 +141,9 @@ function custom_user_registration($request) {
   
     return new WP_REST_Response(array('message' => 'User registered successfully'), 200);
   }
+  
 
-  //====== Password reset =========//
+//====== Password reset =========//
 // Register custom endpoint for password reset
 add_action('rest_api_init', 'register_password_reset_endpoint');
 function register_password_reset_endpoint() {
@@ -181,32 +183,6 @@ function handle_password_reset_request(WP_REST_Request $request) {
     );
 }
 
-//======= wishlist rest route =======//
-add_action('rest_api_init', 'register_wishlist_endpoint');
-
-function register_wishlist_endpoint() {
-    register_rest_route('wp/v2', '/wishlist/(?P<user_id>\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'get_user_wishlist',
-    ));
-}
-
-//callback function
-function get_user_wishlist($request) {
-    $user_id = get_current_user_id();
-
-    if ( $user_id === 0 ) {
-        // User is not logged in, handle accordingly
-        return array();
-    }
-
-    // Implement your logic to retrieve wishlist data for the current user
-    $wishlist = yith_wishlist_get_products($user_id);
-
-    // Return the wishlist data as the API response
-    return $wishlist;
-}
-
 function get_products_by_user( $request ) {
     $user_id = $request['user_id'];
 
@@ -234,6 +210,163 @@ function get_products_by_user( $request ) {
 
     return rest_ensure_response( $formatted_products );
 }
+
+// credentials verification
+function create_product_via_api($product_data) {
+    // WooCommerce API credentials
+    $consumer_key = 'ck_3b1cfe2add0a1811720f3c5acc7abd65ad78efd6';
+    $consumer_secret = 'cs_6e6c98a2393bd22820507d4b540e56d1d1d8b32c';
+
+    // WooCommerce API URL
+    $api_url = 'https://staging.e-sell.today/wp-json/wc/v3/products';
+
+    // Prepare the authentication parameters
+    $auth_params = [
+        'consumer_key' => $consumer_key,
+        'consumer_secret' => $consumer_secret,
+    ];
+
+    // Make the API request
+    $response = wp_remote_post(
+        $api_url,
+        [
+            'method' => 'POST',
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'body' => wp_json_encode($product_data),
+            'timeout' => 45,
+            'sslverify' => false,
+            'authentication' => 'basic',
+            'auth' => $auth_params,
+        ]
+    );
+
+    // Check the response status
+    $response_code = wp_remote_retrieve_response_code($response);
+    if ($response_code === 201) {
+        // Product created successfully
+        return true;
+    } else {
+        // Error creating product
+        $error_message = wp_remote_retrieve_response_message($response);
+        return new WP_Error($response_code, $error_message);
+    }
+}
+
+
+// Add custom REST API endpoint for retrieving user information
+function custom_user_endpoint() {
+    register_rest_route( 'custom/v1', '/users', array(
+        'methods'  => 'GET',
+        'callback' => 'custom_get_users',
+    ) );
+}
+add_action( 'rest_api_init', 'custom_user_endpoint' );
+
+// Callback function to handle the request and retrieve user information
+function custom_get_users( $request ) {
+    $users = get_users();
+
+    $formatted_users = array();
+
+    foreach ( $users as $user ) {
+        $formatted_users[] = array(
+            'id'        => $user->ID,
+            'username'  => $user->user_login,
+            'email'     => $user->user_email,
+            'name'      => $user->display_name,
+            // Add any additional user data you want to include
+        );
+    }
+
+    return $formatted_users;
+}
+/**
+ * Retrieve merged user data from WooCommerce and WordPress.
+ */
+function get_merged_user_data($request) {
+    $user_id = $request['user_id'];
+
+    // Retrieve WooCommerce user data
+    if (function_exists('wc_get_customer')) {
+        $customer = wc_get_customer($user_id);
+
+        // Add any WooCommerce user-related data you want to include
+        $billing_address = $customer->get_billing();
+        $shipping_address = $customer->get_shipping();
+    }
+
+    // Retrieve WordPress user data
+    $user = get_userdata($user_id);
+
+    // Retrieve additional user meta data
+    $image_url = get_user_meta($user_id, 'image_url', true);
+    $additional_details = get_user_meta($user_id, 'additional_details', true);
+
+    // Get user profile image URL
+    $avatar_url = get_avatar_url($user_id);
+
+    // Combine WooCommerce and WordPress user data
+    $merged_data = array(
+        'id' => $user->ID,
+        'username' => $user->user_login,
+        'email' => $user->user_email,
+        'name' => $user->display_name,
+        'billing_address' => $billing_address,
+        'shipping_address' => $shipping_address,
+        'image_url' => $avatar_url,
+        'additional_details' => $additional_details,
+        // Add any additional user data you want to include
+    );
+
+    return rest_ensure_response($merged_data);
+}
+
+
+/**
+ * Register custom endpoint to retrieve merged user data.
+ */
+function register_merged_user_data_endpoint() {
+    register_rest_route('custom/v1', '/users/(?P<user_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_merged_user_data',
+    ));
+}
+add_action('rest_api_init', 'register_merged_user_data_endpoint');
+
+function get_products_by_user_id($request) {
+    $user_id = $request['user_id'];
+
+    $args = array(
+        'author' => $user_id,
+        'status' => 'publish',
+        'type' => 'product',
+    );
+
+    $products = get_posts($args);
+
+    $formatted_products = array();
+
+    foreach ($products as $product) {
+        $formatted_products[] = array(
+            'id' => $product->ID,
+            'title' => $product->post_title,
+            'permalink' => get_permalink($product->ID),
+            // Add any additional product data you want to include
+        );
+    }
+
+    return rest_ensure_response($formatted_products);
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/products/(?P<user_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_products_by_user_id',
+    ));
+});
+
 
 
 

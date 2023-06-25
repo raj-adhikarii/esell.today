@@ -444,3 +444,26 @@ setTimeout(function() {
 }, 4000);
 
 //handel user image
+    jQuery(document).ready(function($) {
+        // Remove from Wishlist
+        $('.remove-wishlist').on('click', function(e) {
+            e.preventDefault();
+            var productId = $(this).data('product-id');
+            // Add your code to remove the product from the wishlist using AJAX or other methods
+
+            // Example AJAX call
+            $.ajax({
+                url: 'remove_from_wishlist.php', // Replace with your backend endpoint for removing from wishlist
+                type: 'POST',
+                data: { product_id: productId },
+                success: function(response) {
+                    // Handle the success response here
+                    // For example, you can remove the product item from the DOM
+                    $(this).closest('.product-item').remove();
+                },
+                error: function(xhr, status, error) {
+                    // Handle the error response here
+                }
+            });
+        });
+    });

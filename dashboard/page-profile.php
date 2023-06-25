@@ -43,190 +43,105 @@ get_header(); ?>
                             </div>
 
                             <ul class="user-profile-sidebar-list">
-                                <li><a <?php echo is_page(sanitize_title('dashboard')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/dashboard/"><i class="far fa-gauge-high"></i> Dashboard</a></li>
-                                <li><a <?php echo is_page(sanitize_title('profile')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile/"><i class="far fa-user"></i> My Profile</a></li>
-                                <li><a <?php echo is_page(sanitize_title('my-ads')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/my-ads/"><i class="far fa-layer-group"></i> My Ads</a></li>
-                                <li><a <?php echo is_page(sanitize_title('post-ad')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/post-ad/"><i class="far fa-plus-circle"></i> Post Ads</a></li>
-                                <li><a <?php echo is_page(sanitize_title('profile-setting')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/profile-setting/"><i class="far fa-gear"></i> Settings</a></li>
-                                <li><a <?php echo is_page(sanitize_title('favorite')) ? 'class="active"' : ''; ?> href="<?php echo site_url(); ?>/favorite/"><i class="far fa-heart"></i> Wishlist</a></li>
-                                <li><a href="<?php echo wp_logout_url( home_url() ); ?>"><i class="far fa-sign-out"></i> Logout</a></li>
+                                <?php  
+                                    require get_template_directory() . '/inc/dashboard-sidebar.php'; 
+                                ?>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-9">
                         <div class="user-profile-wrapper">
                             <div class="row">
-                                <div class="col-lg-7">
-                                    <div class="user-profile-card">
-                                        <h4 class="user-profile-card-title">Profile Info</h4>
-                                        <div class="user-profile-form">
-                                            <form action="#">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>First Name</label>
-                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'first_name', true)); ?>" placeholder="First Name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Last Name</label>
-                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'last_name', true)); ?>" placeholder="Last Name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Email</label>
-                                                            <input type="text" class="form-control" value="<?php echo esc_attr(wp_get_current_user()->user_email); ?>" placeholder="Email">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Phone</label>
-                                                            <input type="text" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'billing_phone', true)) ?: 'Phone not available'; ?>" placeholder="Phone">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Address</label>
-                                                            <?php
-                                                            $user_id = get_current_user_id();
-                                                            $address = get_user_meta($user_id, 'billing_address_1', true);
-                                                            $city = get_user_meta($user_id, 'billing_city', true);
-                                                            $country = get_user_meta($user_id, 'billing_country', true);
-                                                            $postcode = get_user_meta($user_id, 'billing_postcode', true);
-                                                            $full_address = $address . ', ' . $city . ', ' . $country . ', ' . $postcode;
-                                                            ?>
-                                                            <input type="text" class="form-control" value="<?php echo esc_attr($full_address); ?>" placeholder="Address">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <button type="button" class="theme-btn my-3"><span class="far fa-user"></span> Save Changes</button>
-                                            </form>
-                                            <!-- <form id="user-profile-form" method="POST">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>First Name</label>
-                                                            <input type="text" class="form-control" name="first_name" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'first_name', true)); ?>" placeholder="First Name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Last Name</label>
-                                                            <input type="text" class="form-control" name="last_name" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'last_name', true)); ?>" placeholder="Last Name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Email</label>
-                                                            <input type="text" class="form-control" name="email" value="<?php echo esc_attr(wp_get_current_user()->user_email); ?>" placeholder="Email">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Phone</label>
-                                                            <input type="text" class="form-control" name="phone" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'billing_phone', true)) ?: 'Phone not available'; ?>" placeholder="Phone">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Address</label>
-                                                            <?php
-                                                            $user_id = get_current_user_id();
-                                                            $address = get_user_meta($user_id, 'billing_address_1', true);
-                                                            $city = get_user_meta($user_id, 'billing_city', true);
-                                                            $country = get_user_meta($user_id, 'billing_country', true);
-                                                            $postcode = get_user_meta($user_id, 'billing_postcode', true);
-                                                            $full_address = $address . ', ' . $city . ', ' . $country . ', ' . $postcode;
-                                                            ?>
-                                                            <input type="text" class="form-control" name="address" value="<?php echo esc_attr($full_address); ?>" placeholder="Address">
+                                <?php
+                                    do_action( 'woocommerce_before_edit_account_form' ); 
+                                    $user=$current_user;
+                                ?>
+                                <form class="woocommerce-EditAccountForm edit-account" action="" method="post" <?php do_action( 'woocommerce_edit_account_form_tag' ); ?>  enctype="multipart/form-data" >
+
+                                    <?php do_action( 'woocommerce_edit_account_form_start' ); ?>
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <div class="user-profile-card">
+                                                    <h4 class="user-profile-card-title">Profile Info</h4>
+                                                    <div class="user-profile-form">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>First Name</label>
+                                                                    <input type="text" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="account_first_name" id="account_first_name" autocomplete="given-name" value="<?php echo esc_attr( $user->first_name ); ?>" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Last Name</label>
+                                                                    <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_last_name" id="account_last_name" autocomplete="family-name" value="<?php echo esc_attr( $user->last_name ); ?>" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6" style="display:none">
+                                                                <div class="form-group">
+                                                                    <label>Display Name</label>
+                                                                    <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" value="<?php echo esc_attr( $user->display_name ); ?>" /> <span><em><?php esc_html_e( 'This will be how your name will be displayed in the account section and in reviews', 'woocommerce' ); ?></em></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Email</label>
+                                                                    <input type="email" class="woocommerce-Input woocommerce-Input--email input-text" name="account_email" id="account_email" autocomplete="email" value="<?php echo esc_attr( $user->user_email ); ?>" />
+                                                                </div>
+                                                            </div>
+                                                            <?php do_action( 'woocommerce_edit_account_form' ); ?>
+                                                            <?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
+                                                            <button type="submit" class="theme-btn my-3 woocommerce-Button button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><span class="far fa-user"></span><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
+                                                            <input type="hidden" name="action" value="save_account_details" />
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="theme-btn my-3"><span class="far fa-user"></span> Save Changes</button>
-                                            </form> -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-5">
-                                    <div class="user-profile-card">
-                                        <h4 class="user-profile-card-title">Change Password</h4>
-                                        <div class="col-lg-12">
-                                            <div class="user-profile-form">
-                                            <form action="<?php echo esc_url( wp_lostpassword_url() ); ?>" method="post">
-                                                <div class="form-group">
-                                                    <label>Old Password</label>
-                                                    <input type="password" class="form-control" name="old_password" placeholder="Old Password" required>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="user-profile-card">
+                                                    <h4 class="user-profile-card-title">Change Password</h4>
+                                                    <div class="col-lg-12">
+                                                        <div class="user-profile-form">
+                                                            <div class="form-group">
+                                                                <label for="password_current">Old Password</label>
+                                                                <input type="password" class="form-control" name="password_current" id="password_current" autocomplete="off" placeholder="Old Password">
+                                                            </div>
+                                            
+                                                            <div class="form-group">
+                                                                <label for="password_1"><?php esc_html_e( 'New password (leave blank to leave unchanged)', 'woocommerce' ); ?></label>
+                                                                <input type="password" class="form-control" name="password_1" id="password_1" autocomplete="off" />
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="password_2"><?php esc_html_e( 'Confirm new password', 'woocommerce' ); ?></label>
+                                                                <input type="password" class="form-control" name="password_2" id="password_2" autocomplete="off" />
+                                                            </div>
+                                                            
+                                                            <?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
+                                                            <button type="submit" class="theme-btn my-3" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><span class="far fa-key"></span><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
+                                                            <input type="hidden" name="action" value="save_account_details" />
+                                                        </div>
+                                                    </div>
+                                                
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>New Password</label>
-                                                    <input type="password" class="form-control" name="new_password" placeholder="New Password" required>
+                                            </div>
+                                            <div class="clear"></div>
+                                            <div class="col-lg-12">
+                                                <div class="user-profile-card profile-store">
+                                                    <h4 class="user-profile-card-title">Store Info</h4>
+                                                    <div class="col-lg-12">
+                                                        <div class="user-profile-form">
+                                                        <?php do_action( 'woocommerce_edit_account_form_end' ); ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Re-Type Password</label>
-                                                    <input type="password" class="form-control" name="confirm_password" placeholder="Re-Type Password" required>
-                                                </div>
-                                                <button type="submit" class="theme-btn my-3" name="change_password_submit">
-                                                    <span class="far fa-key"></span> Change Password
-                                                </button>
-                                            </form>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="user-profile-card profile-store">
-                                        <h4 class="user-profile-card-title">Personal Info</h4>
-                                        <div class="col-lg-12">
-                                            <div class="user-profile-form">
-                                                <form action="POST" enctype="multipart/form-data">
-                                                    <!-- <div class="form-group">
-                                                        <div class="store-logo-preview">
-                                                            <img src="assets/img/store/01.jpg" alt="">
-                                                        </div>
-                                                        <input type="file" class="store-file">
-                                                        <button type="button" class="theme-btn store-upload"><span class="far fa-upload"></span> Upload Logo</button>
-                                                    </div> -->
 
-                                                    <div class="form-group">
-                                                        <div class="store-logo-preview">
-                                                            <img id="profile-image-preview" src="<?php bloginfo('template_directory'); ?>/assets/img/logo/logow.png" alt="">
-                                                        </div>
-                                                        <input type="file" id="profile-image-upload" class="store-file">
-                                                        <button type="button" id="profile-image-upload-button" class="theme-btn store-upload"><span class="far fa-upload"></span> Upload Profile Image</button>
-                                                    </div>
-
-                                                    <script>
-                                                        document.getElementById('profile-image-upload').addEventListener('change', function (e) {
-                                                            var reader = new FileReader();
-                                                            reader.onload = function (event) {
-                                                                document.getElementById('profile-image-preview').src = event.target.result;
-                                                            }
-                                                            reader.readAsDataURL(e.target.files[0]);
-                                                        });
-                                                    </script>
-
-
-                                                   
-                                                    <div class="form-group">
-                                                        <label>Contact Phone Number</label>
-                                                        <input type="text" name="contact_phone" class="form-control" value="<?php echo esc_attr(get_user_meta(get_current_user_id(), 'billing_phone', true)) ?: 'Phone not available'; ?>"
-                                                            placeholder="Contact Phone Number">
-                                                    </div>
-                                                   
-
-                                                    <div class="form-group">
-                                                        <label>Contact Email</label>
-                                                        <input type="text" name="contact_email" class="form-control" value="<?php echo esc_attr(wp_get_current_user()->user_email); ?>"
-                                                            placeholder="Contact Email">
-                                                    </div>
-                                                    <button type="submit" class="theme-btn my-3"><span class="far fa-save"></span> Save Changes</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    
+                                </form>
+                                <?php do_action( 'woocommerce_after_edit_account_form' ); ?>
                             </div>
                         </div>
                     </div>
