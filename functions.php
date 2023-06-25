@@ -431,7 +431,6 @@ function handle_custom_post_ads() {
 					// Error occurred while uploading a gallery image
 					echo 'Error uploading gallery image: ' . $upload_gallery['error'];
 				} else {
-					// File uploaded successfully, proceed to add it to the product's gallery
 
 					// Get the attachment file path
 					$gallery_image_path = $upload_gallery['file'];

@@ -353,7 +353,7 @@ function get_products_by_user_id($request) {
             'id' => $product->ID,
             'title' => $product->post_title,
             'permalink' => get_permalink($product->ID),
-            // Add any additional product data you want to include
+            // Add any additional product data you want to include like image
         );
     }
 
