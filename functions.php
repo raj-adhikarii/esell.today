@@ -731,45 +731,61 @@ function redirect_my_account() {
 }
 add_action('template_redirect', 'redirect_my_account');
 
-// password
+// password change API
 function change_password_endpoint_init() {
     register_rest_route('user/v2', '/change-password', array(
         'methods' => 'POST',
         'callback' => 'change_password_callback',
         'permission_callback' => 'change_password_permission_callback',
+        'args' => array(
+            'headers' => array(
+                'Authorization' => array(
+                    'required' => true,
+                    'type' => 'string',
+                    'description' => 'Basic ' . base64_encode('Esell_today:TTzs qQtC LvgM pdFG lEPj xz5o')
+                )
+            )
+        )
     ));
 }
 add_action('rest_api_init', 'change_password_endpoint_init');
 
-function change_password_permission_callback() {
+function change_password_permission_callback($request) {
     return current_user_can('edit_users');
 }
 
 function change_password_callback($request) {
-    $user = wp_get_current_user();
+    // Verify the Authorization header
+    $auth_header = $request->get_header('Authorization');
+    if (empty($auth_header)) {
+        return new WP_Error('no_auth_header', 'Authorization header is missing.', array('status' => 403));
+    }
+
+    // Extract the base64-encoded credentials from the Authorization header
+    $credentials = explode(' ', $auth_header);
+    if (count($credentials) !== 2) {
+        return new WP_Error('invalid_auth_header', 'Invalid authorization header format.', array('status' => 403));
+    }
+
+    // Decode the base64-encoded credentials
+    $decoded_credentials = base64_decode($credentials[1]);
+    if (!$decoded_credentials) {
+        return new WP_Error('invalid_auth_header', 'Failed to decode authorization header.', array('status' => 403));
+    }
+
+    // Extract the username and password from the decoded credentials
+    list($username, $password) = explode(':', $decoded_credentials);
+    $username = sanitize_text_field($username);
+    $password = sanitize_text_field($password);
+
+    // Authenticate the user with the provided credentials
+    $user = wp_authenticate($username, $password);
+    if (is_wp_error($user)) {
+        return new WP_Error('invalid_credentials', 'Invalid username or password.', array('status' => 403));
+    }
+
     $user_id = $user->ID;
-
-    $old_password = $request->get_param('old_password');
     $new_password = $request->get_param('new_password');
-    $user_email = $request->get_param('user_email');
-
-    // Validate user's email
-    if (!is_email($user_email)) {
-        return new WP_Error('invalid_email', 'Invalid email address.', array('status' => 400));
-    }
-
-    // Get user by email
-    $user_by_email = get_user_by('email', $user_email);
-
-    // Check if the provided email matches the current user's email
-    if ($user_by_email && $user_by_email->ID !== $user_id) {
-        return new WP_Error('email_mismatch', 'Email address does not match the current user.', array('status' => 400));
-    }
-
-    // Check if the old password matches the user's current password
-    if (!wp_check_password($old_password, $user->user_pass, $user_id)) {
-        return new WP_Error('invalid_password', 'Invalid password.', array('status' => 400));
-    }
 
     // Update the user's password
     wp_set_password($new_password, $user_id);
@@ -778,3 +794,58 @@ function change_password_callback($request) {
 }
 
 
+
+// edit user
+function edit_user_endpoint_init() {
+    register_rest_route('user/v2', '/edit-user/(?P<id>\d+)', array(
+        'methods' => 'POST',
+        'callback' => 'edit_user_callback',
+        'permission_callback' => 'edit_user_permission_callback',
+    ));
+}
+add_action('rest_api_init', 'edit_user_endpoint_init');
+
+function edit_user_permission_callback($request) {
+    return current_user_can('edit_users');
+}
+
+function edit_user_callback($request) {
+    $user_id = $request->get_param('id');
+    $user_data = $request->get_params();
+    
+    // Retrieve the existing user data
+    $existing_user = get_user_by('ID', $user_id);
+    
+    // Check if the user exists
+    if (!$existing_user) {
+        return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
+    }
+    
+    // Prepare the updated user data
+    $updated_user_data = array();
+    
+    // Add any specific user data fields to update
+    if (isset($user_data['username'])) {
+        $updated_user_data['user_login'] = sanitize_text_field($user_data['username']);
+    }
+    
+    if (isset($user_data['email'])) {
+        $updated_user_data['user_email'] = sanitize_email($user_data['email']);
+    }
+    
+    // Update the user data
+    $updated_user_id = wp_update_user(array_merge(['ID' => $user_id], $updated_user_data));
+    
+    // Check if the user update was successful
+    if (is_wp_error($updated_user_id)) {
+        return new WP_Error('user_update_failed', 'Failed to update user.', array('status' => 500));
+    }
+    
+    // Get the updated user object
+    $updated_user = get_user_by('ID', $updated_user_id);
+    
+    return array(
+        'message' => 'User updated successfully.',
+        'user' => $updated_user
+    );
+}

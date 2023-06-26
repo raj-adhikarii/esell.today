@@ -89,3 +89,6 @@ get_header(); ?>
         <!-- login area end -->
     </main>
 <?php get_footer(); 
+
+
+// Error on top of page it should be under form

@@ -165,6 +165,12 @@ get_header(); ?>
                                                 <div class="form-group">
                                                     <label>Description</label>
                                                     <textarea name="description" class="form-control" placeholder="Write description" cols="30" rows="5" ><?php echo  $description ?></textarea>
+
+                                                    <!-- <?php
+                                                        if(isset($_GET['edit'])){
+                                                    ?>
+                                                    <textarea name="description" class="form-control" placeholder="Write description" cols="30" rows="5" ><?php echo  $_GET['description'] ?></textarea>
+                                                    <?php } ?> -->
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-4">
