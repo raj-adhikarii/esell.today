@@ -794,7 +794,6 @@ function change_password_callback($request) {
 }
 
 
-
 // edit user
 function edit_user_endpoint_init() {
     register_rest_route('user/v2', '/edit-user/(?P<id>\d+)', array(
