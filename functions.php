@@ -815,38 +815,38 @@ function edit_user_permission_callback($request) {
 function edit_user_callback($request) {
     $user_id = $request->get_param('id');
     $user_data = $request->get_params();
-    
+
     // Retrieve the existing user data
     $existing_user = get_user_by('ID', $user_id);
-    
+
     // Check if the user exists
     if (!$existing_user) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
-    
+
     // Prepare the updated user data
     $updated_user_data = array();
-    
+
     // Add any specific user data fields to update
     if (isset($user_data['username'])) {
         $updated_user_data['user_login'] = sanitize_text_field($user_data['username']);
     }
-    
+
     if (isset($user_data['email'])) {
         $updated_user_data['user_email'] = sanitize_email($user_data['email']);
     }
-    
+
     // Update the user data
     $updated_user_id = wp_update_user(array_merge(['ID' => $user_id], $updated_user_data));
-    
+
     // Check if the user update was successful
     if (is_wp_error($updated_user_id)) {
         return new WP_Error('user_update_failed', 'Failed to update user.', array('status' => 500));
     }
-    
+
     // Get the updated user object
     $updated_user = get_user_by('ID', $updated_user_id);
-    
+
     return array(
         'message' => 'User updated successfully.',
         'user' => $updated_user
