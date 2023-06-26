@@ -733,19 +733,22 @@ add_action('template_redirect', 'redirect_my_account');
 
 // password change API
 function change_password_endpoint_init() {
-    register_rest_route('user/v2', '/change-password', array(
+    register_rest_route('user/v2', '/change-password/(?P<user_id>\d+)', array(
         'methods' => 'POST',
         'callback' => 'change_password_callback',
         'permission_callback' => 'change_password_permission_callback',
         'args' => array(
+            'user_id' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
             'headers' => array(
                 'Authorization' => array(
                     'required' => true,
                     'type' => 'string',
-                    'description' => 'Basic ' . base64_encode('Esell_today:TTzs qQtC LvgM pdFG lEPj xz5o')
-                )
-            )
-        )
+                    'description' => 'Basic ' . base64_encode('Esell_today:TTzs qQtC LvgM pdFG lEPj xz5o'),
+                ),
+            ),
+        ),
     ));
 }
 add_action('rest_api_init', 'change_password_endpoint_init');
@@ -784,10 +787,11 @@ function change_password_callback($request) {
         return new WP_Error('invalid_credentials', 'Invalid username or password.', array('status' => 403));
     }
 
-    $user_id = $user->ID;
-    $new_password = $request->get_param('new_password');
+    // Get the user ID from the URL parameter
+    $user_id = (int) $request->get_param('user_id');
 
     // Update the user's password
+    $new_password = $request->get_param('new_password');
     wp_set_password($new_password, $user_id);
 
     return array('message' => 'Password changed successfully.');
