@@ -756,7 +756,6 @@ add_action('rest_api_init', 'change_password_endpoint_init');
 function change_password_permission_callback($request) {
     return current_user_can('edit_users');
 }
-
 function change_password_callback($request) {
     // Verify the Authorization header
     $auth_header = $request->get_header('Authorization');
@@ -796,11 +795,11 @@ function change_password_callback($request) {
     // Check if the user is trying to change their own password
     $is_own_password = ($current_user_id === $user_id);
 
-    // Verify the previous password before allowing password change
-    $previous_password = $request->get_param('previous_password');
-    $previous_password = sanitize_text_field($previous_password);
-
     if ($is_own_password) {
+        // Verify the previous password before allowing password change
+        $previous_password = $request->get_param('previous_password');
+        $previous_password = sanitize_text_field($previous_password);
+
         // Verify the previous password using wp_check_password
         $previous_password_matched = wp_check_password($previous_password, $user->user_pass, $user->ID);
         if (!$previous_password_matched) {
@@ -818,7 +817,7 @@ function change_password_callback($request) {
     $new_password = sanitize_text_field($new_password);
 
     // Validate the new password
-    if ($new_password === $previous_password) {
+    if ($new_password === $password) {
         return new WP_Error('same_password', 'New password must be different from the previous password.', array('status' => 400));
     }
 
@@ -827,6 +826,7 @@ function change_password_callback($request) {
 
     return array('message' => 'Password changed successfully.');
 }
+
 
 // edit user
 add_action('rest_api_init', 'register_user_edit_endpoint');
