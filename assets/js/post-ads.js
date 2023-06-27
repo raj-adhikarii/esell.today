@@ -7,7 +7,7 @@ jQuery(document).ready(function(){
 
             // Make AJAX call
             $.ajax({
-            url: "/esell.today/wp-admin/admin-ajax.php",
+            url: "/staging.e-sell.today/wp-admin/admin-ajax.php",
             type: "POST",
             data: formData,
             processData: false,
@@ -49,7 +49,7 @@ jQuery(document).ready(function(){
 
             //Make AJAX call
             $.ajax({
-              url: "/esell.today/wp-admin/admin-ajax.php",
+              url: "/staging.e-sell.today/wp-admin/admin-ajax.php",
               type: "POST",
               data: formData,
               processData: false,
