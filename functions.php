@@ -803,7 +803,7 @@ function change_password_callback($request) {
         // Verify the previous password using wp_check_password
         $previous_password_matched = wp_check_password($previous_password, $user->user_pass, $user->ID);
         if (!$previous_password_matched) {
-            return new WP_Error('invalid_previous_password', 'Invalid previous password.', array('status' => 403));
+            return new WP_Error('invalid_previous_password', 'Previous password does not match.', array('status' => 403));
         }
     } else {
         // Check if the current user has the necessary permission to change other users' passwords
@@ -826,6 +826,7 @@ function change_password_callback($request) {
 
     return array('message' => 'Password changed successfully.');
 }
+
 
 
 // edit user
