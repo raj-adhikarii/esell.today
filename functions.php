@@ -759,33 +759,7 @@ function change_password_permission_callback($request) {
 
 function change_password_callback($request) {
     // Verify the Authorization header and authenticate the user
-    $auth_header = $request->get_header('Authorization');
-    if (empty($auth_header)) {
-        return new WP_Error('no_auth_header', 'Authorization header is missing.', array('status' => 403));
-    }
-
-    // Extract the base64-encoded credentials from the Authorization header
-    $credentials = explode(' ', $auth_header);
-    if (count($credentials) !== 2) {
-        return new WP_Error('invalid_auth_header', 'Invalid authorization header format.', array('status' => 403));
-    }
-
-    // Decode the base64-encoded credentials
-    $decoded_credentials = base64_decode($credentials[1]);
-    if (!$decoded_credentials) {
-        return new WP_Error('invalid_auth_header', 'Failed to decode authorization header.', array('status' => 403));
-    }
-
-    // Extract the username and password from the decoded credentials
-    list($username, $password) = explode(':', $decoded_credentials);
-    $username = sanitize_text_field($username);
-    $password = sanitize_text_field($password);
-
-    // Authenticate the user with the provided credentials
-    $user = wp_authenticate($username, $password);
-    if (is_wp_error($user)) {
-        return new WP_Error('invalid_credentials', 'Invalid username or password.', array('status' => 403));
-    }
+    // ...
 
     // Get the user ID from the URL parameter
     $user_id = (int) $request->get_param('user_id');
@@ -793,6 +767,12 @@ function change_password_callback($request) {
     // Verify the previous password before allowing password change
     $previous_password = $request->get_param('previous_password');
     $previous_password = sanitize_text_field($previous_password);
+
+    // Get the user object
+    $user = get_user_by('id', $user_id);
+    if (!$user) {
+        return new WP_Error('invalid_user', 'Invalid user ID.', array('status' => 400));
+    }
 
     // Verify the previous password using wp_check_password
     $previous_password_matched = wp_check_password($previous_password, $user->user_pass, $user->ID);
@@ -822,6 +802,7 @@ function change_password_callback($request) {
 
     return array('message' => 'Password changed successfully.');
 }
+
 
 
 // edit user
