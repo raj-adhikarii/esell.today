@@ -769,7 +769,7 @@ function change_password_callback($request) {
     $previous_password = sanitize_text_field($previous_password);
 
     // Get the user object
-    $user = get_user_by('id', $user_id);
+    $user = get_userdata($user_id);
     if (!$user) {
         return new WP_Error('invalid_user', 'Invalid user ID.', array('status' => 400));
     }
