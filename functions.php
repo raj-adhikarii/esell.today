@@ -759,7 +759,33 @@ function change_password_permission_callback($request) {
 
 function change_password_callback($request) {
     // Verify the Authorization header and authenticate the user
-    // ...
+    $auth_header = $request->get_header('Authorization');
+    if (empty($auth_header)) {
+        return new WP_Error('no_auth_header', 'Authorization header is missing.', array('status' => 403));
+    }
+
+    // Extract the base64-encoded credentials from the Authorization header
+    $credentials = explode(' ', $auth_header);
+    if (count($credentials) !== 2) {
+        return new WP_Error('invalid_auth_header', 'Invalid authorization header format.', array('status' => 403));
+    }
+
+    // Decode the base64-encoded credentials
+    $decoded_credentials = base64_decode($credentials[1]);
+    if (!$decoded_credentials) {
+        return new WP_Error('invalid_auth_header', 'Failed to decode authorization header.', array('status' => 403));
+    }
+
+    // Extract the username and password from the decoded credentials
+    list($username, $password) = explode(':', $decoded_credentials);
+    $username = sanitize_text_field($username);
+    $password = sanitize_text_field($password);
+
+    // Authenticate the user with the provided credentials
+    $user = wp_authenticate($username, $password);
+    if (is_wp_error($user)) {
+        return new WP_Error('invalid_credentials', 'Invalid username or password.', array('status' => 403));
+    }
 
     // Get the user ID from the URL parameter
     $user_id = (int) $request->get_param('user_id');
@@ -796,6 +822,7 @@ function change_password_callback($request) {
 
     return array('message' => 'Password changed successfully.');
 }
+
 
 // edit user
 add_action('rest_api_init', 'register_user_edit_endpoint');
