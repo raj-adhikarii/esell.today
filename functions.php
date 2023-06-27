@@ -758,7 +758,8 @@ function change_password_permission_callback($request) {
 }
 
 function change_password_callback($request) {
-	$auth_header = $request->get_header('Authorization');
+    // Verify the Authorization header and authenticate the user
+    $auth_header = $request->get_header('Authorization');
     if (empty($auth_header)) {
         return new WP_Error('no_auth_header', 'Authorization header is missing.', array('status' => 403));
     }
@@ -785,6 +786,7 @@ function change_password_callback($request) {
     if (is_wp_error($user)) {
         return new WP_Error('invalid_credentials', 'Invalid username or password.', array('status' => 403));
     }
+
     // Get the user ID from the URL parameter
     $user_id = (int) $request->get_param('user_id');
 
@@ -813,13 +815,18 @@ function change_password_callback($request) {
     }
 
     // Set the new password only if it is different from the previous password
-	$password_changed = wp_set_password($new_password, $user_id);
-    if ($password_changed === false) {
+    $user_data = wp_update_user(array(
+        'ID' => $user_id,
+        'user_pass' => $new_password,
+    ));
+
+    if (is_wp_error($user_data)) {
         return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 500));
     }
 
     return array('message' => 'Password changed successfully.');
 }
+
 
 
 // edit user
