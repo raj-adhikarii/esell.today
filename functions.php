@@ -794,9 +794,7 @@ function change_password_callback($request) {
     $current_user_id = get_current_user_id();
 
     // Check if the user is trying to change their own password
-    $is_own_password = ($current_user_id === $user_id);
-
-    if ($is_own_password) {
+    if ($current_user_id === $user_id) {
         // Verify the previous password before allowing password change
         $previous_password = $request->get_param('previous_password');
         $previous_password = sanitize_text_field($previous_password);
@@ -804,7 +802,7 @@ function change_password_callback($request) {
         // Verify the previous password using wp_check_password
         $previous_password_matched = wp_check_password($previous_password, $user->user_pass, $user->ID);
         if (!$previous_password_matched) {
-            return new WP_Error('invalid_previous_password', 'Previous password does not match.', array('status' => 403));
+            return new WP_Error('invalid_previous_password', 'Invalid previous password.', array('status' => 403));
         }
     } else {
         // Check if the current user has the necessary permission to change other users' passwords
@@ -813,29 +811,23 @@ function change_password_callback($request) {
         }
     }
 
-    // Update the user's password only if the previous password matched
-    if ($previous_password_matched) {
-        $new_password = $request->get_param('new_password');
-        $new_password = sanitize_text_field($new_password);
+    // Update the user's password
+    $new_password = $request->get_param('new_password');
+    $new_password = sanitize_text_field($new_password);
 
-        // Validate the new password
-        if ($new_password === $password) {
-            return new WP_Error('same_password', 'New password must be different from the previous password.', array('status' => 400));
-        }
-
-        // Update the user's password
-        $update_result = wp_set_password($new_password, $user_id);
-        if ($update_result === false) {
-            return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 500));
-        }
-
-        return array('message' => 'Password changed successfully.');
+    // Validate the new password
+    if ($new_password === $previous_password) {
+        return new WP_Error('same_password', 'New password must be different from the previous password.', array('status' => 400));
     }
 
-    return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 403));
+    // Set the new password only if it is different from the previous password
+    $password_changed = wp_set_password($new_password, $user_id);
+    if (!$password_changed) {
+        return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 500));
+    }
+
+    return array('message' => 'Password changed successfully.');
 }
-
-
 
 // edit user
 add_action('rest_api_init', 'register_user_edit_endpoint');
