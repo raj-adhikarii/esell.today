@@ -797,7 +797,11 @@ function change_password_callback($request) {
     if ($current_user_id === $user_id) {
         // Verify the previous password before allowing password change
         $previous_password = $request->get_param('previous_password');
-        if (!wp_check_password($previous_password, $user->data->user_pass, $user->ID)) {
+        $previous_password = sanitize_text_field($previous_password);
+
+        // Verify the previous password using wp_check_password
+        $previous_password_matched = wp_check_password($previous_password, $user->user_pass, $user->ID);
+        if (!$previous_password_matched) {
             return new WP_Error('invalid_previous_password', 'Invalid previous password.', array('status' => 403));
         }
     } else {
@@ -809,10 +813,12 @@ function change_password_callback($request) {
 
     // Update the user's password
     $new_password = $request->get_param('new_password');
+    $new_password = sanitize_text_field($new_password);
     wp_set_password($new_password, $user_id);
 
     return array('message' => 'Password changed successfully.');
 }
+
 
 // edit user
 add_action('rest_api_init', 'register_user_edit_endpoint');
