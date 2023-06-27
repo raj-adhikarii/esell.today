@@ -60,6 +60,7 @@ get_header(); ?>
                                 <button type="submit" class="theme-btn" name="login" value="<?php esc_attr_e('Log in', 'woocommerce'); ?>"><i class="far fa-sign-in"></i> Sign In</button>
                             </div>
                             <?php do_action('woocommerce_login_form_end'); ?>
+                            <div class="alert alert-danger mt-3"></div>
                         </form>
 
                         <?php
