@@ -756,6 +756,7 @@ add_action('rest_api_init', 'change_password_endpoint_init');
 function change_password_permission_callback($request) {
     return current_user_can('edit_users');
 }
+
 function change_password_callback($request) {
     // Verify the Authorization header
     $auth_header = $request->get_header('Authorization');
@@ -823,12 +824,15 @@ function change_password_callback($request) {
         }
 
         // Set the new password only if it is different from the previous password
-        wp_set_password($new_password, $user_id);
+        $result = wp_set_password($new_password, $user_id);
+        if (is_wp_error($result)) {
+            return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 500));
+        }
 
         return array('message' => 'Password changed successfully.');
     }
 
-    return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 500));
+    return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 403));
 }
 
 
