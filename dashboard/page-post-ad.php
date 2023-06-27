@@ -148,23 +148,22 @@ get_header(); ?>
                                             </div>
                                             <?php } ?>
                                             <div class="images-section" <?php echo $edit_ad ?>>
-                                            <form method="post" enctype="multipart/form-data" id="form">
-                                                <input type="file" name="images[]" id="input" multiple>
-                                                <button type="submit">Save</button>
-                                            </form>
+                                                <form method="post" enctype="multipart/form-data" id="form">
+                                                    <input type="file" name="images[]" id="input" class="product-img-file" multiple>
+                                                    <!-- <button type="submit">Save</button> -->
+                                                </form>
 
-                                                                                            <h6 class="fw-bold my-4">Upload Images</h6>
-
-                                                                                            <div id="preview-parent">
-                                            <!-- After upload Javascript will generate previews with this pattern
-                                            <div class="preview">
-                                                <img src="...">
-                                                <button data-index=0>Delete</button>
-                                                <input type="hidden" name="images_order['name']" value=0>
-                                            </div>
-                                            -->
-                                            </div>
-                                            
+                                                <!-- This <div> will be made sortable with SortableJS -->
+                                                <div id="preview-parent">
+                                                <!-- After upload Javascript will generate previews with this pattern
+                                                <div class="preview">
+                                                    <img src="...">
+                                                    <button data-index=0>Delete</button>
+                                                    <input type="hidden" name="images_order['name']" value=0>
+                                                </div>
+                                                -->
+                                                </div>
+                                                                                        
                                             
                                                 <div class="col-lg-12" <?php echo $toggle_id ?>>
                                                     <div class="form-group">
