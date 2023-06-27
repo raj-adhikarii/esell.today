@@ -813,8 +813,8 @@ function change_password_callback($request) {
     }
 
     // Set the new password only if it is different from the previous password
-    $password_changed = wp_set_password($new_password, $user_id);
-    if (!$password_changed) {
+	$password_changed = wp_set_password($new_password, $user_id);
+    if ($password_changed === false) {
         return new WP_Error('password_change_failed', 'Failed to change password.', array('status' => 500));
     }
 
