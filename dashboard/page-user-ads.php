@@ -97,6 +97,7 @@ get_header(); ?>
                                             <th>Price</th>
                                             <th>Views</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="product-data">
@@ -169,7 +170,10 @@ get_header(); ?>
                                                     echo $product_status;
                                                 ?>
                                                 </span>
-                                                <a href="/post-ad/?edit=true&product_id=<?php echo $product_id ?>" class="btn btn-link">Edit AD</a>
+                                            </td>
+
+                                            <td>
+                                                <a href="<?php echo site_url(); ?>/post-ad/?edit=true&product_id=<?php echo $product_id ?>" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
                                             </td>
                                         </tr>
                                         <?php $count++; endwhile; ?>

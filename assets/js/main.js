@@ -467,3 +467,84 @@ setTimeout(function() {
             });
         });
     });
+
+// DataTransfer allows updating files in input shortable
+var dataTransfer = new DataTransfer()
+
+const form = document.querySelector('#form')
+const input = document.querySelector('#input')
+
+input.addEventListener('change', () => {
+
+  let files = input.files
+
+  for (let i = 0; i < files.length; i++) {
+    // A new upload must not replace images but be added
+    dataTransfer.items.add(files[i])
+
+    // Generate previews using FileReader
+    let reader, preview, previewImage
+    reader = new FileReader()
+
+    preview = document.createElement('div')
+    previewImage = document.createElement('img')
+    deleteButton = document.createElement('button')
+    orderInput = document.createElement('input')
+
+    preview.classList.add('preview')
+    document.querySelector('#preview-parent').appendChild(preview)
+    deleteButton.setAttribute('data-index', i)
+    deleteButton.setAttribute('onclick', 'deleteImage(this)')
+    deleteButton.innerText = 'Delete'
+    orderInput.type = 'hidden'
+    orderInput.name = 'images_order[' + files[i].name + ']'
+
+    preview.appendChild(previewImage)
+    preview.appendChild(deleteButton)
+    preview.appendChild(orderInput)
+
+    reader.readAsDataURL(files[i])
+    reader.onloadend = () => {
+      previewImage.src = reader.result
+    }
+  }
+
+  // Update order values for all images
+  updateOrder()
+  // Finally update input files that will be sumbitted
+  input.files = dataTransfer.files
+})
+
+const updateOrder = () => {
+  let orderInputs = document.querySelectorAll('input[name^="images_order"]')
+  let deleteButtons = document.querySelectorAll('button[data-index]')
+  for (let i = 0; i < orderInputs.length; i++) {
+    orderInputs[i].value = [i]
+    deleteButtons[i].dataset.index = [i]
+    
+    // Just to show that order is always correct I add index here
+    deleteButtons[i].innerText = 'Delete (index ' + i + ')'
+  }
+}
+
+const deleteImage = (item) => {
+  // Remove image from DataTransfer and update input
+  dataTransfer.items.remove(item.dataset.index)
+  input.files = dataTransfer.files
+  // Delete element from DOM and update order
+  item.parentNode.remove()
+  updateOrder()
+}
+
+// I make the images sortable by means of SortableJS
+const el = document.getElementById('preview-parent')
+new Sortable(el, {
+  animation: 150,
+
+  // Update order values every time a change is made
+  onEnd: (event) => {
+    updateOrder()
+  }
+})
+  
+

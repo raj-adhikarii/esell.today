@@ -790,6 +790,23 @@ function change_password_callback($request) {
     // Get the user ID from the URL parameter
     $user_id = (int) $request->get_param('user_id');
 
+    // Get the current user's ID
+    $current_user_id = get_current_user_id();
+
+    // Check if the user is trying to change their own password
+    if ($current_user_id === $user_id) {
+        // Verify the previous password before allowing password change
+        $previous_password = $request->get_param('previous_password');
+        if (!wp_check_password($previous_password, $user->data->user_pass, $user->ID)) {
+            return new WP_Error('invalid_previous_password', 'Invalid previous password.', array('status' => 403));
+        }
+    } else {
+        // Check if the current user has the necessary permission to change other users' passwords
+        if (!current_user_can('edit_users')) {
+            return new WP_Error('insufficient_permission', 'You do not have sufficient permission to change other users\' passwords.', array('status' => 403));
+        }
+    }
+
     // Update the user's password
     $new_password = $request->get_param('new_password');
     wp_set_password($new_password, $user_id);
@@ -797,58 +814,44 @@ function change_password_callback($request) {
     return array('message' => 'Password changed successfully.');
 }
 
-
 // edit user
-function edit_user_endpoint_init() {
-    register_rest_route('user/v2', '/edit-user/(?P<id>\d+)', array(
-        'methods' => 'POST',
-        'callback' => 'edit_user_callback',
-        'permission_callback' => 'edit_user_permission_callback',
+add_action('rest_api_init', 'register_user_edit_endpoint');
+
+function register_user_edit_endpoint() {
+    register_rest_route('wp/v2', '/edit-users/(?P<id>\d+)', array(
+        'methods'  => 'PUT',
+        'callback' => 'edit_user',
+        'args'     => array(
+            'id' => array(
+                'validate_callback' => function ($param, $request, $key) {
+                    return is_numeric($param);
+                }
+            ),
+        ),
+
+		'first_name' => array(
+			'validate_callback' => 'rest_validate_request_arg',
+		),
+
+		'last_name' => array(
+			'validate_callback' => 'rest_validate_request_arg',
+		),
     ));
 }
-add_action('rest_api_init', 'edit_user_endpoint_init');
 
-function edit_user_permission_callback($request) {
-    return current_user_can('edit_users');
-}
-
-function edit_user_callback($request) {
+function edit_user($request) {
     $user_id = $request->get_param('id');
-    $user_data = $request->get_params();
+    $user_data = $request->get_json_params();
 
-    // Retrieve the existing user data
-    $existing_user = get_user_by('ID', $user_id);
+    $user = get_user_by('ID', $user_id);
 
-    // Check if the user exists
-    if (!$existing_user) {
+    if ($user) {
+        foreach ($user_data as $key => $value) {
+            update_user_meta($user_id, $key, $value);
+        }
+
+        return new WP_REST_Response('User updated successfully.', 200);
+    } else {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
-
-    // Prepare the updated user data
-    $updated_user_data = array();
-
-    // Add any specific user data fields to update
-    if (isset($user_data['username'])) {
-        $updated_user_data['user_login'] = sanitize_text_field($user_data['username']);
-    }
-
-    if (isset($user_data['email'])) {
-        $updated_user_data['user_email'] = sanitize_email($user_data['email']);
-    }
-
-    // Update the user data
-    $updated_user_id = wp_update_user(array_merge(['ID' => $user_id], $updated_user_data));
-
-    // Check if the user update was successful
-    if (is_wp_error($updated_user_id)) {
-        return new WP_Error('user_update_failed', 'Failed to update user.', array('status' => 500));
-    }
-
-    // Get the updated user object
-    $updated_user = get_user_by('ID', $updated_user_id);
-
-    return array(
-        'message' => 'User updated successfully.',
-        'user' => $updated_user
-    );
 }

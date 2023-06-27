@@ -2,6 +2,7 @@
 /* Template Name: Post Ad Template */
 get_header(); ?>
 
+
 <main class="main">
     <!-- breadcrumb -->
     <?php if(has_post_thumbnail($post ->ID)):
@@ -62,6 +63,9 @@ get_header(); ?>
                                         <?php
                                             $product_id=" ";  
                                             $product_title=" ";
+                                            $edit_ad= " ";
+                                            $price= " ";
+                                            $description= " ";
                                             if(isset($_GET['edit'])):
                                                 $product_id=$_GET['product_id'];
                                                 $product=wc_get_product( $product_id );
@@ -144,7 +148,23 @@ get_header(); ?>
                                             </div>
                                             <?php } ?>
                                             <div class="images-section" <?php echo $edit_ad ?>>
-                                                <h6 class="fw-bold my-4">Upload Images</h6>
+                                            <form method="post" enctype="multipart/form-data" id="form">
+                                                <input type="file" name="images[]" id="input" multiple>
+                                                <button type="submit">Save</button>
+                                            </form>
+
+                                                                                            <h6 class="fw-bold my-4">Upload Images</h6>
+
+                                                                                            <div id="preview-parent">
+                                            <!-- After upload Javascript will generate previews with this pattern
+                                            <div class="preview">
+                                                <img src="...">
+                                                <button data-index=0>Delete</button>
+                                                <input type="hidden" name="images_order['name']" value=0>
+                                            </div>
+                                            -->
+                                            </div>
+                                            
                                             
                                                 <div class="col-lg-12" <?php echo $toggle_id ?>>
                                                     <div class="form-group">

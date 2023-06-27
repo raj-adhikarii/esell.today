@@ -5393,9 +5393,38 @@ body input[type="email"]{
 }
 
 /* ===================
+shortable css 
+====================== */
+/* #preview-parent {
+  display: flex;
+}
+.preview {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+.preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+} */
+#preview-parent {
+  display: flex;
+}
+.preview {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+.preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+/* ===================
 error css 
 ====================== */
-
 .error-wrapper {
   text-align: center;
 }
