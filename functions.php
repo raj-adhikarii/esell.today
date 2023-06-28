@@ -820,11 +820,11 @@ function register_user_edit_endpoint() {
             ),
         ),
 
-        'update_first_name' => array(
+        'first_name' => array(
             'validate_callback' => 'rest_validate_request_arg',
         ),
 
-        'update_last_name' => array(
+        'last_name' => array(
             'validate_callback' => 'rest_validate_request_arg',
         ),
     ));
