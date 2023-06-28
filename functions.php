@@ -830,6 +830,12 @@ function register_user_edit_endpoint() {
             'avatar_url' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
+            'phone' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'billing_address' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
         ),
     ));
 }
@@ -865,6 +871,10 @@ function update_user_data($request) {
             update_user_meta($user_id, 'user_avatar', $user_data['avatar_url']);
         }
 
+        if (isset($user_data['phone'])) {
+            update_user_meta($user_id, 'billing_phone', $user_data['phone']);
+        }
+
         wp_update_user($user_args);
 
         // Update WooCommerce customer billing address data
@@ -873,11 +883,15 @@ function update_user_data($request) {
             'first_name' => $user_data['first_name'],
             'last_name'  => $user_data['last_name'],
             'email'      => $user_data['email'],
+            'phone'      => $user_data['phone'],
+            'address'    => isset($user_data['billing_address']) ? $user_data['billing_address'] : '',
         );
 
         update_user_meta($customer_id, 'billing_first_name', $billing_address['first_name']);
         update_user_meta($customer_id, 'billing_last_name', $billing_address['last_name']);
         update_user_meta($customer_id, 'billing_email', $billing_address['email']);
+        update_user_meta($customer_id, 'billing_phone', $billing_address['phone']);
+        update_user_meta($customer_id, 'billing_address', $billing_address['address']);
 
         // Return the updated user response
         return new WP_REST_Response('User updated successfully.', 200);
