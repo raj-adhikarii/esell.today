@@ -827,7 +827,7 @@ function register_user_edit_endpoint() {
             'email' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
-            'avatar_urls' => array(
+            'avatar_url' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
         ),
@@ -842,16 +842,30 @@ function update_user_data($request) {
 
     if ($user) {
         // Update WordPress user data
-        foreach ($user_data as $key => $value) {
-            if ($key === 'avatar_urls') {
-                if (isset($value['full'])) {
-                    // Update the user's avatar URL
-                    update_user_meta($user_id, 'user_avatar', $value['full']);
-                }
-            } else {
-                update_user_meta($user_id, $key, $value);
-            }
+        $user_args = array(
+            'ID' => $user_id,
+        );
+
+        if (isset($user_data['first_name'])) {
+            $user_args['first_name'] = $user_data['first_name'];
+            update_user_meta($user_id, 'first_name', $user_data['first_name']);
         }
+
+        if (isset($user_data['last_name'])) {
+            $user_args['last_name'] = $user_data['last_name'];
+            update_user_meta($user_id, 'last_name', $user_data['last_name']);
+        }
+
+        if (isset($user_data['email'])) {
+            $user_args['user_email'] = $user_data['email'];
+            update_user_meta($user_id, 'billing_email', $user_data['email']);
+        }
+
+        if (isset($user_data['avatar_url'])) {
+            update_user_meta($user_id, 'user_avatar', $user_data['avatar_url']);
+        }
+
+        wp_update_user($user_args);
 
         // Update WooCommerce customer billing address data
         $customer_id = $user->ID;
