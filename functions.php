@@ -818,14 +818,12 @@ function register_user_edit_endpoint() {
                     return is_numeric($param);
                 }
             ),
-        ),
-
-        'first_name' => array(
-            'validate_callback' => 'rest_validate_request_arg',
-        ),
-
-        'last_name' => array(
-            'validate_callback' => 'rest_validate_request_arg',
+            'first_name' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'last_name' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
         ),
     ));
 }
@@ -846,5 +844,6 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
