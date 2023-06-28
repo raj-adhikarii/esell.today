@@ -822,7 +822,7 @@ function register_user_edit_endpoint() {
             'email' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
-            'avatar_urls' => array(
+            'avatar' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
             'phone' => array(
@@ -862,48 +862,50 @@ function update_user_data($request) {
             update_user_meta($user_id, 'billing_email', $user_data['email']);
         }
 
-        if (isset($user_data['avatar_urls'])) {
-            update_user_meta($user_id, 'user_avatar', $user_data['avatar_urls']);
-        }
-
         if (isset($user_data['phone'])) {
             update_user_meta($user_id, 'billing_phone', $user_data['phone']);
         }
 
         wp_update_user($user_args);
 
+        // Update user avatar
+        if (isset($user_data['avatar'])) {
+            $avatar_url = $user_data['avatar'];
+
+            // Check if the Simple Local Avatars plugin is active
+            if (function_exists('sla_add')) {
+                sla_add($user_id, $avatar_url);
+            } else {
+                // If the plugin is not active, update the default WordPress avatar
+                update_user_meta($user_id, 'simple_local_avatar', $avatar_url);
+            }
+        }
+
         // Update WooCommerce customer billing address data
         $customer_id = $user->ID;
 
         $billing_address = array(
-			'first_name' => $user_data['first_name'],
-			'last_name'  => $user_data['last_name'],
-			'email'      => $user_data['email'],
-			'phone'      => $user_data['phone'],
-			'address'    => isset($user_data['address']) ? $user_data['address'] : '',
-		);
-		
-		// Update the customer's first name, last name, email, and phone
-		wp_update_user(array(
-			'ID'           => $user_id,
-			'first_name'   => $billing_address['first_name'],
-			'last_name'    => $billing_address['last_name'],
-			'user_email'   => $billing_address['email'],
-			'billing_phone' => $billing_address['phone'],
-		));
-		
-		// Update the billing address line 1
-		update_user_meta($user_id, 'billing_address_1', $billing_address['address']);		
+            'first_name' => $user_data['first_name'],
+            'last_name'  => $user_data['last_name'],
+            'email'      => $user_data['email'],
+            'phone'      => $user_data['phone'],
+            'address'    => isset($user_data['address']) ? $user_data['address'] : '',
+        );
+
+        // Update the customer's first name, last name, email, and phone
+        wp_update_user(array(
+            'ID'             => $user_id,
+            'first_name'     => $billing_address['first_name'],
+            'last_name'      => $billing_address['last_name'],
+            'user_email'     => $billing_address['email'],
+            'billing_phone'  => $billing_address['phone'],
+        ));
+
+        // Update the billing address line 1
+        update_user_meta($user_id, 'billing_address_1', $billing_address['address']);
 
         return new WP_REST_Response('User updated successfully.', 200);
     } else {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
-
-
-
-
-
-
-

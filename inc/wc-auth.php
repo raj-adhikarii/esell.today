@@ -1,5 +1,7 @@
 <?php 
-// loggedin server site validation
+/*===================================/*
+    loggedin server site validation
+/*===================================*/
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
     // Verify the nonce for security
     if ( isset( $_POST['custom_login_nonce'] ) && wp_verify_nonce( $_POST['custom_login_nonce'], 'custom_login_nonce' ) ) {
@@ -26,8 +28,9 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
     }
 }
 
-
-//signup validation
+/*======================/*
+    signup validation
+/*======================*/
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     $username = sanitize_user( $_POST['username'] );
     $email = sanitize_email( $_POST['email'] );
@@ -57,7 +60,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     // }
 
     if ( empty( $errors ) ) {
-        // Create a new user
         $user_id = wp_create_user( $username, $password, $email );
 
         if ( ! is_wp_error( $user_id ) ) {
@@ -66,13 +68,13 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
             wp_redirect( site_url( '/login/' ) );
             exit;
         } else {
-            // Registration failed
             $errors[] = $user_id->get_error_message();
         }
     }
 }
-
-// Server-side validation for forget password page 
+/*==================================================== /*
+    Server-side validation for forget password page 
+/*====================================================*/
 function custom_lost_password_validation($errors, $username) {
     if (empty($username)) {
         $errors->add('empty_username', __('Please enter your email address.', 'woocommerce'));
@@ -334,9 +336,9 @@ function get_merged_user_data($request) {
     return rest_ensure_response($merged_data);
 }
 
-/**
- * Register custom endpoint to retrieve merged user data.
- */
+/*==========================================================/*
+    Register custom endpoint to retrieve merged user data
+/*==========================================================*/
 function register_merged_user_data_endpoint() {
     register_rest_route('custom/v1', '/users/(?P<user_id>\d+)', array(
         'methods' => 'GET',
