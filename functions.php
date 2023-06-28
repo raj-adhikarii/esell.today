@@ -860,13 +860,13 @@ function update_user_data($request) {
         if (isset($user_data['email'])) {
             $user_args['user_email'] = $user_data['email'];
             update_user_meta($user_id, 'billing_email', $user_data['email']);
+            wp_update_user($user_args); // Update WordPress user email
+            update_user_meta($user_id, 'billing_email', $user_data['email']); // Update WooCommerce customer email
         }
 
         if (isset($user_data['phone'])) {
             update_user_meta($user_id, 'billing_phone', $user_data['phone']);
         }
-
-        wp_update_user($user_args);
 
         // Update user avatar
         if (isset($user_data['avatar'])) {
@@ -882,8 +882,6 @@ function update_user_data($request) {
         }
 
         // Update WooCommerce customer billing address data
-        $customer_id = $user->ID;
-
         $billing_address = array(
             'first_name' => $user_data['first_name'],
             'last_name'  => $user_data['last_name'],
@@ -894,11 +892,11 @@ function update_user_data($request) {
 
         // Update the customer's first name, last name, email, and phone
         wp_update_user(array(
-            'ID'             => $user_id,
-            'first_name'     => $billing_address['first_name'],
-            'last_name'      => $billing_address['last_name'],
-            'user_email'     => $billing_address['email'],
-            'billing_phone'  => $billing_address['phone'],
+            'ID'           => $user_id,
+            'first_name'   => $billing_address['first_name'],
+            'last_name'    => $billing_address['last_name'],
+            'user_email'   => $billing_address['email'],
+            'billing_phone' => $billing_address['phone'],
         ));
 
         // Update the billing address line 1
