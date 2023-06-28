@@ -842,7 +842,9 @@ function update_user_data($request) {
 
     if ($user) {
         foreach ($user_data as $key => $value) {
-            if ($key === 'avatar_urls') {
+            if ($key === 'email') {
+                wp_update_user(array('ID' => $user_id, 'user_email' => $value));
+            } elseif ($key === 'avatar_urls') {
                 $avatar_urls = $value;
                 foreach ($avatar_urls as $size => $url) {
                     update_user_meta($user_id, 'avatar_url_' . $size, $url);
@@ -857,6 +859,7 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
 
