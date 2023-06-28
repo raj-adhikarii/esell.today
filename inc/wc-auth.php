@@ -86,8 +86,9 @@ function custom_lost_password_validation($errors, $username) {
 }
 add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
 
-
-// custom login endpoint
+/*==========================/*
+    custom login endpoint
+/*==========================*/
 add_action('rest_api_init', 'custom_user_login_endpoint');
 
 function custom_user_login_endpoint() {
@@ -115,8 +116,9 @@ function custom_user_login($request) {
     return new WP_REST_Response(array('message' => 'User logged in successfully', 'user_id' => $user->ID), 200);
 }
 
-
-//custom user register endpoint
+/*==================================/*
+    custom user register endpoint
+/*==================================*/
 add_action('rest_api_init', 'custom_user_registration_endpoint');
 
 function custom_user_registration_endpoint() {
@@ -143,7 +145,9 @@ function custom_user_registration($request) {
   }
   
 
-//====== Password reset =========//
+/*===================/*
+    Password reset
+/*===================*/
 // Register custom endpoint for password reset
 add_action('rest_api_init', 'register_password_reset_endpoint');
 function register_password_reset_endpoint() {
@@ -211,7 +215,9 @@ function get_products_by_user( $request ) {
     return rest_ensure_response( $formatted_products );
 }
 
-// credentials verification
+/*============================/*
+   credentials verification
+/*============================*/
 function create_product_via_api($product_data) {
     // WooCommerce API credentials
     $consumer_key = 'ck_3b1cfe2add0a1811720f3c5acc7abd65ad78efd6';
@@ -254,8 +260,9 @@ function create_product_via_api($product_data) {
     }
 }
 
-
-// Add custom REST API endpoint for retrieving user information
+/*===============================================================/*
+   Add custom REST API endpoint for retrieving user information
+/*===============================================================*/
 function custom_user_endpoint() {
     register_rest_route( 'custom/v1', '/users', array(
         'methods'  => 'GET',
@@ -282,9 +289,10 @@ function custom_get_users( $request ) {
 
     return $formatted_users;
 }
-/**
- * Retrieve merged user data from WooCommerce and WordPress.
- */
+
+/*===============================================================/*
+    Retrieve merged user data from WooCommerce and WordPress.
+/*===============================================================*/
 function get_merged_user_data($request) {
     $user_id = $request['user_id'];
 
@@ -300,6 +308,9 @@ function get_merged_user_data($request) {
     // Retrieve WordPress user data
     $user = get_userdata($user_id);
 
+    // Concatenate first name and last name
+    $name = $user->first_name . ' ' . $user->last_name;
+
     // Retrieve additional user meta data
     $image_url = get_user_meta($user_id, 'image_url', true);
     $additional_details = get_user_meta($user_id, 'additional_details', true);
@@ -312,7 +323,7 @@ function get_merged_user_data($request) {
         'id' => $user->ID,
         'username' => $user->user_login,
         'email' => $user->user_email,
-        'name' => $user->display_name,
+        'name' => $name,
         'billing_address' => $billing_address,
         'shipping_address' => $shipping_address,
         'image_url' => $avatar_url,
@@ -322,7 +333,6 @@ function get_merged_user_data($request) {
 
     return rest_ensure_response($merged_data);
 }
-
 
 /**
  * Register custom endpoint to retrieve merged user data.

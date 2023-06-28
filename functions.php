@@ -191,7 +191,10 @@ function mytheme_add_woocommerce_support() {
 }
 add_action( 'after_setup_theme', 'mytheme_add_woocommerce_support' );
 
-// Update product views count
+/*===============================/*
+ 	Update product views count
+/*===============================*/
+
 function update_product_views_count() {
     if (is_singular('product')) {
         global $post;
@@ -216,55 +219,40 @@ function display_product_views_count() {
     }
 }
 
-// disable aad to cart from store
+/*===================================/*
+	disable aad to cart from store
+/*===================================*/
+
 function disable_add_to_cart() {
     remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
     remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 }
 add_action( 'init', 'disable_add_to_cart' );
 
-
-// Add filter to modify the product query for vendors
-add_filter('dokan_product_listing_query', 'restrict_vendor_product_images', 10, 2);
-
-function restrict_vendor_product_images($args, $query) {
-    // Check if the current user is a vendor
-    if (dokan_is_user_seller(get_current_user_id())) {
-        // Get the current vendor ID
-        $vendor_id = dokan_get_current_user_id();
-
-        // Modify the query to exclude product images from other vendors
-        $args['meta_query'][] = array(
-            'key'     => '_vendor_id',
-            'value'   => $vendor_id,
-            'compare' => '=',
-        );
-    }
-
-    return $args;
-}
-//acf map
-// Method 2: Setting.
+/*==========================/*
+	ACF map widget setting
+/*==========================*/
 function my_acf_init() {
     acf_update_setting('google_api_key', 'AIzaSyC72HFD7TrxeGNFn3z-J_VDkReXJCQK95I');
 }
 add_action('acf/init', 'my_acf_init');
 
-//redirect annomous user to login page 
+/*========================================/*
+	redirect annomous user to login page 
+/*========================================*/
 function redirect_unlogged_users() {
-    // Define the restricted pages slugs
     $restricted_pages = array( 'dashboard', 'my-ads', 'post-ad', 'profile-setting', 'profile-setting', 'profile' );
 
-    // Check if the user is not logged in and trying to access a restricted page
     if ( ! is_user_logged_in() && in_array( get_post_field( 'post_name' ), $restricted_pages ) ) {
-        // Redirect to the register page
         wp_redirect( site_url( '/login/' ) );
         exit;
     }
 }
 add_action( 'template_redirect', 'redirect_unlogged_users' );
 
-//transfer data from frontend
+/*================================/*
+	transfer data from frontend
+/*================================*/
 function publish_product() {
     if (isset($_POST['submit'])) {
         $title = sanitize_text_field($_POST['product-title']);
@@ -521,8 +509,9 @@ function add_custom_fields_to_edit_account_form() {
 }
 add_action( 'woocommerce_edit_account_form', 'add_custom_fields_to_edit_account_form',5 );
 
-
-// Add phone and address fields to the WooCommerce "Edit Account" form
+/*========================================================================/*
+	Add phone and address fields to the WooCommerce "Edit Account" form
+/*========================================================================*/
 function add_custom_fields_to_edit_store_information() {
     $user_id = get_current_user_id();
 	$store_logo = get_user_meta( $user_id, 'store_logo', true );
@@ -731,7 +720,10 @@ function redirect_my_account() {
 }
 add_action('template_redirect', 'redirect_my_account');
 
-// password change API
+/*=======================/*
+	password change API
+/*=======================*/
+
 function change_password_endpoint_init() {
     register_rest_route('user/v2', '/change-password/(?P<user_id>\d+)', array(
         'methods' => 'POST',
@@ -805,7 +797,10 @@ function change_password_callback($request) {
 
 
 
-// edit user
+/*====================/*
+	Update user data
+/*====================*/
+
 add_action('rest_api_init', 'register_user_edit_endpoint');
 
 function register_user_edit_endpoint() {
