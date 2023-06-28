@@ -885,22 +885,20 @@ function update_user_data($request) {
 			'last_name'  => $user_data['last_name'],
 			'email'      => $user_data['email'],
 			'phone'      => $user_data['phone'],
-			'address_1'  => isset($user_data['address']) ? $user_data['address'] : '',
+			'address'    => isset($user_data['address']) ? $user_data['address'] : '',
 		);
 		
-		update_user_meta($customer_id, 'billing_first_name', $billing_address['first_name']);
-		update_user_meta($customer_id, 'billing_last_name', $billing_address['last_name']);
-		update_user_meta($customer_id, 'billing_email', $billing_address['email']);
-		update_user_meta($customer_id, 'billing_phone', $billing_address['phone']);
+		// Update the customer's first name, last name, email, and phone
+		wp_update_user(array(
+			'ID'           => $user_id,
+			'first_name'   => $billing_address['first_name'],
+			'last_name'    => $billing_address['last_name'],
+			'user_email'   => $billing_address['email'],
+			'billing_phone' => $billing_address['phone'],
+		));
 		
-		// Update the billing address fields
-		$billing_address_data = array(
-			'billing_address_1' => $billing_address['address_1'],
-		);
-		
-		foreach ($billing_address_data as $meta_key => $meta_value) {
-			update_user_meta($customer_id, $meta_key, $meta_value);
-		}	
+		// Update the billing address line 1
+		update_user_meta($user_id, 'billing_address_1', $billing_address['address']);		
 
         return new WP_REST_Response('User updated successfully.', 200);
     } else {
