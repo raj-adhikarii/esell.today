@@ -827,7 +827,7 @@ function register_user_edit_endpoint() {
             'email' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
-            'avatar_url' => array(
+            'avatar_urls' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
             'phone' => array(
@@ -867,8 +867,8 @@ function update_user_data($request) {
             update_user_meta($user_id, 'billing_email', $user_data['email']);
         }
 
-        if (isset($user_data['avatar_url'])) {
-            update_user_meta($user_id, 'user_avatar', $user_data['avatar_url']);
+        if (isset($user_data['avatar_urls'])) {
+            update_user_meta($user_id, 'user_avatar', $user_data['avatar_urls']);
         }
 
         if (isset($user_data['phone'])) {
@@ -907,6 +907,7 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
 
