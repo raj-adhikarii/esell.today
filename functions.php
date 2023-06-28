@@ -811,7 +811,7 @@ add_action('rest_api_init', 'register_user_edit_endpoint');
 function register_user_edit_endpoint() {
     register_rest_route('wp/v2', '/edit-users/(?P<id>\d+)', array(
         'methods'  => 'PUT',
-        'callback' => 'edit_user',
+        'callback' => 'update_user_data',
         'args'     => array(
             'id' => array(
                 'validate_callback' => function ($param, $request, $key) {
@@ -820,17 +820,17 @@ function register_user_edit_endpoint() {
             ),
         ),
 
-		'first_name' => array(
-			'validate_callback' => 'rest_validate_request_arg',
-		),
+        'update_first_name' => array(
+            'validate_callback' => 'rest_validate_request_arg',
+        ),
 
-		'last_name' => array(
-			'validate_callback' => 'rest_validate_request_arg',
-		),
+        'update_last_name' => array(
+            'validate_callback' => 'rest_validate_request_arg',
+        ),
     ));
 }
 
-function edit_user($request) {
+function update_user_data($request) {
     $user_id = $request->get_param('id');
     $user_data = $request->get_json_params();
 
@@ -846,3 +846,5 @@ function edit_user($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
+

@@ -5408,8 +5408,10 @@ shortable css
   height: 100px;
   object-fit: cover;
 } */
+
 #preview-parent {
   display: flex;
+  overflow-x: scroll;
 }
 
 .preview {

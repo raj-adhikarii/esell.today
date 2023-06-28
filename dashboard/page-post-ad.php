@@ -147,34 +147,31 @@ get_header(); ?>
                                                 </div>
                                             </div>
                                             <?php } ?>
-                                            <div class="images-section" <?php echo $edit_ad ?>>
-                                                <form method="post" enctype="multipart/form-data" id="form">
-                                                    <input type="file" name="images[]" id="input" class="product-img-file" multiple>
-                                                    <!-- <button type="submit">Save</button> -->
-                                                </form>
-
-                                                <!-- This <div> will be made sortable with SortableJS -->
-                                                <div id="preview-parent">
-                                                <!-- After upload Javascript will generate previews with this pattern
-                                                <div class="preview">
-                                                    <img src="...">
-                                                    <button data-index=0>Delete</button>
-                                                    <input type="hidden" name="images_order['name']" value=0>
-                                                </div>
-                                                -->
-                                                </div>
-                                                                                        
-                                            
+                                            <div class="images-section" <?php echo $edit_ad ?>>                                     
                                                 <div class="col-lg-12" <?php echo $toggle_id ?>>
-                                                    <div class="form-group">
+                                                    <input type="file" name="images[]" id="input" class="product-img-file" multiple>
+                                                    <div id="preview-parent"></div>
+
+                                                        <div class="form-group">
+                                                            <div class="product-upload-wrapper">
+                                                                <div class="product-img-upload">
+                                                                    <span><i class="far fa-images"></i> Upload Product Images</span>
+                                                                </div>
+                                                                <input type="file" name="images[]" class="product-img-file" multiple>
+                                                                <div class="alert alert-danger mt-2" id="error-message"></div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    <!-- <div class="form-group">
                                                         <div class="product-upload-wrapper">
                                                             <div class="product-img-upload">
                                                                 <span><i class="far fa-images"></i> Upload Product Images</span>
                                                             </div>
                                                             <input type="file" name="product_images[]" class="product-img-file" multiple>
                                                             <div class="alert alert-danger mt-2" id="error-message"></div>
-                                                        </div>
-                                                    </div>
+                                                        </div> 
+                                                    </div>-->
                                                 </div>
                                             </div>
                                             

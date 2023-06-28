@@ -19,7 +19,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-get_header( 'shop' ); ?>
+	get_header( 'shop' ); 
+	print <<<HTML
+	<main class="main">
+
+	<!-- breadcrumb -->
+	<div class="site-breadcrumb" style="background: url(https://e-sell.today/wp-content/uploads/2023/04/head.jpeg)">
+		<div class="container">
+			<h2 class="breadcrumb-title">All Stores</h2>
+			<ul class="breadcrumb-menu">
+				<li><a href="<?php echo site_url(); ?>">Home</a></li>
+				<li class="active">All Stores</li>
+			</ul>
+		</div>
+	</div>
+	HTML;
+	?>
 
 	<?php
 		/**
@@ -28,7 +43,9 @@ get_header( 'shop' ); ?>
 		 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
 		 * @hooked woocommerce_breadcrumb - 20
 		 */
+		
 		do_action( 'woocommerce_before_main_content' );
+		echo '<div class="container">';
 	?>
 
 		<?php while ( have_posts() ) : ?>
@@ -36,7 +53,8 @@ get_header( 'shop' ); ?>
 
 			<?php wc_get_template_part( 'content', 'single-product' ); ?>
 
-		<?php endwhile; // end of the loop. ?>
+		<?php endwhile; // end of the loop. 
+		echo '<div>'; ?>
 
 	<?php
 		/**
@@ -44,7 +62,9 @@ get_header( 'shop' ); ?>
 		 *
 		 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
 		 */
+		
 		do_action( 'woocommerce_after_main_content' );
+		
 	?>
 
 	<?php
@@ -58,6 +78,8 @@ get_header( 'shop' ); ?>
 
 
 <?php
+
 get_footer( 'shop' );
+echo '<main>';
 
 /* Omit closing PHP tag at the end of PHP files to avoid "headers already sent" issues. */

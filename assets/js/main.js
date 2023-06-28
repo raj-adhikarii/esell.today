@@ -492,58 +492,39 @@ jQuery(document).ready(function($) {
     wishlistIcon.className = 'fas fa-heart';
   }
 
-  jQuery(document).ready(function($) {
-    startGoogleSignin();
-});
+// Add event listener to remove wishlist functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const removeButtons = document.querySelectorAll('.product-favorite');
 
-function googleSigninCallback(response) {
-    // Process the user data or send it to the server for further handling
-    console.log(response);
-}
+    removeButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const productId = this.getAttribute('data-product-id');
 
-function startGoogleSignin() {
-    gapi.load('auth2', function() {
-        gapi.auth2.init({
-            client_id: '792576410732-pcmcg976a9dl5mc4t3mv241ugsfiscin.apps.googleusercontent.com',
-        }).then(function(auth2) {
-            auth2.attachClickHandler('google-signin-button', {}, googleSigninCallback, function(error) {
-                console.error(error);
-            });
-        });
-    });
-}
+            // Make an AJAX request to remove the product from the wishlist
+            // Replace `remove-from-wishlist.php` with the actual server-side script or endpoint
+            fetch('remove-from-wishlist.php', {
+                method: 'POST',
+                body: JSON.stringify({ productId: productId })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                // Check the response data and handle any errors or success messages
 
-// Call the startGoogleSignin function when the document is ready
-document.addEventListener("DOMContentLoaded", function(event) {
-    startGoogleSignin();
-});
-
-// hide error message
-setTimeout(function() {
-    jQuery('#error-message').fadeOut('slow');
-}, 4000);
-
-//handel user image
-    jQuery(document).ready(function($) {
-        // Remove from Wishlist
-        $('.remove-wishlist').on('click', function(e) {
-            e.preventDefault();
-            var productId = $(this).data('product-id');
-            // Add your code to remove the product from the wishlist using AJAX or other methods
-
-            // Example AJAX call
-            $.ajax({
-                url: 'remove_from_wishlist.php', // Replace with your backend endpoint for removing from wishlist
-                type: 'POST',
-                data: { product_id: productId },
-                success: function(response) {
-                    // Handle the success response here
-                    // For example, you can remove the product item from the DOM
-                    $(this).closest('.product-item').remove();
-                },
-                error: function(xhr, status, error) {
-                    // Handle the error response here
+                // If the removal was successful, remove the corresponding product item from the DOM
+                if (data.success) {
+                    const productItem = button.closest('.product-item');
+                    if (productItem) {
+                        productItem.remove();
+                    }
                 }
+            })
+            .catch(function(error) {
+                // Handle any errors that occurred during the AJAX request
+                console.error('Error:', error);
             });
         });
     });
+});
