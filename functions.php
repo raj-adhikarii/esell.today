@@ -846,7 +846,7 @@ function update_user_data($request) {
                 if (class_exists('one_user_avatar') && isset($value['full'])) {
                     // Update the user's avatar using the "One User Avatar" plugin
                     $avatar_plugin = new one_user_avatar();
-                    $avatar_plugin->save_avatar($user_id, $value['full']);
+                    $avatar_plugin->upload_avatar($user_id, $value['full']);
                 }
             } else {
                 update_user_meta($user_id, $key, $value);
@@ -858,6 +858,7 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
 
