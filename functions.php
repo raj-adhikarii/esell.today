@@ -893,9 +893,9 @@ function update_user_data($request) {
 		update_user_meta($customer_id, 'billing_email', $billing_address['email']);
 		update_user_meta($customer_id, 'billing_phone', $billing_address['phone']);
 		
-		// Update the billing address field
+		// Update the billing address fields
 		$billing_address_data = array(
-			'address_1' => $billing_address['address_1'],
+			'billing_address_1' => $billing_address['address_1'],
 		);
 		
 		foreach ($billing_address_data as $meta_key => $meta_value) {
