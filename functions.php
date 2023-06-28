@@ -884,14 +884,24 @@ function update_user_data($request) {
             'last_name'  => $user_data['last_name'],
             'email'      => $user_data['email'],
             'phone'      => $user_data['phone'],
-            'address'    => isset($user_data['billing_address']) ? $user_data['billing_address'] : '',
+            'address_1'  => isset($user_data['billing_address']['address_1']) ? $user_data['billing_address']['address_1'] : '',
+            'address_2'  => isset($user_data['billing_address']['address_2']) ? $user_data['billing_address']['address_2'] : '',
+            'city'       => isset($user_data['billing_address']['city']) ? $user_data['billing_address']['city'] : '',
+            'state'      => isset($user_data['billing_address']['state']) ? $user_data['billing_address']['state'] : '',
+            'postcode'   => isset($user_data['billing_address']['postcode']) ? $user_data['billing_address']['postcode'] : '',
+            'country'    => isset($user_data['billing_address']['country']) ? $user_data['billing_address']['country'] : '',
         );
 
         update_user_meta($customer_id, 'billing_first_name', $billing_address['first_name']);
         update_user_meta($customer_id, 'billing_last_name', $billing_address['last_name']);
         update_user_meta($customer_id, 'billing_email', $billing_address['email']);
         update_user_meta($customer_id, 'billing_phone', $billing_address['phone']);
-        update_user_meta($customer_id, 'billing_address', $billing_address['address']);
+        update_user_meta($customer_id, 'billing_address_1', $billing_address['address_1']);
+        update_user_meta($customer_id, 'billing_address_2', $billing_address['address_2']);
+        update_user_meta($customer_id, 'billing_city', $billing_address['city']);
+        update_user_meta($customer_id, 'billing_state', $billing_address['state']);
+        update_user_meta($customer_id, 'billing_postcode', $billing_address['postcode']);
+        update_user_meta($customer_id, 'billing_country', $billing_address['country']);
 
         // Return the updated user response
         return new WP_REST_Response('User updated successfully.', 200);
