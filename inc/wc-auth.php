@@ -339,21 +339,13 @@ function get_merged_user_data($request) {
 /*==========================================================/*
     Register custom endpoint to retrieve merged user data
 /*==========================================================*/
-function register_merged_user_data_endpoint() {
-    register_rest_route('custom/v1', '/users/(?P<user_id>\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'get_merged_user_data',
-    ));
-}
-add_action('rest_api_init', 'register_merged_user_data_endpoint');
-
 function get_products_by_user_id($request) {
-    $user_id = $request['user_id'];
+    $user_id = $request->get_param('user_id');
 
     $args = array(
         'author' => $user_id,
-        'status' => 'publish',
-        'type' => 'product',
+        'post_status' => 'publish',
+        'post_type' => 'product',
     );
 
     $products = get_posts($args);
@@ -361,11 +353,19 @@ function get_products_by_user_id($request) {
     $formatted_products = array();
 
     foreach ($products as $product) {
+        $product_data = wc_get_product($product->ID);
+        $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product->ID), 'full');
+        $product_categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'names'));
+
         $formatted_products[] = array(
             'id' => $product->ID,
             'title' => $product->post_title,
             'permalink' => get_permalink($product->ID),
-            // Add any additional product data you want to include like image
+            'price' => $product_data->get_price(),
+            'image' => $product_image[0],
+            'categories' => $product_categories,
+            'description' => $product->post_content,
+            // Add any additional product data you want to include
         );
     }
 
@@ -377,10 +377,4 @@ add_action('rest_api_init', function () {
         'methods' => 'GET',
         'callback' => 'get_products_by_user_id',
     ));
-});
-
-
-
-
-
-  
+}); 
