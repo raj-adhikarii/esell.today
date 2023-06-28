@@ -841,18 +841,31 @@ function update_user_data($request) {
     $user = get_user_by('ID', $user_id);
 
     if ($user) {
+        // Update WordPress user data
         foreach ($user_data as $key => $value) {
             if ($key === 'avatar_urls') {
-                if (class_exists('one_user_avatar') && isset($value['full'])) {
-                    // Update the user's avatar using the "One User Avatar" plugin
-                    $avatar_plugin = new one_user_avatar();
-                    $avatar_plugin->upload_avatar($user_id, $value['full']);
+                if (isset($value['full'])) {
+                    // Update the user's avatar URL
+                    update_user_meta($user_id, 'user_avatar', $value['full']);
                 }
             } else {
                 update_user_meta($user_id, $key, $value);
             }
         }
 
+        // Update WooCommerce customer billing address data
+        $customer_id = $user->ID;
+        $billing_address = array(
+            'first_name' => $user_data['first_name'],
+            'last_name'  => $user_data['last_name'],
+            'email'      => $user_data['email'],
+        );
+
+        update_user_meta($customer_id, 'billing_first_name', $billing_address['first_name']);
+        update_user_meta($customer_id, 'billing_last_name', $billing_address['last_name']);
+        update_user_meta($customer_id, 'billing_email', $billing_address['email']);
+
+        // Return the updated user response
         return new WP_REST_Response('User updated successfully.', 200);
     } else {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
