@@ -827,6 +827,9 @@ function register_user_edit_endpoint() {
             'email' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
+            'avatar_urls' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
         ),
     ));
 }
@@ -839,7 +842,14 @@ function update_user_data($request) {
 
     if ($user) {
         foreach ($user_data as $key => $value) {
-            update_user_meta($user_id, $key, $value);
+            if ($key === 'avatar_urls') {
+                $avatar_urls = $value;
+                foreach ($avatar_urls as $size => $url) {
+                    update_user_meta($user_id, 'avatar_url_' . $size, $url);
+                }
+            } else {
+                update_user_meta($user_id, $key, $value);
+            }
         }
 
         return new WP_REST_Response('User updated successfully.', 200);
@@ -847,6 +857,7 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
 
