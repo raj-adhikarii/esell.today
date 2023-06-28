@@ -849,10 +849,15 @@ function update_user_data($request) {
                 foreach ($avatar_urls as $size => $url) {
                     update_user_meta($user_id, 'avatar_url_' . $size, $url);
                 }
+                // Set the primary avatar size
+                update_user_meta($user_id, 'primary_avatar', $avatar_urls['full']);
             } else {
                 update_user_meta($user_id, $key, $value);
             }
         }
+
+        // Clear avatar cache for the user
+        do_action('oua_clear_avatar_cache', $user_id);
 
         return new WP_REST_Response('User updated successfully.', 200);
     } else {
