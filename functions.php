@@ -824,6 +824,9 @@ function register_user_edit_endpoint() {
             'last_name' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
+            'email' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
         ),
     ));
 }
