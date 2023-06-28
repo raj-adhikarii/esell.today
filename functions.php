@@ -893,15 +893,21 @@ function update_user_data($request) {
         update_user_meta($customer_id, 'billing_email', $billing_address['email']);
         update_user_meta($customer_id, 'billing_phone', $billing_address['phone']);
 
-        // Merge the address fields into a single field
-        $full_address = implode(', ', $billing_address);
-        update_user_meta($customer_id, 'billing_address_1', $full_address);
+        // Update the billing address field
+        $billing_address_data = array(
+            'address_1' => $billing_address['address_1'],
+        );
+
+        foreach ($billing_address_data as $meta_key => $meta_value) {
+            update_user_meta($customer_id, $meta_key, $meta_value);
+        }
 
         return new WP_REST_Response('User updated successfully.', 200);
     } else {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
 
