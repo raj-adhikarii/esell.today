@@ -833,7 +833,7 @@ function register_user_edit_endpoint() {
             'phone' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
-            'address_1' => array(
+            'address' => array(
                 'validate_callback' => 'rest_validate_request_arg',
             ),
         ),
@@ -879,25 +879,30 @@ function update_user_data($request) {
 
         // Update WooCommerce customer billing address data
         $customer_id = $user->ID;
+
         $billing_address = array(
             'first_name' => $user_data['first_name'],
             'last_name'  => $user_data['last_name'],
             'email'      => $user_data['email'],
             'phone'      => $user_data['phone'],
-            'address'    => isset($user_data['address_1']) ? $user_data['address_1'] : '',
+            'address_1'  => isset($user_data['address']) ? $user_data['address'] : '',
         );
 
         update_user_meta($customer_id, 'billing_first_name', $billing_address['first_name']);
         update_user_meta($customer_id, 'billing_last_name', $billing_address['last_name']);
         update_user_meta($customer_id, 'billing_email', $billing_address['email']);
         update_user_meta($customer_id, 'billing_phone', $billing_address['phone']);
-        update_user_meta($customer_id, 'billing_address_1', $billing_address['address']);
+
+        // Merge the address fields into a single field
+        $full_address = implode(', ', $billing_address);
+        update_user_meta($customer_id, 'billing_address_1', $full_address);
 
         return new WP_REST_Response('User updated successfully.', 200);
     } else {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
 
