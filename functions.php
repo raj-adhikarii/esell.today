@@ -842,28 +842,23 @@ function update_user_data($request) {
 
     if ($user) {
         foreach ($user_data as $key => $value) {
-            if ($key === 'email') {
-                wp_update_user(array('ID' => $user_id, 'user_email' => $value));
-            } elseif ($key === 'avatar_urls') {
-                $avatar_urls = $value;
-                foreach ($avatar_urls as $size => $url) {
-                    update_user_meta($user_id, 'avatar_url_' . $size, $url);
+            if ($key === 'avatar_urls') {
+                if (class_exists('one_user_avatar') && isset($value['full'])) {
+                    // Update the user's avatar using the "One User Avatar" plugin
+                    $avatar_plugin = new one_user_avatar();
+                    $avatar_plugin->save_avatar($user_id, $value['full']);
                 }
-                // Set the primary avatar size
-                update_user_meta($user_id, 'primary_avatar', $avatar_urls['full']);
             } else {
                 update_user_meta($user_id, $key, $value);
             }
         }
-
-        // Clear avatar cache for the user
-        do_action('oua_clear_avatar_cache', $user_id);
 
         return new WP_REST_Response('User updated successfully.', 200);
     } else {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
 
 
 
