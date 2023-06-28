@@ -859,7 +859,6 @@ function update_user_data($request) {
 
         if (isset($user_data['email'])) {
             $user_args['user_email'] = $user_data['email'];
-            update_user_meta($user_id, 'billing_email', $user_data['email']);
             wp_update_user($user_args); // Update WordPress user email
             update_user_meta($user_id, 'billing_email', $user_data['email']); // Update WooCommerce customer email
         }
