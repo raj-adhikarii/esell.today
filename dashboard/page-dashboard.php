@@ -79,22 +79,26 @@ get_header() ?>
                             wp_reset_query(  );
 
                             /**
-                             * Get All PUblished Ads By Author
+                             * Get Total Views of All the Products
                              */
+                            
+                             $query = "SELECT SUM(meta_value) as total_views
+                                    FROM {$wpdb->prefix}posts AS p
+                                    INNER JOIN {$wpdb->prefix}postmeta AS pm
+                                    ON p.ID = pm.post_id
+                                    WHERE p.post_type = 'product'
+                                    AND p.post_status IN ('publish', 'draft')
+                                    AND p.post_author = %d
+                                    AND pm.meta_key = 'view_count'";
 
-                            global $wpdb;
-
-                            $query = "SELECT COUNT(*) as product_count
-                                    FROM {$wpdb->prefix}posts
-                                    WHERE post_type = 'product'
-                                    AND post_status = 'publish'
-                                    AND post_author = %d";
-
-                            $publish_product_count = $wpdb->get_var($wpdb->prepare($query, $author_id));
-
-                            wp_reset_query();
+                            $total_views = $wpdb->get_var($wpdb->prepare($query, $author_id));
+                            if ($total_views >= 1000) {
+                                $total_views .= 'k';
+                            } elseif (empty($total_views)) {
+                                $total_views = 0;
+                            }
+                            wp_reset_query(  );
                             wp_reset_postdata(  );
-
                             /**
                              * Get Total Views of All the Products
                              */

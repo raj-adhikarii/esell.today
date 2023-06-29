@@ -5804,6 +5804,24 @@ footer css
   }
 }
 
+/* div#toast-container {
+  margin: auto!important;
+  top: 50%;
+  margin-top: -25px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  right: 0!important;
+} */
+
+div#toast-container {
+  margin: auto !important;
+    margin-top: auto;
+  top: 50%;
+  margin-top: 0px !important;
+  left: 50%;
+  transform: translate(-19%, 0);
+  right: 0 !important;
+}
 
 
 /* ======================

@@ -333,7 +333,7 @@ function handle_custom_post_ads() {
     $ad_content = $_POST['description'];
     $price = $_POST['product_price'];
     $category = $_POST['post_category'];
-    $tags_keyword = $_POST['tags_keyword'];
+    $tags_keyword = explode(',',$_POST['tags_keyword']);
     $ad_images = $_FILES['product_images'];
 	 //print_r($ad_images);
 	// exit;
@@ -357,7 +357,9 @@ function handle_custom_post_ads() {
         // Set the category for the post
 		$category = wp_set_object_terms($post_id, $category, 'product_cat');
         // Set the tags for the post
-       $tags= wp_set_post_tags($post_id, $tags_keyword);
+       $tags= wp_set_post_terms($post_id, $tags_keyword,'product_tag');
+
+		
 
         // Add the product price as custom meta data
        $price_meta= update_post_meta($post_id, '_price', $price);
@@ -391,14 +393,13 @@ function handle_custom_post_ads() {
 					'post_content'   => '',
 					'post_status'    => 'inherit',
 				);
-				print_r($featured_attachment_data);
 				// Insert the attachment into the media library
 				$featured_attachment_id = wp_insert_attachment($featured_attachment_data, $featured_image_path);
 
 				if (!is_wp_error($featured_attachment_id)) {
 					// Set the attachment as the featured image for a specific post
 					set_post_thumbnail($post_id, $featured_attachment_id);
-					echo "Image Update".$attachmentID;
+
 				} else {
 					// Error occurred while inserting the featured attachment
 					echo 'Error setting the featured image: ' . $featured_attachment_id->get_error_message();
@@ -436,7 +437,7 @@ function handle_custom_post_ads() {
 
 					if (!is_wp_error($gallery_attachment_id)) {
 						// Add the attachment to the product's gallery
-						add_post_meta($post_id, '_product_image_gallery', $gallery_attachment_id, false);
+						$gallery_attachment_ids[]=$gallery_attachment_id;
 					} else {
 						// Error occurred while inserting a gallery attachment
 						echo 'Error adding gallery image: ' . $gallery_attachment_id->get_error_message();
@@ -444,7 +445,11 @@ function handle_custom_post_ads() {
 				}
 			}
 		}
-	
+	// Add the gallery attachment IDs as an array to the product's gallery
+	if (!empty($gallery_attachment_ids)) {
+		 $gallery_attachment_ids_string = implode(',', $gallery_attachment_ids);
+		 update_post_meta($post_id, '_product_image_gallery', $gallery_attachment_ids_string);
+	}
     } else {
         echo json_encode(array('success' => false, 'message' => 'Failed to create ad post.'));
     }
@@ -509,9 +514,8 @@ function add_custom_fields_to_edit_account_form() {
 }
 add_action( 'woocommerce_edit_account_form', 'add_custom_fields_to_edit_account_form',5 );
 
-/*========================================================================/*
-	Add phone and address fields to the WooCommerce "Edit Account" form
-/*========================================================================*/
+
+// Add phone and address fields to the WooCommerce "Edit Account" form
 function add_custom_fields_to_edit_store_information() {
     $user_id = get_current_user_id();
 	$store_logo = get_user_meta( $user_id, 'store_logo', true );
@@ -544,15 +548,7 @@ function add_custom_fields_to_edit_store_information() {
 					</script>
 
 
-                    <?php  
-						$store_phone_number = get_user_meta( $user_id, 'store_phone_number', true );
-					?>                 
-					<div class="form-group">
-						<label>Contact Phone Number</label>
-						<input type="text" name="store_phone_number" class="form-control" value="<?php echo $store_phone_number ?>"
-							placeholder="Contact Phone Number">
-					</div>
-					
+                    
 					<?php  
 						$store_name = get_user_meta( $user_id, 'store_name', true );
 					?>
@@ -561,12 +557,7 @@ function add_custom_fields_to_edit_store_information() {
 						<input type="text" name="store_name" class="form-control" value="<?php echo $store_name  ?>"
 							placeholder="Store Name">
 					</div>
-					<?php $contact_email = get_user_meta( $user_id, 'contact_email', true ); ?>
-					<div class="form-group">
-						<label>Contact Email</label>
-						<input type="email" name="contact_email" class="form-control" value="<?php echo $contact_email  ?>"
-							placeholder="Contact Email">
-					</div>
+				
 					<?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
 					<button type="submit" class="theme-btn my-3" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><span class="far fa-save"></span><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
 					<input type="hidden" name="action" value="save_account_details" />	
@@ -589,20 +580,12 @@ function save_custom_user_fields_on_edit_account( $user_id ) {
         update_user_meta( $user_id, 'billing_address_1', $address );
     }
 
-	if ( isset( $_POST['store_phone_number'] ) ) {
-        $store_phone_number = sanitize_text_field( $_POST['store_phone_number'] );
-        update_user_meta( $user_id, 'store_phone_number', $store_phone_number );
-    }
 
 	if ( isset( $_POST['store_name'] ) ) {
         $store_name = sanitize_text_field( $_POST['store_name'] );
         update_user_meta( $user_id, 'store_name', $store_name );
     }
 
-	if ( isset( $_POST['contact_email'] ) ) {
-        $contact_email = sanitize_text_field( $_POST['contact_email'] );
-        update_user_meta( $user_id, 'contact_email', $contact_email );
-    }
 	// var_dump($_FILES );exit;
 	if ( isset( $_FILES['store_logo'] ) && ! empty( $_FILES['store_logo']['tmp_name'] ) ) {
         $uploaded_file = wp_handle_upload( $_FILES['store_logo'], array( 'test_form' => false ) );
@@ -634,7 +617,7 @@ function  fetch_my_ads(){
 	);
 
 	$product_query = new WP_Query($args);
-	print_r($product_query->found_posts);
+	// print_r($product_query->found_posts);
 	if(!empty($product_query->have_posts())){
 		while($product_query->have_posts()){
 			$product_query->the_post();
@@ -906,3 +889,20 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
+
+// Redirect user after updating account details with data
+function redirect_after_account_update_with_data() {
+    // Specify the custom URL where you want to redirect the user
+    $redirect_url = '/profile';
+
+
+
+    // Append the data as a query parameter to the redirect URL
+    $redirect_url = add_query_arg('update_status','true', $redirect_url);
+
+    // Perform the redirect
+    wp_redirect($redirect_url);
+    exit; // Ensure that further code execution is halted
+}
+add_action('woocommerce_save_account_details', 'redirect_after_account_update_with_data');

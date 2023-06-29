@@ -53,6 +53,15 @@ get_header(); ?>
                 </div>
                     <div class="col-lg-9">
                         <div class="user-profile-wrapper">
+                        <?php  
+                                if(isset($_GET['update_status'])):
+                            ?>
+                            <div class="alert alert-success" role="alert">
+                                Success! Your account has been updated.
+                            </div>
+                            <?php 
+                                endif;
+                            ?>
                             <div class="user-profile-card profile-setting">
                                 <h4 class="user-profile-card-title">Settings</h4>
                                 <div class="row">
