@@ -356,12 +356,15 @@ function get_products_by_user_id($request) {
         $product_data = wc_get_product($product->ID);
         $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product->ID), 'full');
         $product_categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'names'));
-        
+
         // Get product published date
         $published_date = $product->post_date;
 
         // Get total number of views for the product
         $views = get_post_meta($product->ID, 'views', true);
+
+        // Get the category IDs
+        $category_ids = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'ids'));
 
         $formatted_products[] = array(
             'id' => $product->ID,
@@ -370,7 +373,7 @@ function get_products_by_user_id($request) {
             'price' => $product_data->get_price(),
             'image' => $product_image[0],
             'categories' => $product_categories,
-            'category_ids' => $category_ids,
+            'category_ids' => $category_ids, // Add the category IDs to the response
             'description' => $product->post_content,
             'published_date' => $published_date,
             'views' => $views,
@@ -387,6 +390,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_products_by_user_id',
     ));
 });
+
 
 /*=========================================/*
     Register the custom REST API endpoint
