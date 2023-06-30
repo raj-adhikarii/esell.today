@@ -72,6 +72,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         }
     }
 }
+
 /*==================================================== /*
     Server-side validation for forget password page 
 /*====================================================*/
@@ -147,10 +148,9 @@ function custom_user_registration($request) {
   }
   
 
-/*===================/*
-    Password reset
-/*===================*/
-// Register custom endpoint for password reset
+/*================================================/*
+    Register custom endpoint for password reset
+/*================================================*/
 add_action('rest_api_init', 'register_password_reset_endpoint');
 function register_password_reset_endpoint() {
     register_rest_route('esell/v1', '/password-reset', array(
@@ -218,12 +218,12 @@ function get_products_by_user( $request ) {
 }
 
 /*============================/*
-   credentials verification
+   Post product via rest api
 /*============================*/
 function create_product_via_api($product_data) {
     // WooCommerce API credentials
-    $consumer_key = 'ck_3b1cfe2add0a1811720f3c5acc7abd65ad78efd6';
-    $consumer_secret = 'cs_6e6c98a2393bd22820507d4b540e56d1d1d8b32c';
+    $consumer_key = 'Esell_today';
+    $consumer_secret = 'TTzs qQtC LvgM pdFG lEPj xz5o';
 
     // WooCommerce API URL
     $api_url = 'https://staging.e-sell.today/wp-json/wc/v3/products';
@@ -391,7 +391,6 @@ add_action('rest_api_init', function () {
     ));
 });
 
-
 /*=========================================/*
     Related products
 /*=========================================*/
@@ -429,3 +428,207 @@ add_action('rest_api_init', function () {
         'callback' => 'get_related_products',
     ));
 });
+
+/*=======================/*
+	password change API
+/*=======================*/
+
+function change_password_endpoint_init() {
+    register_rest_route('user/v2', '/change-password/(?P<user_id>\d+)', array(
+        'methods' => 'POST',
+        'callback' => 'change_password_callback',
+        'permission_callback' => 'change_password_permission_callback',
+        'args' => array(
+            'user_id' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'headers' => array(
+                'Authorization' => array(
+                    'required' => true,
+                    'type' => 'string',
+                    'description' => 'Basic ' . base64_encode('Esell_today:TTzs qQtC LvgM pdFG lEPj xz5o'),
+                ),
+            ),
+        ),
+    ));
+}
+add_action('rest_api_init', 'change_password_endpoint_init');
+
+function change_password_permission_callback($request) {
+    return current_user_can('edit_users');
+}
+
+function change_password_callback($request) {
+    // Verify the Authorization header and authenticate the user
+    // ...
+
+    // Get the user ID from the URL parameter
+    $user_id = (int) $request->get_param('user_id');
+
+    // Verify the previous password before allowing password change
+    $previous_password = $request->get_param('previous_password');
+    $previous_password = sanitize_text_field($previous_password);
+
+    // Get the user object
+    $user = get_userdata($user_id);
+    if (!$user) {
+        return new WP_Error('invalid_user', 'Invalid user ID.', array('status' => 400));
+    }
+
+    // Verify the previous password using wp_check_password
+    $previous_password_matched = wp_check_password($previous_password, $user->user_pass, $user->ID);
+    if (!$previous_password_matched) {
+        return new WP_Error('invalid_previous_password', 'Invalid previous password.', array('status' => 403));
+    }
+
+    // Update the user's password
+    $new_password = $request->get_param('new_password');
+    $new_password = sanitize_text_field($new_password);
+
+    // Validate the new password
+    if (empty($new_password)) {
+        return new WP_Error('empty_new_password', 'New password is required.', array('status' => 400));
+    }
+
+    // Check if the new password is the same as the previous password
+    if ($new_password === $previous_password) {
+        return new WP_Error('same_password', 'New password must be different from the previous password.', array('status' => 400));
+    }
+
+    // Set the new password only if it is different from the previous password
+    $password_changed = wp_set_password($new_password, $user_id);
+    if (!$password_changed) {
+        return new WP_Error('password_changed', 'Password changed successfully.', array('status' => 201));
+    }
+
+    return array('message' => 'Password changed successfully.');
+}
+
+
+
+/*====================/*
+	Update user data
+/*====================*/
+
+add_action('rest_api_init', 'register_user_edit_endpoint');
+
+function register_user_edit_endpoint() {
+    register_rest_route('wp/v2', '/edit-users/(?P<id>\d+)', array(
+        'methods'  => 'PUT',
+        'callback' => 'update_user_data',
+        'args'     => array(
+            'id' => array(
+                'validate_callback' => function ($param, $request, $key) {
+                    return is_numeric($param);
+                }
+            ),
+            'first_name' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'last_name' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'email' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'avatar' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'phone' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+            'address' => array(
+                'validate_callback' => 'rest_validate_request_arg',
+            ),
+        ),
+    ));
+}
+
+function update_user_data($request) {
+    $user_id = $request->get_param('id');
+    $user_data = $request->get_json_params();
+
+    $user = get_user_by('ID', $user_id);
+
+    if ($user) {
+        // Update WordPress user data
+        $user_args = array(
+            'ID' => $user_id,
+        );
+
+        if (isset($user_data['first_name'])) {
+            $user_args['first_name'] = $user_data['first_name'];
+            update_user_meta($user_id, 'first_name', $user_data['first_name']);
+        }
+
+        if (isset($user_data['last_name'])) {
+            $user_args['last_name'] = $user_data['last_name'];
+            update_user_meta($user_id, 'last_name', $user_data['last_name']);
+        }
+
+        if (isset($user_data['email'])) {
+            $user_args['user_email'] = $user_data['email'];
+            wp_update_user($user_args); // Update WordPress user email
+            update_user_meta($user_id, 'billing_email', $user_data['email']); // Update WooCommerce customer email
+        }
+
+        if (isset($user_data['phone'])) {
+            update_user_meta($user_id, 'billing_phone', $user_data['phone']);
+        }
+
+        // Update user avatar
+        if (isset($user_data['avatar'])) {
+            $avatar_url = $user_data['avatar'];
+
+            // Check if the Simple Local Avatars plugin is active
+            if (function_exists('sla_add')) {
+                sla_add($user_id, $avatar_url);
+            } else {
+                // If the plugin is not active, update the default WordPress avatar
+                update_user_meta($user_id, 'simple_local_avatar', $avatar_url);
+            }
+        }
+
+        // Update WooCommerce customer billing address data
+        $billing_address = array(
+            'first_name' => $user_data['first_name'],
+            'last_name'  => $user_data['last_name'],
+            'email'      => $user_data['email'],
+            'phone'      => $user_data['phone'],
+            'address'    => isset($user_data['address']) ? $user_data['address'] : '',
+        );
+
+        // Update the customer's first name, last name, email, and phone
+        wp_update_user(array(
+            'ID'           => $user_id,
+            'first_name'   => $billing_address['first_name'],
+            'last_name'    => $billing_address['last_name'],
+            'user_email'   => $billing_address['email'],
+            'billing_phone' => $billing_address['phone'],
+        ));
+
+        // Update the billing address line 1
+        update_user_meta($user_id, 'billing_address_1', $billing_address['address']);
+
+        return new WP_REST_Response('User updated successfully.', 200);
+    } else {
+        return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
+    }
+}
+
+
+// Redirect user after updating account details with data
+function redirect_after_account_update_with_data() {
+    // Specify the custom URL where you want to redirect the user
+    $redirect_url = '/profile';
+
+
+
+    // Append the data as a query parameter to the redirect URL
+    $redirect_url = add_query_arg('update_status','true', $redirect_url);
+
+    // Perform the redirect
+    wp_redirect($redirect_url);
+    exit; // Ensure that further code execution is halted
+}
+add_action('woocommerce_save_account_details', 'redirect_after_account_update_with_data');

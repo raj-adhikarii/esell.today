@@ -19,16 +19,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-	get_header( 'shop' ); 
+get_header( 'shop' ); 
+
+global $product;
+
+// Get the product ID
+// $product_id = $product->get_id();
+
+// // Get the product object
+// $product = wc_get_product( $product_id );
+
+// // Get the product name
+// $product_name = $product->get_name();
+
+// // Get the product price
+// $product_price = $product->get_price_html();
+
 	print <<<HTML
 	<main class="main">
 
 	<!-- breadcrumb -->
 	<div class="site-breadcrumb" style="background: url(https://e-sell.today/wp-content/uploads/2023/04/head.jpeg)">
 		<div class="container">
-			<h2 class="breadcrumb-title">All Stores</h2>
+			<h2 class="breadcrumb-title">Product</h2>
 			<ul class="breadcrumb-menu">
 				<li><a href="<?php echo site_url(); ?>">Home</a></li>
+				
 				<li class="active">All Stores</li>
 			</ul>
 		</div>
@@ -36,47 +52,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	HTML;
 	?>
 
-	<?php
-		/**
-		 * woocommerce_before_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
-		 * @hooked woocommerce_breadcrumb - 20
-		 */
-		
-		do_action( 'woocommerce_before_main_content' );
-		echo '<div class="container">';
-	?>
-
-		<?php while ( have_posts() ) : ?>
-			<?php the_post(); ?>
-
-			<?php wc_get_template_part( 'content', 'single-product' ); ?>
-
-		<?php endwhile; // end of the loop. 
-		echo '<div>'; ?>
-
-	<?php
-		/**
-		 * woocommerce_after_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
-		 */
-		
-		do_action( 'woocommerce_after_main_content' );
-		
-	?>
-
-	<?php
-		/**
-		 * woocommerce_sidebar hook.
-		 *
-		 * @hooked woocommerce_get_sidebar - 10
-		 */
-		// do_action( 'woocommerce_sidebar' );
-	?>
-<!-- product single -->
-<div class="product-single py-120">
+	<!-- product single -->
+		<div class="product-single py-120">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9 mb-4">
