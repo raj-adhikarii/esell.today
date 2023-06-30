@@ -393,5 +393,38 @@ add_action('rest_api_init', function () {
 
 
 /*=========================================/*
-    Register the custom REST API endpoint
+    Related products
 /*=========================================*/
+function get_related_products($request) {
+    $product_id = $request->get_param('product_id');
+    
+    $product = wc_get_product($product_id);
+    
+    if ($product) {
+        $related_ids = $product->get_related();
+
+        $related_products = array();
+
+        foreach ($related_ids as $related_id) {
+            $related_product = wc_get_product($related_id);
+
+            $related_products[] = array(
+                'id' => $related_product->get_id(),
+                'name' => $related_product->get_name(),
+                'price' => $related_product->get_price(),
+                // Add any additional product data you want to include
+            );
+        }
+
+        return rest_ensure_response($related_products);
+    } else {
+        return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
+    }
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/related-products/(?P<product_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_related_products',
+    ));
+});
