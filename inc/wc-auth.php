@@ -370,6 +370,7 @@ function get_products_by_user_id($request) {
             'price' => $product_data->get_price(),
             'image' => $product_image[0],
             'categories' => $product_categories,
+            'category_ids' => $category_ids,
             'description' => $product->post_content,
             'published_date' => $published_date,
             'views' => $views,
@@ -390,46 +391,3 @@ add_action('rest_api_init', function () {
 /*=========================================/*
     Register the custom REST API endpoint
 /*=========================================*/
-add_action('rest_api_init', 'wc_category_api_register_endpoint');
-function wc_category_api_register_endpoint() {
-    register_rest_route('custom/v1', '/products/(?P<category_id>\d+)', array(
-        'methods'  => 'GET',
-        'callback' => 'wc_category_api_get_products',
-    ));
-}
-
-// Define the callback function for the custom endpoint
-function wc_category_api_get_products($request) {
-    $category_id = $request->get_param('category_id');
-    $args = array(
-        'post_type'      => 'product',
-        'posts_per_page' => -1,
-        'tax_query'      => array(
-            array(
-                'taxonomy' => 'product_cat',
-                'field'    => 'term_id',
-                'terms'    => intval($category_id),
-            ),
-        ),
-    );
-
-    $products = new WP_Query($args);
-
-    if ($products->have_posts()) {
-        $result = array();
-
-        while ($products->have_posts()) {
-            $products->the_post();
-            global $product;
-            $result[] = array(
-                'id'    => $product->get_id(),
-                'name'  => $product->get_name(),
-                'price' => $product->get_price(),
-            );
-        }
-
-        return $result;
-    } else {
-        return new WP_Error('no_products_found', 'No products found in the specified category.', array('status' => 404));
-    }
-}
