@@ -115,7 +115,7 @@ get_header(); ?>
                                                     <img src="<?php echo get_the_post_thumbnail_url($product->ID); ?>" class="img-responsive" alt="<?php the_title(); ?>"/>
                                                         <div class="table-ad-content">
                                                             <h6><?php echo get_the_title($product->ID); ?></h6>
-                                                            <span>Ad ID: #<?php echo $product_id ?></span>
+                                                            <!-- <span>Ad ID: #<?php echo $product_id ?></span> -->
                                                         </div>
                                                     </a>
                                                 </div>
@@ -172,8 +172,9 @@ get_header(); ?>
                                                 </span>
                                             </td>
 
-                                            <td>
+                                            <td style="display: flex; gap: 6px;">
                                                 <a href="<?php echo site_url(); ?>/post-ad/?edit=true&product_id=<?php echo $product_id ?>" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
+                                                <a href="#" class="btn btn-outline-danger btn-sm rounded-2" data-bs-toggle="tooltip" title="Delete"><i class="far fa-trash-can"></i></a>
                                             </td>
                                         </tr>
                                         <?php $count++; endwhile; ?>

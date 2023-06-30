@@ -5392,6 +5392,9 @@ body input[type="email"]{
   height: 52px;
 }
 
+/* .user-profile-card .table>:not(caption)>*>* {
+  vertical-align: top !important;
+} */
 /* ===================
 shortable css 
 ====================== */

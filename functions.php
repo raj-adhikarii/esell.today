@@ -487,7 +487,9 @@ function add_custom_menu_item_link( $items ) {
 
 add_filter( 'woocommerce_account_menu_items', 'add_custom_menu_item_link' );
 
-// Add phone and address fields to the WooCommerce "Edit Account" form
+/*=======================================================================/*
+	Add phone and address fields to the WooCommerce "Edit Account" form
+/*=======================================================================*/
 function add_custom_fields_to_edit_account_form() {
     $user_id = get_current_user_id();
 
@@ -514,8 +516,9 @@ function add_custom_fields_to_edit_account_form() {
 }
 add_action( 'woocommerce_edit_account_form', 'add_custom_fields_to_edit_account_form',5 );
 
-
-// Add phone and address fields to the WooCommerce "Edit Account" form
+/*=======================================================================/*
+	Add phone and address fields to the WooCommerce "Edit Account" form
+/*=======================================================================*/
 function add_custom_fields_to_edit_store_information() {
     $user_id = get_current_user_id();
 	$store_logo = get_user_meta( $user_id, 'store_logo', true );
@@ -526,7 +529,6 @@ function add_custom_fields_to_edit_store_information() {
 			<div class="col-lg-12">
 				<div class="user-profile-form">
                                             
-
 					<div class="form-group">
 						<div class="store-logo-preview">
 							<?php if ( $store_logo ) : ?>
@@ -567,8 +569,9 @@ function add_custom_fields_to_edit_store_information() {
 	<?php
 }
 add_action( 'woocommerce_edit_account_form_end', 'add_custom_fields_to_edit_store_information',10 );
-
-// Save phone and address fields data
+/*======================================/*
+	Save phone and address fields data
+/*======================================*/
 function save_custom_user_fields_on_edit_account( $user_id ) {
     if ( isset( $_POST['billing_phone'] ) ) {
         $phone = sanitize_text_field( $_POST['billing_phone'] );
