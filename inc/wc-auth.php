@@ -412,6 +412,7 @@ function get_related_products($request) {
                 'id' => $related_product->get_id(),
                 'name' => $related_product->get_name(),
                 'price' => $related_product->get_price(),
+                'image' => wp_get_attachment_image_src($related_product->get_image_id(), 'full')[0],
                 // Add any additional product data you want to include
             );
         }
