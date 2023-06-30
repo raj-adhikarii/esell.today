@@ -149,7 +149,7 @@ get_header(); ?>
                                             <?php } ?>
                                             <div class="images-section" <?php echo $edit_ad ?>>                                     
                                                 <div class="col-lg-12" <?php echo $toggle_id ?>>
-                                                    <input type="file" name="images[]" id="input" class="product-img-file" multiple>
+                                                    <input type="file" name="product_images[]" id="input" class="product-img-file" multiple>
                                                     <div id="preview-parent"></div>
 
                                                         <div class="form-group">
@@ -157,7 +157,7 @@ get_header(); ?>
                                                                 <div class="product-img-upload">
                                                                     <span><i class="far fa-images"></i> Upload Product Images</span>
                                                                 </div>
-                                                                <input type="file" name="images[]" class="product-img-file" multiple>
+                                                                <input type="file" name="product_images[]" class="product-img-file" multiple>
                                                                 <div class="alert alert-danger mt-2" id="error-message"></div>
                                                             </div>
                                                         </div>

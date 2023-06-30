@@ -143,8 +143,7 @@ function handle_custom_post_ads() {
     $category = $_POST['post_category'];
     $tags_keyword = explode(',',$_POST['tags_keyword']);
     $ad_images = $_FILES['product_images'];
-	 //print_r($ad_images);
-	// exit;
+    
     $post_data = array(
         'post_title'   => $ad_title,
         'post_content' => $ad_content,
@@ -152,11 +151,9 @@ function handle_custom_post_ads() {
         'post_status'  => 'draft'
     );
 	$post_id=" ";
-	// print_r($_POST);
 	if(isset($_POST['edit_field'])){
 		$post_id=$_POST['edit_field'];
 		$post_data['ID']=$post_id;
-		//print_r($post_data);
 		wp_update_post($post_data);
 	}else{
 		$post_id = wp_insert_post($post_data);
@@ -167,16 +164,13 @@ function handle_custom_post_ads() {
         // Set the tags for the post
        $tags= wp_set_post_terms($post_id, $tags_keyword,'product_tag');
 
-		
-
         // Add the product price as custom meta data
        $price_meta= update_post_meta($post_id, '_price', $price);
         // Upload and attach the images to the post
 		// Check if any images were uploaded
 		if (!empty($ad_images['tmp_name'])) {
-			// print_r("temp name are not empty");
-			$uploaded_images = $ad_images;
 			
+			$uploaded_images = $ad_images;
 			// Store the first image as the featured image
 			$featured_image = $uploaded_images['tmp_name'][0];
 			$featured_image_name = $uploaded_images['name'][0];
@@ -184,7 +178,6 @@ function handle_custom_post_ads() {
 
 			// Upload the featured image to the WordPress media library
 			$upload_featured = wp_upload_bits($featured_image_name, null, file_get_contents($featured_image));
-
 			if (isset($upload_featured['error']) && !empty($upload_featured['error'])) {
 				// Error occurred while uploading the featured image
 				echo 'Error uploading the featured image: ' . $upload_featured['error'];
@@ -203,7 +196,7 @@ function handle_custom_post_ads() {
 				);
 				// Insert the attachment into the media library
 				$featured_attachment_id = wp_insert_attachment($featured_attachment_data, $featured_image_path);
-
+               
 				if (!is_wp_error($featured_attachment_id)) {
 					// Set the attachment as the featured image for a specific post
 					set_post_thumbnail($post_id, $featured_attachment_id);
@@ -216,6 +209,8 @@ function handle_custom_post_ads() {
 
 			// Process the remaining images as gallery images
 			$gallery_images = array_slice($uploaded_images['tmp_name'], 1); // Remove the first image
+			//remove last element of the array
+           	array_pop($gallery_images);
 
 			foreach ($gallery_images as $key => $gallery_image) {
 				$gallery_image_name = $uploaded_images['name'][$key + 1];
