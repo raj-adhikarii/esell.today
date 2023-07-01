@@ -615,20 +615,3 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
-
-
-// Redirect user after updating account details with data
-function redirect_after_account_update_with_data() {
-    // Specify the custom URL where you want to redirect the user
-    $redirect_url = '/profile';
-
-
-
-    // Append the data as a query parameter to the redirect URL
-    $redirect_url = add_query_arg('update_status','true', $redirect_url);
-
-    // Perform the redirect
-    wp_redirect($redirect_url);
-    exit; // Ensure that further code execution is halted
-}
-add_action('woocommerce_save_account_details', 'redirect_after_account_update_with_data');
