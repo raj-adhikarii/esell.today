@@ -502,13 +502,6 @@ function  fetch_my_ads(){
 add_action('wp_ajax_fetch_my_ads', 'fetch_my_ads');
 add_action('wp_ajax_nopriv_fetch_my_ads', 'fetch_my_ads');
 
-function redirect_my_account() {
-    if (is_account_page()) {
-        wp_redirect('/dashboard');
-        exit;
-    }
-}
-add_action('template_redirect', 'redirect_my_account');
 /**
  * Pagination
  */
@@ -537,3 +530,12 @@ if ( ! function_exists( 'pagination' ) ) :
         ) );
     }
 endif;
+
+function redirect_my_account() {
+    if (is_account_page()) {
+        wp_redirect('/dashboard');
+        exit;
+    }
+}
+add_action('template_redirect', 'redirect_my_account');
+
