@@ -610,19 +610,29 @@ function update_user_data($request) {
 function search_products($request) {
     $search_term = $request->get_param('search');
 
+    // Check if the request is authenticated using an application password
+    $user = wp_authenticate_application_password(null, null);
+    if (is_wp_error($user)) {
+        return $user;
+    }
+
     // Query parameters for product search
     $params = array(
         'status' => 'publish',
         'search' => $search_term,
     );
 
+    // Prepare the headers with the authorization information
+    $headers = array(
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Application ' . $user->Esell_today . ':' . $user->TTzsqQtCLvgMpdFGlEPjxz5o,
+    );
+
     // Perform the product search using the WooCommerce REST API
     $response = wp_remote_get(wc_get_endpoint_url('products', '', wc_get_page_permalink('shop'), wc_get_api_version()), array(
         'method' => 'GET',
         'timeout' => 45,
-        'headers' => array(
-            'Content-Type' => 'application/json',
-        ),
+        'headers' => $headers,
         'body' => $params,
     ));
 
@@ -645,6 +655,12 @@ add_action('rest_api_init', function () {
     register_rest_route('custom/v1', '/products/search', array(
         'methods' => 'GET',
         'callback' => 'search_products',
+        'permission_callback' => function () {
+            // Allow access only to authenticated users with application passwords
+            if (is_user_logged_in() && current_user_can('manage_application_passwords')) {
+                return true;
+            }
+            return false;
+        },
     ));
 });
-
