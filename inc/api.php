@@ -655,8 +655,8 @@ add_action('rest_api_init', function () {
         'methods' => 'GET',
         'callback' => 'search_products',
         'permission_callback' => function () {
-            // Allow access only to authenticated users with application passwords
-            if (is_user_logged_in() && current_user_can('manage_application_passwords')) {
+            // Allow access to all authenticated users
+            if (is_user_logged_in()) {
                 return true;
             }
             return false;
