@@ -392,48 +392,6 @@ add_action('rest_api_init', function () {
 /*===========================================================/*
     Register custom endpoint to retrieve product by user ID
 /*===========================================================*/
-function get_products_by_user_id($request) {
-    $user_id = $request->get_param('user_id');
-
-    // Query for products associated with the user
-    $products = wc_get_products(array(
-        'author'      => $user_id,
-        'status'      => 'publish',
-        'limit'       => -1,
-    ));
-
-    $formatted_products = array();
-
-    foreach ($products as $product) {
-        $product_data = $product->get_data();
-        $product_image = wp_get_attachment_image_src($product->get_image_id(), 'full');
-        $product_categories = wp_get_post_terms($product_data['id'], 'product_cat', array('fields' => 'names'));
-
-        $user_id = get_post_field('post_author', $product_data['id']);
-
-        $formatted_products[] = array(
-            'id' => $product->get_id(),
-            'title' => $product_data['name'],
-            'permalink' => $product_data['permalink'],
-            'price' => $product->get_price(),
-            'image' => $product_image[0],
-            'categories' => $product_categories,
-            'description' => $product_data['description'],
-            'published_date' => $product_data['date_created']->date('Y-m-d H:i:s'),
-            'user_id' => $user_id,
-        );
-    }
-
-    return rest_ensure_response($formatted_products);
-}
-
-add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/products/(?P<user_id>\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'get_products_by_user_id',
-    ));
-});
-
 
 /*=========================================/*
     Related products

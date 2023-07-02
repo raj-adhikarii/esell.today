@@ -539,3 +539,16 @@ function redirect_my_account() {
 }
 add_action('template_redirect', 'redirect_my_account');
 
+/*=======================/*
+
+/*======================*/
+add_action('woocommerce_api_create_product', 'add_user_id_to_product', 10, 2);
+
+function add_user_id_to_product($product_id, $product_data) {
+    // Get the current user ID
+    $user_id = get_current_user_id();
+
+    // Update the product with the user ID
+    update_post_meta($product_id, 'user_id', $user_id);
+}
+
