@@ -542,7 +542,7 @@ add_action('template_redirect', 'redirect_my_account');
 /*==============================/*
 	Add user ID to product data
 /*==============================*/
-add_filter('woocommerce_rest_prepare_product_object', 'add_user_id_to_product_response', 10, 3);
+add_filter('woocommerce_rest_prepare_product', 'add_user_id_to_product_response', 10, 3);
 function add_user_id_to_product_response($response, $product, $request) {
     if (!is_wp_error($response)) {
         $user_id = $product->get_author();
@@ -550,3 +550,4 @@ function add_user_id_to_product_response($response, $product, $request) {
     }
     return $response;
 }
+
