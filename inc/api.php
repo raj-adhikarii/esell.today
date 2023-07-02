@@ -611,7 +611,7 @@ function search_products($request) {
     $search_term = $request->get_param('search');
 
     // Check if the request is authenticated using an application password
-    $user = wp_authenticate_application_password(null, null);
+    $user = wp_authenticate_application_password('Esell_today', 'TTzs qQtC LvgM pdFG lEPj xz5o');
     if (is_wp_error($user)) {
         return $user;
     }
@@ -623,10 +623,8 @@ function search_products($request) {
     );
 
     // Prepare the headers with the authorization information
-    $credentials = base64_encode($user->Esell_today . ':' . $user->TzsqQtCLvgMpdFGlEPjxz5o);
     $headers = array(
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Basic ' . $credentials,
+        'Authorization' => 'Basic ' . base64_encode($user->user_login . ':' . $user->password),
     );
 
     // Perform the product search using the WooCommerce REST API
