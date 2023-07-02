@@ -619,11 +619,12 @@ function search_products($request) {
     // Query parameters for product search
     $params = array(
         'status' => 'publish',
-        'search' => $search_term,
+        'q' => $search_term,
     );
 
     // Prepare the headers with the authorization information
     $headers = array(
+        'Content-Type' => 'application/json',
         'Authorization' => 'Basic ' . base64_encode($user->user_login . ':' . $user->password),
     );
 
@@ -655,11 +656,12 @@ add_action('rest_api_init', function () {
         'methods' => 'GET',
         'callback' => 'search_products',
         'permission_callback' => function () {
-            // Allow access to all authenticated users
-            if (is_user_logged_in()) {
+            // Allow access only to authenticated users with application passwords
+            if (is_user_logged_in() && current_user_can('manage_application_passwords')) {
                 return true;
             }
             return false;
         },
     ));
 });
+
