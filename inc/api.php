@@ -342,33 +342,31 @@ function get_merged_user_data($request) {
 function get_products_by_user_id($request) {
     $user_id = $request->get_param('user_id');
 
-    // Get the user object based on the user ID
-    $user = get_user_by('ID', $user_id);
-
     // Check if the user exists and has the role of customer or subscriber
+    $user = get_userdata($user_id);
     if (!$user || !in_array('customer', $user->roles) && !in_array('subscriber', $user->roles)) {
         return new WP_Error('invalid_user', 'Invalid user ID or user is not a customer.');
     }
 
     // Query for products associated with the user
-    $product_query = new WC_Product_Query(array(
-        'author' => $user_id,
-        'status' => 'publish',
+    $products = wc_get_products(array(
+        'author'      => $user_id,
+        'status'      => 'publish',
+        'limit'       => -1,
     ));
-    $products = $product_query->get_products();
 
     $formatted_products = array();
 
     foreach ($products as $product) {
         $product_data = $product->get_data();
-        $product_image = wp_get_attachment_image_src($product_data['image_id'], 'full');
+        $product_image = wp_get_attachment_image_src($product->get_image_id(), 'full');
         $product_categories = wp_get_post_terms($product_data['id'], 'product_cat', array('fields' => 'names'));
 
         $formatted_products[] = array(
             'id' => $product_data['id'],
             'title' => $product_data['name'],
             'permalink' => $product_data['permalink'],
-            'price' => $product_data['price'],
+            'price' => $product->get_price(),
             'image' => $product_image[0],
             'categories' => $product_categories,
             'description' => $product_data['description'],
@@ -386,7 +384,6 @@ add_action('rest_api_init', function () {
         'callback' => 'get_products_by_user_id',
     ));
 });
-
 
 /*=========================================/*
     Related products
