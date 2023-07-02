@@ -542,18 +542,11 @@ add_action('template_redirect', 'redirect_my_account');
 /*==============================/*
 	Add user ID to product data
 /*==============================*/
-// Add user ID to product data in API response
-function add_user_id_to_product_api_response($response, $post, $request) {
-    $user_id = $post->post_author;
-    $response->data['user_id'] = $user_id;
-
-    // Get product object
-    $product = wc_get_product($post->ID);
-    
-    // Get product owner's name
-    $author = get_userdata($user_id);
-    $response->data['user_name'] = $author->display_name;
-
+add_filter('woocommerce_rest_prepare_product_object', 'add_user_id_to_product_response', 10, 3);
+function add_user_id_to_product_response($response, $product, $request) {
+    if (!is_wp_error($response)) {
+        $user_id = $product->get_user_id();
+        $response->data['user_id'] = $user_id;
+    }
     return $response;
 }
-add_filter('woocommerce_rest_prepare_product', 'add_user_id_to_product_api_response', 10, 3);
