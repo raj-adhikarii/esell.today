@@ -342,12 +342,6 @@ function get_merged_user_data($request) {
 function get_products_by_user_id($request) {
     $user_id = $request->get_param('user_id');
 
-    // Check if the user exists and has the role of customer or subscriber
-    $user = get_userdata($user_id);
-    if (!$user || !in_array('customer', $user->roles) && !in_array('subscriber', $user->roles)) {
-        return new WP_Error('invalid_user', 'Invalid user ID or user is not a customer.');
-    }
-
     // Query for products associated with the user
     $products = wc_get_products(array(
         'author'      => $user_id,
