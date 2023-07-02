@@ -678,7 +678,6 @@ add_action('rest_api_init', function () {
 
 
 //============================handeling image=========================
-
 add_action('rest_api_init', function () {
     register_rest_route('custom/v1', '/upload-product-image', array(
         'methods'  => 'POST',
@@ -698,6 +697,17 @@ add_action('rest_api_init', function () {
         },
     ));
 });
+
+// Add the necessary file upload permissions and capabilities for the 'edit_products' capability
+add_filter('user_has_cap', 'add_product_upload_capability', 10, 3);
+function add_product_upload_capability($allcaps, $caps, $args) {
+    // Check if the 'edit_products' capability is requested
+    if (in_array('edit_products', $caps)) {
+        // Add the 'upload_files' capability to allow file uploads
+        $allcaps['upload_files'] = true;
+    }
+    return $allcaps;
+}
 
 function handle_product_image_upload() {
     // Verify if the 'image' parameter exists in the request
@@ -743,9 +753,3 @@ function handle_product_image_upload() {
     ));
 }
 
-add_action('rest_api_init', function () {
-    register_rest_route('your-namespace/v1', '/upload-product-image', array(
-        'methods' => 'POST',
-        'callback' => 'handle_product_image_upload',
-    ));
-});
