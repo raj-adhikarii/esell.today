@@ -336,47 +336,43 @@ function get_merged_user_data($request) {
     return rest_ensure_response($merged_data);
 }
 
-/*==========================================================/*
-    Register custom endpoint to retrieve merged user data
-/*==========================================================*/
+/*===========================================================/*
+    Register custom endpoint to retrieve product by user ID
+/*===========================================================*/
 function get_products_by_user_id($request) {
     $user_id = $request->get_param('user_id');
 
-    $args = array(
-        'author' => $user_id,
-        'post_status' => 'publish',
-        'post_type' => 'product',
-    );
+    // Get the user object based on the user ID
+    $user = get_user_by('ID', $user_id);
 
-    $products = get_posts($args);
+    // Check if the user exists and has the role of customer or subscriber
+    if (!$user || !in_array('customer', $user->roles) && !in_array('subscriber', $user->roles)) {
+        return new WP_Error('invalid_user', 'Invalid user ID or user is not a customer.');
+    }
+
+    // Query for products associated with the user
+    $product_query = new WC_Product_Query(array(
+        'author' => $user_id,
+        'status' => 'publish',
+    ));
+    $products = $product_query->get_products();
 
     $formatted_products = array();
 
     foreach ($products as $product) {
-        $product_data = wc_get_product($product->ID);
-        $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product->ID), 'full');
-        $product_categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'names'));
-
-        // Get product published date
-        $published_date = $product->post_date;
-
-        // Get total number of views for the product
-        $views = get_post_meta($product->ID, 'views', true);
-
-        // Get the category IDs
-        $category_ids = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'ids'));
+        $product_data = $product->get_data();
+        $product_image = wp_get_attachment_image_src($product_data['image_id'], 'full');
+        $product_categories = wp_get_post_terms($product_data['id'], 'product_cat', array('fields' => 'names'));
 
         $formatted_products[] = array(
-            'id' => $product->ID,
-            'title' => $product->post_title,
-            'permalink' => get_permalink($product->ID),
-            'price' => $product_data->get_price(),
+            'id' => $product_data['id'],
+            'title' => $product_data['name'],
+            'permalink' => $product_data['permalink'],
+            'price' => $product_data['price'],
             'image' => $product_image[0],
             'categories' => $product_categories,
-            'category_ids' => $category_ids, // Add the category IDs to the response
-            'description' => $product->post_content,
-            'published_date' => $published_date,
-            'views' => $views,
+            'description' => $product_data['description'],
+            'published_date' => $product_data['date_created']->date('Y-m-d H:i:s'),
             // Add any additional product data you want to include
         );
     }
@@ -390,6 +386,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_products_by_user_id',
     ));
 });
+
 
 /*=========================================/*
     Related products
