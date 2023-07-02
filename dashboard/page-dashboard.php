@@ -100,24 +100,21 @@ get_header() ?>
                             wp_reset_query(  );
                             wp_reset_postdata(  );
                             /**
-                             * Get Total Views of All the Products
+                             * Get Total publish Products
                              */
                             
-                             $query = "SELECT SUM(meta_value) as total_views
-                                    FROM {$wpdb->prefix}posts AS p
-                                    INNER JOIN {$wpdb->prefix}postmeta AS pm
-                                    ON p.ID = pm.post_id
-                                    WHERE p.post_type = 'product'
-                                    AND p.post_status IN ('publish', 'draft')
-                                    AND p.post_author = %d
-                                    AND pm.meta_key = 'view_count'";
+                            
+                             $count_query = $wpdb->prepare(
+                                "SELECT COUNT(ID) 
+                                FROM {$wpdb->posts} 
+                                WHERE post_type = 'product' 
+                                AND post_status = 'publish' 
+                                AND post_author = %d",
+                                $author_id
+                            );
 
-                            $total_views = $wpdb->get_var($wpdb->prepare($query, $author_id));
-                            if ($total_views >= 1000) {
-                                $total_views .= 'k';
-                            } elseif (empty($total_views)) {
-                                $total_views = 0;
-                            }
+                            $publish_product_count = $wpdb->get_var( $count_query );
+                            
                             wp_reset_query(  );
                             wp_reset_postdata(  );
 
@@ -167,11 +164,13 @@ get_header() ?>
                                            $current_user = wp_get_current_user();
                                            $user_id = $current_user->ID;
                                            
+                                           $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1; 
                                            $args = array(
                                                'author'         => $user_id,
                                                'post_type'      => 'product',
                                                'post_status'    => array( 'publish', 'draft' ),
                                                'posts_per_page' => 8,
+                                               'paged'          =>$paged,
                                            );
                                            $query = new WP_Query( $args );
                                         ?>
@@ -260,6 +259,12 @@ get_header() ?>
                                         <?php endwhile; ?>
                                     </tbody>
                                         </table>
+
+                                        <div class="text-center">
+                                            <?php  
+                                                pagination( $paged, $query->max_num_pages); // Pagination Function
+                                            ?> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
