@@ -356,7 +356,7 @@ function get_products_by_user_id($request) {
         $product_image = wp_get_attachment_image_src($product->get_image_id(), 'full');
         $product_categories = wp_get_post_terms($product_data['id'], 'product_cat', array('fields' => 'names'));
 
-        $user_id = $product_data['post_author'];
+        $user_id = get_post_field('post_author', $product_data['id']);
 
         $formatted_products[] = array(
             'id' => $product->get_id(),
@@ -380,6 +380,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_products_by_user_id',
     ));
 });
+
 
 /*=========================================/*
     Related products
