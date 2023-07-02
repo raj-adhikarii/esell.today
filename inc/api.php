@@ -262,6 +262,52 @@ function create_product_via_api($product_data) {
     }
 }
 
+/*=======================================================================/*
+   retrieve a product along with the user ID of the user who published it
+/*========================================================================*/
+function get_product_with_user($request) {
+    $product_id = $request['product_id'];
+
+    // Get the product object
+    $product = wc_get_product($product_id);
+
+    // Retrieve the user ID of the product author
+    $user_id = $product->get_author();
+
+    // Retrieve the user object
+    $user = get_userdata($user_id);
+
+    // Concatenate first name and last name
+    $name = $user->first_name . ' ' . $user->last_name;
+
+    // Get user profile image URL
+    $avatar_url = get_avatar_url($user_id);
+
+    // Retrieve additional user meta data
+    $additional_details = get_user_meta($user_id, 'additional_details', true);
+
+    // Prepare the product data with user information
+    $product_data = array(
+        'id' => $product->get_id(),
+        'name' => $product->get_name(),
+        'price' => $product->get_price(),
+        'user_id' => $user_id,
+        'user_name' => $name,
+        'user_avatar' => $avatar_url,
+        'additional_details' => $additional_details,
+        // Add any additional product data or user information you want to include
+    );
+
+    return rest_ensure_response($product_data);
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/products/(?P<product_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_product_with_user',
+    ));
+});
+
 /*===============================================================/*
    Add custom REST API endpoint for retrieving user information
 /*===============================================================*/
@@ -294,7 +340,8 @@ function custom_get_users( $request ) {
 
 /*===============================================================/*
     Retrieve merged user data from WooCommerce and WordPress.
-/*===============================================================*/function get_merged_user_data($request) {
+/*===============================================================*/
+function get_merged_user_data($request) {
     $user_id = $request['user_id'];
 
     // Retrieve WooCommerce user data
