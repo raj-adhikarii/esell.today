@@ -679,7 +679,7 @@ add_action('rest_api_init', function () {
 
 //============================handeling image=========================
 add_action('rest_api_init', function () {
-    register_rest_route('wc/v4', '/upload-product-image', array(
+    register_rest_route('custom/v1', '/upload-product-image', array(
         'methods'  => 'POST',
         'callback' => 'handle_product_image_upload',
         'args'     => array(
