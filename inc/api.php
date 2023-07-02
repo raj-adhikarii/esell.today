@@ -629,7 +629,7 @@ function search_products($request) {
     );
 
     // Perform the product search using the WooCommerce REST API
-    $response = wp_remote_get(wc_get_endpoint_url('products', '', wc_get_page_permalink('shop'), wc_get_api_version()), array(
+    $response = wp_remote_get('https://staging.e-sell.today/wp-json/wc/v3/products', array(
         'method' => 'GET',
         'timeout' => 45,
         'headers' => $headers,
@@ -664,4 +664,3 @@ add_action('rest_api_init', function () {
         },
     ));
 });
-
