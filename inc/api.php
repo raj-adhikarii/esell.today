@@ -707,7 +707,7 @@ function handle_product_image_upload(WP_REST_Request $request) {
         $file = $_FILES['image'];
 
         // Define the allowed file types and max file size
-        $allowed_types = array('image/jpeg', 'image/png');
+        $allowed_types = array('image/jpeg', 'image/png', 'image/jpg');
         $max_size      = 2 * 2048 * 2048; // 4 MB
 
         // Validate the file type and size
