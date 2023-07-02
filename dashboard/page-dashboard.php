@@ -164,7 +164,7 @@ get_header() ?>
                                            $current_user = wp_get_current_user();
                                            $user_id = $current_user->ID;
                                            
-                                           $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1; 
+                                          // $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1; 
                                            $args = array(
                                                'author'         => $user_id,
                                                'post_type'      => 'product',
@@ -280,4 +280,3 @@ get_header() ?>
 </main>
 
 <?php get_footer(); 
-// endif; ?>
