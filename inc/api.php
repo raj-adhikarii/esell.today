@@ -356,6 +356,9 @@ function get_products_by_user_id($request) {
         $product_image = wp_get_attachment_image_src($product->get_image_id(), 'full');
         $product_categories = wp_get_post_terms($product_data['id'], 'product_cat', array('fields' => 'names'));
 
+        $user_id = $product_data['post_author'];
+        $user = get_user_by('id', $user_id);
+
         $formatted_products[] = array(
             'id' => $product->get_id(),
             'title' => $product_data['name'],
@@ -365,7 +368,8 @@ function get_products_by_user_id($request) {
             'categories' => $product_categories,
             'description' => $product_data['description'],
             'published_date' => $product_data['date_created']->date('Y-m-d H:i:s'),
-            'user_id' => $product_data['post_author'], // Add the user ID who added the product
+            'user_id' => $user_id,
+            'user_name' => $user ? $user->user_login : 'Unknown User',
         );
     }
 
@@ -378,6 +382,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_products_by_user_id',
     ));
 });
+
 
 
 /*=========================================/*
