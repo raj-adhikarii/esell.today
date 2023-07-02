@@ -15,13 +15,7 @@ jQuery(document).ready(function(){
       success: function(response) {
           // Handle success response
           console.log(response);
-          //jQuery("#custom_post_ads_form")[0].reset();
-          // jQuery('.custom-message').empty().text(response).show();
-          // jQuery('html, body').animate({
-          //   scrollTop: $("#user-profile").offset().top
-          // }, 1000, 'swing', function() {
-          //   window.location.hash = '#user-profile';
-          // });
+          jQuery("#custom_post_ads_form")[0].reset();
   
           toastr.success(response);
       },

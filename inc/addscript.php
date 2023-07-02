@@ -10,6 +10,7 @@ function esell_scripts() {
 	wp_enqueue_style( 'esell-owl-carousel', get_stylesheet_directory_uri() . '/assets/css/owl.carousel.min.css', array(), _esell_VERSION, false);
 	wp_enqueue_style( 'esell-nice-select', get_stylesheet_directory_uri() . '/assets/css/nice-select.min.css', array(), _esell_VERSION, false);
 	wp_enqueue_style( 'esell-jquery-ui', get_stylesheet_directory_uri() . '/assets/css/jquery-ui.min.css', array(), _esell_VERSION, false);
+	wp_enqueue_style( 'esell-jquery-toaster', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css', array(), _esell_VERSION, false);
 	wp_enqueue_style( 'esell-main-sty', get_stylesheet_directory_uri() . '/assets/css/style.css', array(), _esell_VERSION, false);
 	wp_enqueue_style( 'esell-style', get_stylesheet_uri(), array(), _esell_VERSION );
 	wp_style_add_data( 'esell-style', 'rtl', 'replace' );
@@ -31,6 +32,7 @@ function esell_scripts() {
 	wp_enqueue_script( 'esell-jquery-nice-select', get_template_directory_uri() . '/assets/js/jquery.nice-select.min.js', array(), _esell_VERSION, true );
 	wp_enqueue_script( 'esell-jquery-ui-min', get_template_directory_uri() . '/assets/js/jquery-ui.min.js', array(), _esell_VERSION, true );
 	wp_enqueue_script( 'esell-wow-min', get_template_directory_uri() . '/assets/js/wow.min.js', array(), _esell_VERSION, true );
+	wp_enqueue_script( 'esell-toaster-js','https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js', array(), _esell_VERSION, true );
 	wp_enqueue_script( 'esell-main', get_template_directory_uri() . '/assets/js/main.js', array(), _esell_VERSION, true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
