@@ -542,12 +542,61 @@ add_action('template_redirect', 'redirect_my_account');
 /*==============================/*
 	Add user ID to product data
 /*==============================*/
-add_filter('woocommerce_rest_prepare_product', 'add_user_id_to_product_response', 10, 3);
-function add_user_id_to_product_response($response, $product, $request) {
-    if (!is_wp_error($response)) {
-        $user_id = $product->get_author();
-        $response->data['user_id'] = $user_id;
+// Hook into the WooCommerce REST API product creation request
+add_action('woocommerce_rest_insert_product', 'custom_save_product_image', 10, 2);
+
+function custom_save_product_image($product, $request) {
+    // Check if the image data is present in the request
+    if (isset($request['images']) && is_array($request['images'])) {
+        // Loop through each image in the request
+        foreach ($request['images'] as $image) {
+            // Process and save the image to the database
+            $attachment_id = custom_save_image($image['src']);
+            
+            // If the image was saved successfully, attach it to the product
+            if ($attachment_id) {
+                $product->add_image_id($attachment_id);
+            }
+        }
     }
-    return $response;
 }
+
+function custom_save_image($base64Image) {
+    // Decode the base64-encoded image string
+    $decodedImage = base64_decode($base64Image);
+    
+    // Generate a unique filename for the image
+    $filename = md5(uniqid()) . '.jpg';
+    
+    // Specify the upload directory path
+    $uploadPath = wp_upload_dir()['path'] . '/' . $filename;
+    
+    // Save the image to the upload directory
+    $imageSaved = file_put_contents($uploadPath, $decodedImage);
+    
+    // If the image was saved successfully, attach it to the media library
+    if ($imageSaved) {
+        $attachment = array(
+            'guid'           => wp_upload_dir()['url'] . '/' . $filename,
+            'post_mime_type' => 'image/jpeg',
+            'post_title'     => sanitize_file_name($filename),
+            'post_content'   => '',
+            'post_status'    => 'inherit'
+        );
+        
+        // Insert the attachment into the media library
+        $attachment_id = wp_insert_attachment($attachment, $uploadPath);
+        
+        // Generate metadata for the attachment
+        $attachment_data = wp_generate_attachment_metadata($attachment_id, $uploadPath);
+        
+        // Update the attachment metadata
+        wp_update_attachment_metadata($attachment_id, $attachment_data);
+        
+        return $attachment_id;
+    }
+    
+    return false;
+}
+
 
