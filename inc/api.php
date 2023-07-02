@@ -720,27 +720,42 @@ function handle_product_image_upload() {
             $file_name = $file['name'];
             $tmp_path = $file['tmp_name'];
 
-            // Move the uploaded file to the desired directory
-            $upload_dir = wp_upload_dir();
-            $target_dir = $upload_dir['path'] . '/product-images/';
-            $target_path = $target_dir . $file_name;
+            // Get the file extension
+            $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-            // Create the target directory if it doesn't exist
-            if (!file_exists($target_dir)) {
-                mkdir($target_dir, 0755, true);
-            }
+            // Define allowed file types
+            $allowed_extensions = array('jpeg', 'jpg', 'png');
 
-            // Move the file to the target directory
-            if (move_uploaded_file($tmp_path, $target_path)) {
-                // File successfully uploaded
-                // Save the file path to the database or perform any other desired actions
-                $file_url = $upload_dir['url'] . '/product-images/' . $file_name;
+            // Check if the file extension is allowed
+            if (in_array($file_extension, $allowed_extensions)) {
+                // Move the uploaded file to the desired directory
+                $upload_dir = wp_upload_dir();
+                $target_dir = $upload_dir['path'] . '/product-images/';
+                $target_path = $target_dir . $file_name;
 
-                // Return a success response
+                // Create the target directory if it doesn't exist
+                if (!file_exists($target_dir)) {
+                    mkdir($target_dir, 0755, true);
+                }
+
+                // Move the file to the target directory
+                if (move_uploaded_file($tmp_path, $target_path)) {
+                    // File successfully uploaded
+                    // Save the file path to the database or perform any other desired actions
+                    $file_url = $upload_dir['url'] . '/product-images/' . $file_name;
+
+                    // Return a success response
+                    return rest_ensure_response(array(
+                        'success' => true,
+                        'message' => 'Image uploaded successfully',
+                        'file_url' => $file_url
+                    ));
+                }
+            } else {
+                // File type not allowed
                 return rest_ensure_response(array(
-                    'success' => true,
-                    'message' => 'Image uploaded successfully',
-                    'file_url' => $file_url
+                    'success' => false,
+                    'message' => 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.'
                 ));
             }
         }
@@ -752,4 +767,3 @@ function handle_product_image_upload() {
         'message' => 'Failed to upload image'
     ));
 }
-
