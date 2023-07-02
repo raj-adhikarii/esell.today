@@ -678,63 +678,53 @@ add_action('rest_api_init', function () {
 
 
 //============================handeling image=========================
-add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/upload-product-image', array(
-        'methods'  => 'POST',
-        'callback' => 'handle_product_image_upload',
-        'args'     => array(
-            'product_id' => array(
-                'required' => true,
-                'type'     => 'integer',
-            ),
-            'image'      => array(
-                'required' => true,
-                'type'     => 'file',
-            ),
-        ),
-        'permission_callback' => function () {
-            return current_user_can('edit_products'); // Adjust the capability as needed
-        },
-    ));
-});
-
-function handle_product_image_upload(WP_REST_Request $request) {
-    // Get the product ID from the request
-    $product_id = $request->get_param('product_id');
-
-    // Check if a file was uploaded
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+function handle_product_image_upload() {
+    // Verify if the 'image' parameter exists in the request
+    if (isset($_FILES['image'])) {
         $file = $_FILES['image'];
 
-        // Define the allowed file types and max file size
-        $allowed_types = array('image/jpeg', 'image/png', 'image/jpg');
-        $max_size      = 2 * 2048 * 2048; // 4 MB
+        // Check for any errors during file upload
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            // Get the file name and temporary path
+            $file_name = $file['name'];
+            $tmp_path = $file['tmp_name'];
 
-        // Validate the file type and size
-        if (in_array($file['type'], $allowed_types) && $file['size'] <= $max_size) {
-            // Generate a unique filename
-            $filename = uniqid() . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-
-            // Define the file path to save the image
+            // Move the uploaded file to the desired directory
             $upload_dir = wp_upload_dir();
-            $file_path  = $upload_dir['basedir'] . '/product/' . $filename;
+            $target_dir = $upload_dir['path'] . '/product-images/';
+            $target_path = $target_dir . $file_name;
 
-            // Move the uploaded file to the destination directory
-            if (move_uploaded_file($file['tmp_name'], $file_path)) {
-                // Image uploaded successfully, you can store the file path or URL in the database
-                // and associate it with the corresponding product
-                // Here, we're just returning the file path in the response
-                return rest_ensure_response(array(
-                    'message'   => 'Image uploaded successfully.',
-                    'file_path' => $file_path,
-                ));
-            } else {
-                return new WP_Error('image_upload_error', 'Failed to upload image.', array('status' => 500));
+            // Create the target directory if it doesn't exist
+            if (!file_exists($target_dir)) {
+                mkdir($target_dir, 0755, true);
             }
-        } else {
-            return new WP_Error('invalid_file', 'Invalid file type or size.', array('status' => 400));
+
+            // Move the file to the target directory
+            if (move_uploaded_file($tmp_path, $target_path)) {
+                // File successfully uploaded
+                // Save the file path to the database or perform any other desired actions
+                $file_url = $upload_dir['url'] . '/product-images/' . $file_name;
+
+                // Return a success response
+                return rest_ensure_response(array(
+                    'success' => true,
+                    'message' => 'Image uploaded successfully',
+                    'file_url' => $file_url
+                ));
+            }
         }
-    } else {
-        return new WP_Error('missing_file', 'No file uploaded.', array('status' => 400));
     }
+
+    // Return an error response if the image parameter is missing or if there was an issue with file upload
+    return rest_ensure_response(array(
+        'success' => false,
+        'message' => 'Failed to upload image'
+    ));
 }
+
+add_action('rest_api_init', function () {
+    register_rest_route('your-namespace/v1', '/upload-product-image', array(
+        'methods' => 'POST',
+        'callback' => 'handle_product_image_upload',
+    ));
+});
