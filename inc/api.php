@@ -678,6 +678,27 @@ add_action('rest_api_init', function () {
 
 
 //============================handeling image=========================
+
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/upload-product-image', array(
+        'methods'  => 'POST',
+        'callback' => 'handle_product_image_upload',
+        'args'     => array(
+            'product_id' => array(
+                'required' => true,
+                'type'     => 'integer',
+            ),
+            'image'      => array(
+                'required' => true,
+                'type'     => 'file',
+            ),
+        ),
+        'permission_callback' => function () {
+            return current_user_can('edit_products'); // Adjust the capability as needed
+        },
+    ));
+});
+
 function handle_product_image_upload() {
     // Verify if the 'image' parameter exists in the request
     if (isset($_FILES['image'])) {
