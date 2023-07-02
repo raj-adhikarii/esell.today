@@ -623,14 +623,12 @@ function search_products($request) {
     );
 
     // Prepare the headers with the authorization information
+    $credentials = base64_encode($user->Esell_today . ':' . $user->TzsqQtCLvgMpdFGlEPjxz5o);
     $headers = array(
         'Content-Type' => 'application/json',
-        'Authorization' => array(
-            'required' => true,
-            'type' => 'string',
-            'description' => 'Basic ' . base64_encode('Esell_today:TTzs qQtC LvgM pdFG lEPj xz5o'),
-        ),
+        'Authorization' => 'Basic ' . $credentials,
     );
+
     // Perform the product search using the WooCommerce REST API
     $response = wp_remote_get(wc_get_endpoint_url('products', '', wc_get_page_permalink('shop'), wc_get_api_version()), array(
         'method' => 'GET',
