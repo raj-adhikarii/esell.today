@@ -294,8 +294,7 @@ function custom_get_users( $request ) {
 
 /*===============================================================/*
     Retrieve merged user data from WooCommerce and WordPress.
-/*===============================================================*/
-function get_merged_user_data($request) {
+/*===============================================================*/function get_merged_user_data($request) {
     $user_id = $request['user_id'];
 
     // Retrieve WooCommerce user data
@@ -335,6 +334,13 @@ function get_merged_user_data($request) {
 
     return rest_ensure_response($merged_data);
 }
+
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/users/(?P<user_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_merged_user_data',
+    ));
+});
 
 /*===========================================================/*
     Register custom endpoint to retrieve product by user ID
