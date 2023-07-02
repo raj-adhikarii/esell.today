@@ -603,3 +603,48 @@ function update_user_data($request) {
         return new WP_Error('user_not_found', 'User not found.', array('status' => 404));
     }
 }
+
+/*=========================/*
+    Search Product
+/*=========================*/
+function search_products($request) {
+    $search_term = $request->get_param('search');
+
+    // Query parameters for product search
+    $params = array(
+        'status' => 'publish',
+        'search' => $search_term,
+    );
+
+    // Perform the product search using the WooCommerce REST API
+    $response = wp_remote_get(wc_get_endpoint_url('products', '', wc_get_page_permalink('shop'), wc_get_api_version()), array(
+        'method' => 'GET',
+        'timeout' => 45,
+        'headers' => array(
+            'Content-Type' => 'application/json',
+        ),
+        'body' => $params,
+    ));
+
+    // Check for errors
+    if (is_wp_error($response)) {
+        return $response;
+    }
+
+    // Retrieve the response body
+    $body = wp_remote_retrieve_body($response);
+
+    // Convert the response to an array
+    $products = json_decode($body, true);
+
+    // Return the products as a REST API response
+    return rest_ensure_response($products);
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/products/search', array(
+        'methods' => 'GET',
+        'callback' => 'search_products',
+    ));
+});
+
