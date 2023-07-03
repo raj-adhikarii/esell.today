@@ -627,11 +627,18 @@ function search_products($request) {
         'search' => $search_term,
     );
 
+    // WooCommerce API credentials
+    $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
+    $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
+
     // Perform the product search using the WooCommerce REST API
     $response = wp_remote_get('https://staging.e-sell.today/wp-json/wc/v3/products', array(
         'method' => 'GET',
         'timeout' => 45,
         'body' => $params,
+        'headers' => array(
+            'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
+        ),
     ));
 
     // Check for errors
@@ -659,7 +666,6 @@ add_action('rest_api_init', function () {
         },
     ));
 });
-
 
 //============================handeling image=========================
 add_action('rest_api_init', function () {
