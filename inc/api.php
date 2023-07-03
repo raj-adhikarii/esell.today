@@ -343,6 +343,19 @@ function custom_get_users( $request ) {
 /*===============================================================*/
 function get_customer_data($request) {
     $user_id = $request['user_id'];
+    
+    // Retrieve WordPress user data
+    $user = get_userdata($user_id);
+
+    // Concatenate first name and last name
+    $name = $user->first_name . ' ' . $user->last_name;
+
+    // Retrieve additional user meta data
+    $image_url = get_user_meta($user_id, 'image_url', true);
+    $additional_details = get_user_meta($user_id, 'additional_details', true);
+
+    // Get user profile image URL
+    $avatar_url = get_avatar_url($user_id);
 
     // Retrieve customer data
     $customer = new WC_Customer($user_id);
@@ -352,15 +365,14 @@ function get_customer_data($request) {
 
     // Get billing address
     $billing_address = array(
-        'first_name' => $customer->get_billing_first_name(),
-        'last_name' => $customer->get_billing_last_name(),
-        'company' => $customer->get_billing_company(),
+        'id' => $user->ID,
+        'username' => $user->user_login,
+        'email' => $user->user_email,
+        'name' => $name,
+        'image_url' => $avatar_url,
         'address_1' => $customer->get_billing_address_1(),
         'address_2' => $customer->get_billing_address_2(),
         'city' => $customer->get_billing_city(),
-        'state' => $customer->get_billing_state(),
-        'postcode' => $customer->get_billing_postcode(),
-        'country' => $customer->get_billing_country(),
     );
 
     // Combine phone and billing address data
@@ -373,7 +385,7 @@ function get_customer_data($request) {
 }
 
 add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/customer/(?P<user_id>\d+)', array(
+    register_rest_route('custom/v1', '/users/(?P<user_id>\d+)', array(
         'methods' => 'GET',
         'callback' => 'get_customer_data',
     ));
