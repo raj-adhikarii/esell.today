@@ -354,7 +354,7 @@ function get_merged_user_data($request) {
 
         // Retrieve custom phone and billing address
         $phone = $customer->get_meta('custom_phone', true);
-        $custom_billing_address = $customer->get_meta('custom_billing_address', true);
+        $custom_billing_address = $customer->get_meta('_billing_address_1', true);
     }
 
     // Retrieve WordPress user data
@@ -394,7 +394,6 @@ add_action('rest_api_init', function () {
         'callback' => 'get_merged_user_data',
     ));
 });
-
 
 /*=========================================/*
     Related products
