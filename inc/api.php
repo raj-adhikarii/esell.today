@@ -354,6 +354,10 @@ function get_merged_user_data($request) {
 
         // Retrieve phone number
         $phone = $customer->get_billing_phone();
+        
+        // Set phone and billing address to null if they are empty
+        $phone = !empty($phone) ? $phone : null;
+        $billing_address = !empty($billing_address) ? $billing_address : null;
     }
 
     // Retrieve WordPress user data
@@ -376,6 +380,7 @@ function get_merged_user_data($request) {
         'email' => $user->user_email,
         'name' => $name,
         'billing_address' => $billing_address,
+        'shipping_address' => $shipping_address,
         'phone' => $phone,
         'image_url' => $avatar_url,
         'additional_details' => $additional_details,
