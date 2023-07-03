@@ -341,59 +341,44 @@ function custom_get_users( $request ) {
 /*===============================================================/*
     Retrieve merged user data from WooCommerce and WordPress.
 /*===============================================================*/
-function get_merged_user_data($request) {
+function get_customer_data($request) {
     $user_id = $request['user_id'];
 
-    // Retrieve WooCommerce user data
-    if (function_exists('wc_get_customer')) {
-        $customer = wc_get_customer($user_id);
+    // Retrieve customer data
+    $customer = new WC_Customer($user_id);
 
-        // Add any WooCommerce user-related data you want to include
-        $billing_address = $customer->get_billing();
-        $shipping_address = $customer->get_shipping();
+    // Get phone number
+    $phone = $customer->get_billing_phone();
 
-        // Retrieve custom phone and billing address
-        $phone = $customer->get_meta('custom_phone', true);
-        $custom_billing_address = $customer->get_meta('_billing_address_1', true);
-    }
-
-    // Retrieve WordPress user data
-    $user = get_userdata($user_id);
-
-    // Concatenate first name and last name
-    $name = $user->first_name . ' ' . $user->last_name;
-
-    // Retrieve additional user meta data
-    $image_url = get_user_meta($user_id, 'image_url', true);
-    $additional_details = get_user_meta($user_id, 'additional_details', true);
-
-    // Get user profile image URL
-    $avatar_url = get_avatar_url($user_id);
-
-    // Combine WooCommerce and WordPress user data
-    $merged_data = array(
-        'id' => $user->ID,
-        'username' => $user->user_login,
-        'email' => $user->user_email,
-        'name' => $name,
-        'billing_address' => $billing_address,
-        'shipping_address' => $shipping_address,
-        'phone' => $phone,
-        'custom_billing_address' => $custom_billing_address,
-        'image_url' => $avatar_url,
-        'additional_details' => $additional_details,
-        // Add any additional user data you want to include
+    // Get billing address
+    $billing_address = array(
+        'first_name' => $customer->get_billing_first_name(),
+        'last_name' => $customer->get_billing_last_name(),
+        'company' => $customer->get_billing_company(),
+        'address_1' => $customer->get_billing_address_1(),
+        'address_2' => $customer->get_billing_address_2(),
+        'city' => $customer->get_billing_city(),
+        'state' => $customer->get_billing_state(),
+        'postcode' => $customer->get_billing_postcode(),
+        'country' => $customer->get_billing_country(),
     );
 
-    return rest_ensure_response($merged_data);
+    // Combine phone and billing address data
+    $customer_data = array(
+        'phone' => $phone,
+        'billing_address' => $billing_address,
+    );
+
+    return rest_ensure_response($customer_data);
 }
 
 add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/users/(?P<user_id>\d+)', array(
+    register_rest_route('custom/v1', '/customer/(?P<user_id>\d+)', array(
         'methods' => 'GET',
-        'callback' => 'get_merged_user_data',
+        'callback' => 'get_customer_data',
     ));
 });
+
 
 /*=========================================/*
     Related products
