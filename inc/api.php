@@ -776,7 +776,7 @@ function get_product_with_user_id($request) {
     }
 
     // Get the product's author (user who published the product)
-    $author_id = $product->get_author_id();
+    $author_id = $product->get_meta('_product_author', true);
 
     // Return the product details with the user ID
     $data = array(
@@ -796,3 +796,4 @@ add_action('rest_api_init', function () {
         'callback' => 'get_product_with_user_id',
     ));
 });
+
