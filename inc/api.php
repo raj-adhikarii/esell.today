@@ -371,8 +371,6 @@ function get_customer_data($request) {
         'name' => $name,
         'image_url' => $avatar_url,
         'address_1' => $customer->get_billing_address_1(),
-        'address_2' => $customer->get_billing_address_2(),
-        'city' => $customer->get_billing_city(),
     );
 
     // Combine phone and billing address data
