@@ -391,12 +391,140 @@ Version         : 1.0
 
 })(jQuery);
 
+// DataTransfer allows updating files in input shortable
+var dataTransfer = new DataTransfer()
+
+const form = document.querySelector('#form')
+const input = document.querySelector('#input')
+
+input.addEventListener('change', () => {
+
+  let files = input.files
+
+  for (let i = 0; i < files.length; i++) {
+    // A new upload must not replace images but be added
+    dataTransfer.items.add(files[i])
+
+    // Generate previews using FileReader
+    let reader, preview, previewImage
+    reader = new FileReader()
+
+    preview = document.createElement('div')
+    previewImage = document.createElement('img')
+    deleteButton = document.createElement('button')
+    orderInput = document.createElement('input')
+
+    preview.classList.add('preview')
+    document.querySelector('#preview-parent').appendChild(preview)
+    deleteButton.setAttribute('data-index', i)
+    deleteButton.setAttribute('onclick', 'deleteImage(this)')
+    deleteButton.innerText = 'Delete'
+    orderInput.type = 'hidden'
+    orderInput.name = 'images_order[' + files[i].name + ']'
+
+    preview.appendChild(previewImage)
+    preview.appendChild(deleteButton)
+    preview.appendChild(orderInput)
+
+    reader.readAsDataURL(files[i])
+    reader.onloadend = () => {
+      previewImage.src = reader.result
+    }
+  }
+
+  // Update order values for all images
+  updateOrder()
+  // Finally update input files that will be sumbitted
+  input.files = dataTransfer.files
+})
+
+const updateOrder = () => {
+  let orderInputs = document.querySelectorAll('input[name^="images_order"]')
+  let deleteButtons = document.querySelectorAll('button[data-index]')
+  for (let i = 0; i < orderInputs.length; i++) {
+    orderInputs[i].value = [i]
+    deleteButtons[i].dataset.index = [i]
+    
+    // Just to show that order is always correct I add index here
+    deleteButtons[i].innerText = 'Delete (image ' + i + ')'
+  }
+}
+
+const deleteImage = (item) => {
+  // Remove image from DataTransfer and update input
+  dataTransfer.items.remove(item.dataset.index)
+  input.files = dataTransfer.files
+  // Delete element from DOM and update order
+  item.parentNode.remove()
+  updateOrder()
+}
+
+// I make the images sortable by means of SortableJS
+const el = document.getElementById('preview-parent')
+new Sortable(el, {
+  animation: 150,
+
+  // Update order values every time a change is made
+  onEnd: (event) => {
+    updateOrder()
+  }
+})
 
 
+jQuery(document).ready(function($) {
+    $('.product-favorite').on('click', function(e) {
+        e.preventDefault();
+        
+        var productId = $(this).data('product-id');
+        
+        // Trigger YITH Wishlist functionality
+        yith_wcwl_add_to_wishlist(productId);
+    });
+});
 
 
+  // Get the icon element
+  const wishlistIcon = document.getElementById('wishlist-icon');
 
+  // Check if there is at least one wishlist item
+  if (wishlistItemCount > 0) {
+    // Update the class to switch to the filled heart icon
+    wishlistIcon.className = 'fas fa-heart';
+  }
 
+// Add event listener to remove wishlist functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const removeButtons = document.querySelectorAll('.product-favorite');
 
+    removeButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const productId = this.getAttribute('data-product-id');
 
+            // Make an AJAX request to remove the product from the wishlist
+            // Replace `remove-from-wishlist.php` with the actual server-side script or endpoint
+            fetch('remove-from-wishlist.php', {
+                method: 'POST',
+                body: JSON.stringify({ productId: productId })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                // Check the response data and handle any errors or success messages
 
+                // If the removal was successful, remove the corresponding product item from the DOM
+                if (data.success) {
+                    const productItem = button.closest('.product-item');
+                    if (productItem) {
+                        productItem.remove();
+                    }
+                }
+            })
+            .catch(function(error) {
+                // Handle any errors that occurred during the AJAX request
+                console.error('Error:', error);
+            });
+        });
+    });
+});

@@ -10,51 +10,54 @@
 get_header();
 ?>
 
-	<main id="primary" class="site-main">
+	<main class="main">
 
-		<section class="error-404 not-found">
-			<header class="page-header">
-				<h1 class="page-title"><?php esc_html_e( 'Oops! That page can&rsquo;t be found.', 'esell' ); ?></h1>
-			</header><!-- .page-header -->
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url(https://images.unsplash.com/photo-1584824486509-112e4181ff6b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)">
+            <div class="container">
+                <h2 class="breadcrumb-title">404 Error</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">404 Error</li>
+                </ul>
+            </div>
+        </div>
 
-			<div class="page-content">
-				<p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'esell' ); ?></p>
 
-					<?php
+
+        <!-- error area -->
+        <div class="error-area py-120">
+            <div class="container">
+                <div class="col-md-6 mx-auto">
+                    <div class="error-wrapper">
+                        <h1>4<span>0</span>4</h1>
+                        <h2>Opos... Page Not Found!</h2>
+						<p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'esell' ); ?></p>
+                        <a href="<?php echo site_url(); ?>" class="theme-btn">Go Back Home <i class="far fa-home"></i></a>
+                    </div>
+
+					<!-- <?php
 					get_search_form();
+					?> -->
 
-					the_widget( 'WP_Widget_Recent_Posts' );
-					?>
+				<div class="user-profile-search mt-40">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search...">
+                            <i class="far fa-search"></i>
+                    </div>
+                </div>
+					
+                </div>
+            </div>
+        </div>
+        <!-- error area end -->
+        
 
-					<div class="widget widget_categories">
-						<h2 class="widget-title"><?php esc_html_e( 'Most Used Categories', 'esell' ); ?></h2>
-						<ul>
-							<?php
-							wp_list_categories(
-								array(
-									'orderby'    => 'count',
-									'order'      => 'DESC',
-									'show_count' => 1,
-									'title_li'   => '',
-									'number'     => 10,
-								)
-							);
-							?>
-						</ul>
-					</div><!-- .widget -->
-
-					<?php
-					/* translators: %1$s: smiley */
-					$esell_archive_content = '<p>' . sprintf( esc_html__( 'Try looking in the monthly archives. %1$s', 'esell' ), convert_smilies( ':)' ) ) . '</p>';
-					the_widget( 'WP_Widget_Archives', 'dropdown=1', "after_title=</h2>$esell_archive_content" );
-
-					the_widget( 'WP_Widget_Tag_Cloud' );
-					?>
-
-			</div><!-- .page-content -->
-		</section><!-- .error-404 -->
-
-	</main><!-- #main -->
-
+    </main>
+<!-- mysql pw " Prolific@123#!" -->
+<!-- datapase: wordpress
+user: wp_user
+pass: Pro.... -->
+<!-- https://i12bretro.github.io/tutorials/0770.html -->
 <?php
 get_footer();

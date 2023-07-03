@@ -8,28 +8,30 @@
  */
 
 ?>
+	<div class="col-md-4">
+		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+			<div class="blog-item">
+				<div class="blog-item-img">
+					<?php esell_post_thumbnail(); ?>									
+				</div>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-		<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
+				<div class="blog-item-info">
+					<?php if ( 'post' === get_post_type() ) : ?>
+						<div class="blog-item-meta">
+							<ul>
+								<li><a href="<?php the_permalink(); ?>"><i class="far fa-user-circle"></i> <?php esell_posted_by(); ?> </a></li>
+								<li><a href="<?php the_permalink(); ?>"><i class="far fa-calendar-alt"></i><?php esell_posted_on(); ?></a></li>
+							</ul>
+						</div>
+					<?php endif; ?>
+					<h4 class="blog-title">
+						<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
+					</h4>
+					<footer class="entry-footer">
+						<?php esell_entry_footer(); ?>
+					</footer><!-- .entry-footer -->
+				</div>
+			</div>
+		</article><!-- #post-<?php the_ID(); ?> -->
+    </div>
 
-		<?php if ( 'post' === get_post_type() ) : ?>
-		<div class="entry-meta">
-			<?php
-			esell_posted_on();
-			esell_posted_by();
-			?>
-		</div><!-- .entry-meta -->
-		<?php endif; ?>
-	</header><!-- .entry-header -->
-
-	<?php esell_post_thumbnail(); ?>
-
-	<div class="entry-summary">
-		<?php the_excerpt(); ?>
-	</div><!-- .entry-summary -->
-
-	<footer class="entry-footer">
-		<?php esell_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
-</article><!-- #post-<?php the_ID(); ?> -->
