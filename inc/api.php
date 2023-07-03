@@ -396,6 +396,11 @@ add_action('rest_api_init', function () {
 function get_related_products($request) {
     $product_id = $request->get_param('product_id');
     
+    // Activate breakpoints for debugging
+    if (function_exists('xdebug_break')) {
+        xdebug_break();
+    }
+
     $product = wc_get_product($product_id);
 
     error_log(print_r($product_id, true));
@@ -428,6 +433,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_related_products',
     ));
 });
+
 
 /*=======================/*
 	password change API
