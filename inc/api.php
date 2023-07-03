@@ -352,12 +352,9 @@ function get_merged_user_data($request) {
         $billing_address = $customer->get_billing();
         $shipping_address = $customer->get_shipping();
 
-        // Retrieve phone number
-        $phone = $customer->get_billing_phone();
-        
-        // Set phone and billing address to null if they are empty
-        $phone = !empty($phone) ? $phone : null;
-        $billing_address = !empty($billing_address) ? $billing_address : null;
+        // Retrieve custom phone and billing address
+        $phone = $customer->get_meta('custom_phone', true);
+        $custom_billing_address = $customer->get_meta('custom_billing_address', true);
     }
 
     // Retrieve WordPress user data
@@ -382,6 +379,7 @@ function get_merged_user_data($request) {
         'billing_address' => $billing_address,
         'shipping_address' => $shipping_address,
         'phone' => $phone,
+        'custom_billing_address' => $custom_billing_address,
         'image_url' => $avatar_url,
         'additional_details' => $additional_details,
         // Add any additional user data you want to include
