@@ -678,19 +678,22 @@ add_action('rest_api_init', function () {
 
 
 //============================handeling image=========================
-register_rest_route('custom/v1', '/upload-product-image', array(
-    'methods'  => 'POST',
-    'callback' => 'handle_product_image_upload',
-    'args'     => array(
-        'product_id' => array(
-            'required' => true,
-            'type'     => 'integer',
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/upload-product-image', array(
+        'methods'  => 'POST',
+        'callback' => 'handle_product_image_upload',
+        'args'     => array(
+            'product_id' => array(
+                'required' => true,
+                'type'     => 'integer',
+            ),
+            
         ),
-    ),
         'permission_callback' => function () {
             return current_user_can('edit_products'); // Adjust the capability as needed
         },
     ));
+});
 
 // Add the necessary file upload permissions and capabilities for the 'edit_products' capability
 add_filter('user_has_cap', 'add_product_upload_capability', 10, 3);
