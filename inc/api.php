@@ -396,7 +396,8 @@ function get_related_products($request) {
     $product_id = $request->get_param('product_id');
     
     $product = wc_get_product($product_id);
-    
+
+    error_log(print_r($product_id, true));
     if ($product) {
         $related_ids = $product->get_related();
 
@@ -620,30 +621,16 @@ function update_user_data($request) {
 function search_products($request) {
     $search_term = $request->get_param('search');
 
-    // Check if the request is authenticated using an application password
-    $application_password = get_user_by('login', 'Esell_today')->ID;
-    $user = wp_authenticate_application_password($application_password, 'TTzs qQtC LvgM pdFG lEPj xz5o');
-    if (is_wp_error($user)) {
-        return $user;
-    }
-
     // Query parameters for product search
     $params = array(
         'status' => 'publish',
         'search' => $search_term,
     );
 
-    // Prepare the headers with the authorization information
-    $headers = array(
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Bearer ' . $user->access_token,
-    );
-
     // Perform the product search using the WooCommerce REST API
     $response = wp_remote_get('https://staging.e-sell.today/wp-json/wc/v3/products', array(
         'method' => 'GET',
         'timeout' => 45,
-        'headers' => $headers,
         'body' => $params,
     ));
 
@@ -667,11 +654,8 @@ add_action('rest_api_init', function () {
         'methods' => 'GET',
         'callback' => 'search_products',
         'permission_callback' => function () {
-            // Allow access only to authenticated users with application passwords
-            if (is_user_logged_in() && current_user_can('manage_application_passwords')) {
-                return true;
-            }
-            return false;
+            // Allow access to all users (public access)
+            return true;
         },
     ));
 });
@@ -687,7 +671,6 @@ add_action('rest_api_init', function () {
                 'required' => true,
                 'type'     => 'integer',
             ),
-            
         ),
         'permission_callback' => function () {
             return current_user_can('edit_products'); // Adjust the capability as needed
