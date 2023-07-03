@@ -351,6 +351,9 @@ function get_merged_user_data($request) {
         // Add any WooCommerce user-related data you want to include
         $billing_address = $customer->get_billing();
         $shipping_address = $customer->get_shipping();
+
+        // Retrieve phone number
+        $phone = $customer->get_billing_phone();
     }
 
     // Retrieve WordPress user data
@@ -373,7 +376,7 @@ function get_merged_user_data($request) {
         'email' => $user->user_email,
         'name' => $name,
         'billing_address' => $billing_address,
-        'shipping_address' => $shipping_address,
+        'phone' => $phone,
         'image_url' => $avatar_url,
         'additional_details' => $additional_details,
         // Add any additional user data you want to include
@@ -388,6 +391,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_merged_user_data',
     ));
 });
+
 
 /*=========================================/*
     Related products
