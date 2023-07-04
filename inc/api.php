@@ -208,6 +208,11 @@ function retrieve_products_by_user($request) {
         return $product['author'] == $user_id;
     });
 
+    // Return an empty array if no products found
+    if (empty($filtered_products)) {
+        return array();
+    }
+
     // Return the filtered products as a REST API response
     return rest_ensure_response($filtered_products);
 }
@@ -218,6 +223,7 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
+
 
 /*===============================================================/*
    Add custom REST API endpoint for retrieving user information
