@@ -182,18 +182,11 @@ function retrieve_products_by_user($request) {
     $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
     $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
 
-    // Query parameters for product search
-    $params = array(
-        'status' => 'publish',
-        'author' => $user_id,
-        'per_page' => 10,
-    );
-
     // Perform the product search using the WooCommerce REST API
-    $response = wp_remote_get('https://staging.e-sell.today/wp-json/wc/v3/products', array(
+    $url = "https://staging.e-sell.today/wp-json/wc/v3/products?author=$user_id";
+    $response = wp_remote_get($url, array(
         'method' => 'GET',
         'timeout' => 45,
-        'body' => $params,
         'headers' => array(
             'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
         ),
