@@ -210,13 +210,13 @@ function retrive_products_by_user($request) {
     // Convert the response to an array
     $products = json_decode($body, true);
 
-    // Add author ID to each product
-    foreach ($products as &$product) {
-        $product['author_id'] = $user_id;
-    }
+    // Filter products by user ID
+    $filtered_products = array_filter($products, function ($product) use ($user_id) {
+        return $product['author'] == $user_id;
+    });
 
-    // Return the modified products as a REST API response
-    return rest_ensure_response($products);
+    // Return the filtered products as a REST API response
+    return rest_ensure_response($filtered_products);
 }
 
 add_action('rest_api_init', function () {
