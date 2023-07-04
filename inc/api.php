@@ -674,6 +674,39 @@ function handle_product_image_upload() {
 /*============================================/*
     Add Id of user which published the product
 /*============================================*/
+// function get_product_with_user_id($request) {
+//     $product_id = $request->get_param('product_id');
+
+//     // Get the product
+//     $product = wc_get_product($product_id);
+
+//     // Check if the product exists
+//     if (!$product) {
+//         return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
+//     }
+
+//     // Get the product's author ID
+//     $author_id = get_post_field('post_author', $product_id);
+
+//     // Return the product details with the author ID
+//     $data = array(
+//         'id' => $product->get_id(),
+//         'name' => $product->get_name(),
+//         'price' => $product->get_price(),
+//         'user_id' => $author_id,
+//         // Add any additional product data you want to include
+//     );
+
+//     return rest_ensure_response($data);
+// }
+
+// add_action('rest_api_init', function () {
+//     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)', array(
+//         'methods' => 'GET',
+//         'callback' => 'get_product_with_user_id',
+//     ));
+// });
+
 function get_product_with_user_id($request) {
     $product_id = $request->get_param('product_id');
 
@@ -688,16 +721,13 @@ function get_product_with_user_id($request) {
     // Get the product's author ID
     $author_id = get_post_field('post_author', $product_id);
 
-    // Return the product details with the author ID
-    $data = array(
-        'id' => $product->get_id(),
-        'name' => $product->get_name(),
-        'price' => $product->get_price(),
-        'user_id' => $author_id,
-        // Add any additional product data you want to include
-    );
+    // Get the product data
+    $product_data = $product->get_data();
 
-    return rest_ensure_response($data);
+    // Add the author ID to the product data
+    $product_data['user_id'] = $author_id;
+
+    return rest_ensure_response($product_data);
 }
 
 add_action('rest_api_init', function () {
@@ -706,5 +736,6 @@ add_action('rest_api_init', function () {
         'callback' => 'get_product_with_user_id',
     ));
 });
+
 
 
