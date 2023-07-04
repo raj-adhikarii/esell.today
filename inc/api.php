@@ -182,7 +182,7 @@ function retrive_products_by_user($request) {
     $params = array(
         'status' => 'publish',
         'author' => $user_id,
-        'per_page' => 5, // Retrieve all products
+        'per_page' => 10,
     );
 
     // WooCommerce API credentials
@@ -210,7 +210,12 @@ function retrive_products_by_user($request) {
     // Convert the response to an array
     $products = json_decode($body, true);
 
-    // Return the products as a REST API response
+    // Add author ID to each product
+    foreach ($products as &$product) {
+        $product['author_id'] = $user_id;
+    }
+
+    // Return the modified products as a REST API response
     return rest_ensure_response($products);
 }
 
@@ -220,6 +225,7 @@ add_action('rest_api_init', function () {
         'callback' => 'retrive_products_by_user',
     ));
 });
+
 
 /*===============================================================/*
    Add custom REST API endpoint for retrieving user information
