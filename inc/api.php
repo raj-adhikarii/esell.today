@@ -178,18 +178,17 @@ function create_product_via_api($product_data) {
 function retrieve_products_by_user($request) {
     $user_id = $request->get_param('user_id');
 
-    global $wpdb;
+    $args = array(
+        'post_type' => 'product',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'author' => $user_id,
+    );
 
-    // Query to retrieve products by the specified user ID
-    $query = "SELECT p.* FROM $wpdb->posts AS p
-              INNER JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
-              WHERE p.post_type = 'product'
-              AND p.post_status = 'publish'
-              AND pm.meta_key = '_author'
-              AND pm.meta_value = $user_id";
+    $query = new WP_Query($args);
 
-    // Run the custom query
-    $products = $wpdb->get_results($query);
+    // Retrieve the products
+    $products = $query->get_posts();
 
     // Return the products as a REST API response
     return rest_ensure_response($products);
@@ -201,8 +200,6 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
-
-
 
 
 /*===============================================================/*
