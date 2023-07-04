@@ -183,7 +183,7 @@ function retrieve_products_by_user($request) {
     $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
 
     // Perform the product search using the WooCommerce REST API
-    $response = wp_remote_get('https://staging.e-sell.today/wp-json/wc/v3/products', array(
+    $response = wp_remote_get("https://staging.e-sell.today/wp-json/wc/v3/products?author=$user_id", array(
         'method' => 'GET',
         'timeout' => 45,
         'headers' => array(
@@ -203,18 +203,8 @@ function retrieve_products_by_user($request) {
     // Convert the response to an array
     $products = json_decode($body, true);
 
-    // Filter products by user ID
-    $filtered_products = array_filter($products, function ($product) use ($user_id) {
-        return $product['author'] == $user_id;
-    });
-
-    // Return an empty array if no products found
-    if (empty($filtered_products)) {
-        return array();
-    }
-
-    // Return the filtered products as a REST API response
-    return rest_ensure_response($filtered_products);
+    // Return the products as a REST API response
+    return rest_ensure_response($products);
 }
 
 add_action('rest_api_init', function () {
@@ -223,6 +213,7 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
+
 
 
 /*===============================================================/*
