@@ -178,13 +178,6 @@ function create_product_via_api($product_data) {
 function retrieve_products_by_user($request) {
     $user_id = $request->get_param('user_id');
 
-    // Query parameters for product search
-    $params = array(
-        'status' => 'publish',
-        'author' => $user_id,
-        'per_page' => 10,
-    );
-
     // WooCommerce API credentials
     $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
     $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
@@ -193,7 +186,6 @@ function retrieve_products_by_user($request) {
     $response = wp_remote_get('https://staging.e-sell.today/wp-json/wc/v3/products', array(
         'method' => 'GET',
         'timeout' => 45,
-        'body' => $params,
         'headers' => array(
             'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
         ),
@@ -211,8 +203,13 @@ function retrieve_products_by_user($request) {
     // Convert the response to an array
     $products = json_decode($body, true);
 
-    // Return the products as a REST API response
-    return rest_ensure_response($products);
+    // Filter products by user ID
+    $filtered_products = array_filter($products, function ($product) use ($user_id) {
+        return $product['author'] == $user_id;
+    });
+
+    // Return the filtered products as a REST API response
+    return rest_ensure_response($filtered_products);
 }
 
 add_action('rest_api_init', function () {
@@ -221,7 +218,6 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
-
 
 /*===============================================================/*
    Add custom REST API endpoint for retrieving user information
