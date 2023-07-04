@@ -569,127 +569,63 @@ add_action('rest_api_init', function () {
 });
 
 //============================handeling image=========================
-add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/upload-product-image', array(
-        'methods'  => 'POST',
-        'callback' => 'handle_product_image_upload',
-        'args'     => array(
-            'product_id' => array(
-                'required' => true,
-                'type'     => 'integer',
-            ),
+function create_product_image($request) {
+    $product_id = $request->get_param('product_id');
+
+    // Process the uploaded image file
+    $uploaded_file = $_FILES['file'];
+
+    // Perform necessary validations and save the file to a desired location
+    // Extract the file path or URL of the saved image file
+
+    $image_data = array(
+        'name' => $_POST['name'], // Optional: Set the name or title of the image
+        'position' => $_POST['position'], // Optional: Set the position of the image in the product gallery
+        'src' => $image_file_url, // Set the path or URL of the saved image file
+    );
+
+    // WooCommerce API credentials
+    $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
+    $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
+
+    // Create the image in WooCommerce using the REST API
+    $response = wp_remote_post("https://staging.e-sell.today/wp-json/wc/v3/products/$product_id/images", array(
+        'method' => 'POST',
+        'timeout' => 45,
+        'headers' => array(
+            'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
+            'Content-Type' => 'application/json',
         ),
-        'permission_callback' => function () {
-            return current_user_can('edit_products'); // Adjust the capability as needed
-        },
+        'body' => wp_json_encode($image_data),
+    ));
+
+    // Check for errors
+    if (is_wp_error($response)) {
+        $error_message = $response->get_error_message();
+        return new WP_Error('image_upload_error', $error_message);
+    }
+
+    // Retrieve the response body
+    $body = wp_remote_retrieve_body($response);
+
+    // Convert the response to an array
+    $created_image = json_decode($body, true);
+
+    // Return the created image as a REST API response
+    return rest_ensure_response($created_image);
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
+        'methods' => 'POST',
+        'callback' => 'create_product_image',
     ));
 });
 
-// Add the necessary file upload permissions and capabilities for the 'edit_products' capability
-add_filter('user_has_cap', 'add_product_upload_capability', 10, 3);
-function add_product_upload_capability($allcaps, $caps, $args) {
-    // Check if the 'edit_products' capability is requested
-    if (in_array('edit_products', $caps)) {
-        // Add the 'upload_files' capability to allow file uploads
-        $allcaps['upload_files'] = true;
-    }
-    return $allcaps;
-}
-
-function handle_product_image_upload() {
-    // Verify if the 'image' parameter exists in the request
-    if (isset($_FILES['image'])) {
-        $file = $_FILES['image'];
-
-        // Check for any errors during file upload
-        if ($file['error'] === UPLOAD_ERR_OK) {
-            // Get the file name and temporary path
-            $file_name = $file['name'];
-            $tmp_path = $file['tmp_name'];
-
-            // Get the file extension
-            $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-
-            // Define allowed file types
-            $allowed_extensions = array('jpeg', 'jpg', 'png');
-
-            // Check if the file extension is allowed
-            if (in_array($file_extension, $allowed_extensions)) {
-                // Move the uploaded file to the desired directory
-                $upload_dir = wp_upload_dir();
-                $target_dir = $upload_dir['path'] . '/product-images/';
-                $target_path = $target_dir . $file_name;
-
-                // Create the target directory if it doesn't exist
-                if (!file_exists($target_dir)) {
-                    mkdir($target_dir, 0755, true);
-                }
-
-                // Move the file to the target directory
-                if (move_uploaded_file($tmp_path, $target_path)) {
-                    // File successfully uploaded
-                    // Save the file path to the database or perform any other desired actions
-                    $file_url = $upload_dir['url'] . '/product-images/' . $file_name;
-
-                    // Return a success response
-                    return rest_ensure_response(array(
-                        'success' => true,
-                        'message' => 'Image uploaded successfully',
-                        'file_url' => $file_url
-                    ));
-                }
-            } else {
-                // File type not allowed
-                return rest_ensure_response(array(
-                    'success' => false,
-                    'message' => 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.'
-                ));
-            }
-        }
-    }
-
-    // Return an error response if the image parameter is missing or if there was an issue with file upload
-    return rest_ensure_response(array(
-        'success' => false,
-        'message' => 'Failed to upload image'
-    ));
-}
 
 /*============================================/*
     Add Id of user which published the product
 /*============================================*/
-// function get_product_with_user_id($request) {
-//     $product_id = $request->get_param('product_id');
-
-//     // Get the product
-//     $product = wc_get_product($product_id);
-
-//     // Check if the product exists
-//     if (!$product) {
-//         return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
-//     }
-
-//     // Get the product's author ID
-//     $author_id = get_post_field('post_author', $product_id);
-
-//     // Return the product details with the author ID
-//     $data = array(
-//         'id' => $product->get_id(),
-//         'name' => $product->get_name(),
-//         'price' => $product->get_price(),
-//         'user_id' => $author_id,
-//         // Add any additional product data you want to include
-//     );
-
-//     return rest_ensure_response($data);
-// }
-
-// add_action('rest_api_init', function () {
-//     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)', array(
-//         'methods' => 'GET',
-//         'callback' => 'get_product_with_user_id',
-//     ));
-// });
 
 function get_product_with_user_id($request) {
     $product_id = $request->get_param('product_id');
