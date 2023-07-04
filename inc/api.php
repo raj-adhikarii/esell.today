@@ -178,31 +178,18 @@ function create_product_via_api($product_data) {
 function retrieve_products_by_user($request) {
     $user_id = $request->get_param('user_id');
 
-    // WooCommerce API credentials
-    $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
-    $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
+    global $wpdb;
 
-    // Perform the product search using the WooCommerce REST API
-    $url = "https://staging.e-sell.today/wp-json/wc/v3/products?author=$user_id";
-    $response = wp_remote_get($url, array(
-        'method' => 'GET',
-        'timeout' => 45,
-        'headers' => array(
-            'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
-        ),
-    ));
+    // Query to retrieve products by the specified user ID
+    $query = "SELECT p.* FROM $wpdb->posts AS p
+              INNER JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
+              WHERE p.post_type = 'product'
+              AND p.post_status = 'publish'
+              AND pm.meta_key = '_author'
+              AND pm.meta_value = $user_id";
 
-    // Check for errors
-    if (is_wp_error($response)) {
-        $error_message = $response->get_error_message();
-        return new WP_Error('product_search_error', $error_message);
-    }
-
-    // Retrieve the response body
-    $body = wp_remote_retrieve_body($response);
-
-    // Convert the response to an array
-    $products = json_decode($body, true);
+    // Run the custom query
+    $products = $wpdb->get_results($query);
 
     // Return the products as a REST API response
     return rest_ensure_response($products);
@@ -214,6 +201,7 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
+
 
 
 
