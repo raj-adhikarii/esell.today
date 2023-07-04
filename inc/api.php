@@ -182,7 +182,7 @@ function retrive_products_by_user($request) {
     $params = array(
         'status' => 'publish',
         'author' => $user_id,
-        'per_page' => -1, // Retrieve all products
+        'per_page' => 5, // Retrieve all products
     );
 
     // WooCommerce API credentials
