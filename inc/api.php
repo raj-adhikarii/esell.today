@@ -175,7 +175,7 @@ function create_product_via_api($product_data) {
 /*=======================================================================/*
     rest api to get all the product published by certain user
 /*========================================================================*/
-function retrive_products_by_user($request) {
+function retrieve_products_by_user($request) {
     $user_id = $request->get_param('user_id');
 
     // Query parameters for product search
@@ -201,7 +201,8 @@ function retrive_products_by_user($request) {
 
     // Check for errors
     if (is_wp_error($response)) {
-        return $response;
+        $error_message = $response->get_error_message();
+        return new WP_Error('product_search_error', $error_message);
     }
 
     // Retrieve the response body
@@ -215,6 +216,12 @@ function retrive_products_by_user($request) {
         return $product['author'] == $user_id;
     });
 
+    // Check if any products were found
+    if (empty($filtered_products)) {
+        $error_message = 'No products found for the requested user ID.';
+        return new WP_Error('no_products_found', $error_message);
+    }
+
     // Return the filtered products as a REST API response
     return rest_ensure_response($filtered_products);
 }
@@ -222,7 +229,7 @@ function retrive_products_by_user($request) {
 add_action('rest_api_init', function () {
     register_rest_route('wc/v3', '/products/user/(?P<user_id>\d+)', array(
         'methods' => 'GET',
-        'callback' => 'retrive_products_by_user',
+        'callback' => 'retrieve_products_by_user',
     ));
 });
 
