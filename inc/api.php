@@ -685,10 +685,10 @@ function get_product_with_user_id($request) {
         return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
     }
 
-    // Get the product's author (user who published the product)
-    $author_id = $product->get_author();
+    // Get the product's author ID
+    $author_id = get_post_field('post_author', $product_id);
 
-    // Return the product details with the user ID
+    // Return the product details with the author ID
     $data = array(
         'id' => $product->get_id(),
         'name' => $product->get_name(),
