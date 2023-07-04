@@ -211,19 +211,8 @@ function retrieve_products_by_user($request) {
     // Convert the response to an array
     $products = json_decode($body, true);
 
-    // Filter products by user ID
-    $filtered_products = array_filter($products, function ($product) use ($user_id) {
-        return $product['author'] == $user_id;
-    });
-
-    // Check if any products were found
-    if (empty($filtered_products)) {
-        $error_message = 'No products found for the requested user ID.';
-        return new WP_Error('no_products_found', $error_message);
-    }
-
-    // Return the filtered products as a REST API response
-    return rest_ensure_response($filtered_products);
+    // Return the products as a REST API response
+    return rest_ensure_response($products);
 }
 
 add_action('rest_api_init', function () {
