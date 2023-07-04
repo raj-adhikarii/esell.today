@@ -173,50 +173,53 @@ function create_product_via_api($product_data) {
 }
 
 /*=======================================================================/*
-   retrieve a product along with the user ID of the user who published it
+    rest api to get all the product published by certain user
 /*========================================================================*/
-// function get_product_with_user($request) {
-//     $product_id = $request->get_param('product_id');
+function retrive_products_by_user($request) {
+    $user_id = $request->get_param('user_id');
 
-//     // Get the product object
-//     $product = wc_get_product($product_id);
+    // Query parameters for product search
+    $params = array(
+        'status' => 'publish',
+        'author' => $user_id,
+        'per_page' => -1, // Retrieve all products
+    );
 
-//     // Retrieve the user ID of the product author
-//     $user_id = $product->get_author();
+    // WooCommerce API credentials
+    $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
+    $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
 
-//     // Retrieve the user object
-//     $user = get_userdata($user_id);
+    // Perform the product search using the WooCommerce REST API
+    $response = wp_remote_get('https://staging.e-sell.today/wp-json/wc/v3/products', array(
+        'method' => 'GET',
+        'timeout' => 45,
+        'body' => $params,
+        'headers' => array(
+            'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
+        ),
+    ));
 
-//     // Concatenate first name and last name
-//     $name = $user->first_name . ' ' . $user->last_name;
+    // Check for errors
+    if (is_wp_error($response)) {
+        return $response;
+    }
 
-//     // Get user profile image URL
-//     $avatar_url = get_avatar_url($user_id);
+    // Retrieve the response body
+    $body = wp_remote_retrieve_body($response);
 
-//     // Retrieve additional user meta data
-//     $additional_details = get_user_meta($user_id, 'additional_details', true);
+    // Convert the response to an array
+    $products = json_decode($body, true);
 
-//     // Prepare the product data with user information
-//     $product_data = array(
-//         'id' => $product->get_id(),
-//         'name' => $product->get_name(),
-//         'price' => $product->get_price(),
-//         'user_id' => $user_id,
-//         'user_name' => $name,
-//         'user_avatar' => $avatar_url,
-//         'additional_details' => $additional_details,
-//         // Add any additional product data or user information you want to include
-//     );
+    // Return the products as a REST API response
+    return rest_ensure_response($products);
+}
 
-//     return rest_ensure_response($product_data);
-// }
-
-// add_action('rest_api_init', function () {
-//     register_rest_route('custom/v1', '/products/(?P<product_id>\d+)', array(
-//         'methods' => 'GET',
-//         'callback' => 'get_product_with_user',
-//     ));
-// });
+add_action('rest_api_init', function () {
+    register_rest_route('wc/v3', '/products/user/(?P<user_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'retrive_products_by_user',
+    ));
+});
 
 /*===============================================================/*
    Add custom REST API endpoint for retrieving user information
