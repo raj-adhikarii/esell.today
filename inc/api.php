@@ -821,6 +821,7 @@ add_action('rest_api_init', function () {
     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
         'methods' => 'POST',
         'callback' => 'create_product_image',
+        'permission_callback' => '__return_true', // Allow public access
     ));
 });
 
