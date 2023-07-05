@@ -175,31 +175,60 @@ function create_product_via_api($product_data) {
 /*=======================================================================/*
     rest api to get all the product published by certain user
 /*========================================================================*/
-// function retrieve_products_by_user($request) {
-//     $user_id = $request->get_param('user_id');
+function retrieve_products_by_user($request) {
+    $user_id = $request->get_param('user_id');
 
-//     $args = array(
-//         'post_type' => 'product',
-//         'post_status' => 'publish',
-//         'posts_per_page' => -1,
-//         'author' => $user_id,
-//     );
+    $args = array(
+        'post_type' => 'product',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'author' => $user_id,
+    );
 
-//     $query = new WP_Query($args);
+    $query = new WP_Query($args);
 
-//     // Retrieve the products
-//     $products = $query->get_posts();
+    // Retrieve the products
+    $products = $query->get_posts();
 
-//     // Return the products as a REST API response
-//     return rest_ensure_response($products);
-// }
+    // Process each product to add image, category, and views
+    $processed_products = array();
+    foreach ($products as $product) {
+        // Get the product data
+        $product_data = (array) $product;
 
-// add_action('rest_api_init', function () {
-//     register_rest_route('wc/v3', '/products/user/(?P<user_id>\d+)', array(
-//         'methods' => 'GET',
-//         'callback' => 'retrieve_products_by_user',
-//     ));
-// });
+        // Get the product object
+        $product_obj = wc_get_product($product->ID);
+
+        // Get the image URL
+        $image_id = $product_obj->get_image_id();
+        $image_url = wp_get_attachment_image_src($image_id, 'full');
+
+        // Get the category information
+        $categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'ids_and_names'));
+
+        // Get the number of views (example value, replace with your own logic)
+        $views = get_post_meta($product->ID, 'views', true);
+
+        // Add the image, category, and views to the product data
+        $product_data['image_url'] = $image_url ? $image_url[0] : '';
+        $product_data['category'] = $categories;
+        $product_data['views'] = $views;
+
+        // Add the processed product to the list
+        $processed_products[] = $product_data;
+    }
+
+    // Return the processed products as a REST API response
+    return rest_ensure_response($processed_products);
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('wc/v3', '/products/user/(?P<user_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'retrieve_products_by_user',
+    ));
+});
+
 
 
 /*===============================================================/*
