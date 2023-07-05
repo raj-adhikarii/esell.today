@@ -175,31 +175,31 @@ function create_product_via_api($product_data) {
 /*=======================================================================/*
     rest api to get all the product published by certain user
 /*========================================================================*/
-function retrieve_products_by_user($request) {
-    $user_id = $request->get_param('user_id');
+// function retrieve_products_by_user($request) {
+//     $user_id = $request->get_param('user_id');
 
-    $args = array(
-        'post_type' => 'product',
-        'post_status' => 'publish',
-        'posts_per_page' => -1,
-        'author' => $user_id,
-    );
+//     $args = array(
+//         'post_type' => 'product',
+//         'post_status' => 'publish',
+//         'posts_per_page' => -1,
+//         'author' => $user_id,
+//     );
 
-    $query = new WP_Query($args);
+//     $query = new WP_Query($args);
 
-    // Retrieve the products
-    $products = $query->get_posts();
+//     // Retrieve the products
+//     $products = $query->get_posts();
 
-    // Return the products as a REST API response
-    return rest_ensure_response($products);
-}
+//     // Return the products as a REST API response
+//     return rest_ensure_response($products);
+// }
 
-add_action('rest_api_init', function () {
-    register_rest_route('wc/v3', '/products/user/(?P<user_id>\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'retrieve_products_by_user',
-    ));
-});
+// add_action('rest_api_init', function () {
+//     register_rest_route('wc/v3', '/products/user/(?P<user_id>\d+)', array(
+//         'methods' => 'GET',
+//         'callback' => 'retrieve_products_by_user',
+//     ));
+// });
 
 
 /*===============================================================/*
