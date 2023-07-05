@@ -213,8 +213,10 @@ function retrieve_products_by_user($request) {
             );
         }
 
-        // Get the number of views
-        $views = get_field('views', $product->ID);
+        // Increase the views count
+        $views = get_post_meta($product->ID, 'views', true);
+        $views = empty($views) ? 1 : intval($views) + 1;
+        update_post_meta($product->ID, 'views', $views);
 
         // Add the image, category, and views to the product data
         $product_data['image_url'] = $image_url ? $image_url[0] : '';
@@ -235,6 +237,7 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
+
 
 
 
