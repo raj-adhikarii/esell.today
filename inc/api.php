@@ -779,12 +779,10 @@ function create_product_image($request) {
     $name = isset($json_data['name']) ? $json_data['name'] : '';
     $position = isset($json_data['position']) ? $json_data['position'] : '';
 
-    $image_data = array(
         $image_data = array(
             'file' => $image_file_url,
             'name' => $name,
             'position' => $position,
-        )        
     );
 
     // WooCommerce API credentials
