@@ -205,13 +205,20 @@ function retrieve_products_by_user($request) {
 
         // Get the category information
         $categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'ids_and_names'));
+        $category_data = array();
+        foreach ($categories as $category) {
+            $category_data[] = array(
+                'id' => $category->term_id,
+                'name' => $category->name,
+            );
+        }
 
         // Get the number of views (example value, replace with your own logic)
         $views = get_post_meta($product->ID, 'views', true);
 
         // Add the image, category, and views to the product data
         $product_data['image_url'] = $image_url ? $image_url[0] : '';
-        $product_data['category'] = $categories;
+        $product_data['category'] = $category_data;
         $product_data['views'] = $views;
 
         // Add the processed product to the list
@@ -228,7 +235,6 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
-
 
 
 /*===============================================================/*
