@@ -663,9 +663,17 @@ function create_product_image($request) {
     // Obtain the file URL
     $image_file_url = $upload_dir['url'] . '/' . basename($uploaded_file['name']);
 
+    // Get the JSON payload from the request body
+    $request_body = file_get_contents('php://input');
+    $json_data = json_decode($request_body, true);
+
+    // Extract the image name and position from the JSON data
+    $name = isset($json_data['name']) ? $json_data['name'] : '';
+    $position = isset($json_data['position']) ? $json_data['position'] : '';
+
     $image_data = array(
-        'name' => $_POST['name'], // Optional: Set the name or title of the image
-        'position' => $_POST['position'], // Optional: Set the position of the image in the product gallery
+        'name' => $name, // Optional: Set the name or title of the image
+        'position' => $position, // Optional: Set the position of the image in the product gallery
         'src' => $image_file_url, // Set the path or URL of the saved image file
     );
 
