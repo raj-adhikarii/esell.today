@@ -656,12 +656,23 @@ function create_product_image($request) {
     $target_dir = $upload_dir['path'] . '/';
     $target_file = $target_dir . basename($uploaded_file['name']);
 
+    // Set appropriate permissions for the target directory
+    if (!file_exists($target_dir)) {
+        wp_mkdir_p($target_dir);
+        chmod($target_dir, 0755);
+    }
+
+    // Set appropriate permissions for the target file
     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
     }
 
+    // Set appropriate permissions for the uploaded file
+    chmod($target_file, 0644);
+
     // Obtain the file URL
     $image_file_url = $upload_dir['url'] . '/' . basename($uploaded_file['name']);
+
 
     // Get the JSON payload from the request body
     $json_data = $request->get_json_params();
