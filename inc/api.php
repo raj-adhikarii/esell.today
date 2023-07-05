@@ -648,9 +648,17 @@ function get_product_with_user_id($request) {
     $image_id = $product->get_image_id();
     $image_url = wp_get_attachment_image_src($image_id, 'full');
 
-    // Add the author ID and image URL to the product data
+    // Get the category information
+    $categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'ids_and_names'));
+
+    // Get the number of views (example value, replace with your own logic)
+    $views = get_post_meta($product_id, 'views', true);
+
+    // Add the author ID, image URL, category information, and views to the product data
     $product_data['user_id'] = $author_id;
     $product_data['image_url'] = $image_url ? $image_url[0] : '';
+    $product_data['category'] = $categories;
+    $product_data['views'] = $views;
 
     return rest_ensure_response($product_data);
 }
