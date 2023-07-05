@@ -174,6 +174,8 @@ function create_product_via_api($product_data) {
 
 /*=======================================================================/*
     rest api to get all the product published by certain user
+    @see https://staging.e-sell.today/wp-json/wc/v3/products/user/1?
+    consumer_key=ck_2bfdecd44427762646b056a79035f944fa22c88c&consumer_secret=cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3
 /*========================================================================*/
 function retrieve_products_by_user($request) {
     $user_id = $request->get_param('user_id');
@@ -678,6 +680,10 @@ add_action('rest_api_init', function () {
 
 /*============================================/*
     Add Id of user which published the product
+    
+    @see https://staging.e-sell.today/wp-json/wc/v3/products/867?
+    consumer_key=ck_2bfdecd44427762646b056a79035f944fa22c88c&
+    consumer_secret=cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3
 /*============================================*/
 
 function get_product_with_user_id($request) {
@@ -701,9 +707,20 @@ function get_product_with_user_id($request) {
     $image_id = $product->get_image_id();
     $image_url = wp_get_attachment_image_url($image_id, 'full');
 
-    // Add the author ID and image URL to the product data
+    // Get the gallery image URLs
+    $gallery_image_ids = $product->get_gallery_image_ids();
+    $gallery_image_urls = array();
+    foreach ($gallery_image_ids as $gallery_image_id) {
+        $gallery_image_url = wp_get_attachment_image_url($gallery_image_id, 'full');
+        if ($gallery_image_url) {
+            $gallery_image_urls[] = $gallery_image_url;
+        }
+    }
+
+    // Add the author ID, image URL, and gallery image URLs to the product data
     $product_data['user_id'] = $author_id;
     $product_data['image_url'] = $image_url;
+    $product_data['gallery_image_urls'] = $gallery_image_urls;
 
     return rest_ensure_response($product_data);
 }
@@ -714,3 +731,4 @@ add_action('rest_api_init', function () {
         'callback' => 'get_product_with_user_id',
     ));
 });
+
