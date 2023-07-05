@@ -205,11 +205,15 @@ function retrieve_products_by_user($request) {
 
         // Get the gallery images URLs
         $gallery_image_ids = $product_obj->get_gallery_image_ids();
+        // Get the gallery image URLs
+        $gallery_image_ids = $product_obj->get_gallery_image_ids();
         $gallery_image_urls = array();
         foreach ($gallery_image_ids as $gallery_image_id) {
-            $gallery_image_urls[] = wp_get_attachment_image_url($gallery_image_id, 'full');
+            $gallery_image_url = wp_get_attachment_image_src($gallery_image_id, 'full');
+            if ($gallery_image_url) {
+                $gallery_image_urls[] = $gallery_image_url[0];
+            }
         }
-
 
         // Get the category information
         $categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'all'));
