@@ -790,7 +790,7 @@ function create_product_image($request) {
     $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
 
     // Create the image in WooCommerce using the REST API
-    $response = wp_remote_post("https://staging.e-sell.today/wp-json/wc/v3/products/$product_id/images", array(
+    $response = wp_safe_remote_post("https://staging.e-sell.today/wp-json/wc/v3/products/$product_id/images", array(
         'method' => 'POST',
         'timeout' => 45,
         'headers' => array(
