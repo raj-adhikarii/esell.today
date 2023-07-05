@@ -664,8 +664,7 @@ function create_product_image($request) {
     $image_file_url = $upload_dir['url'] . '/' . basename($uploaded_file['name']);
 
     // Get the JSON payload from the request body
-    $request_body = file_get_contents('php://input');
-    $json_data = json_decode($request_body, true);
+    $json_data = $request->get_json_params();
 
     // Extract the image name and position from the JSON data
     $name = isset($json_data['name']) ? $json_data['name'] : '';
