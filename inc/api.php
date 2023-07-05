@@ -640,40 +640,20 @@ add_action('rest_api_init', function () {
 });
 
 //============================handeling image=========================
-
 function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
     // Process the uploaded image file
     $uploaded_file = $_FILES['file'];
 
-    // Check if the file upload encountered any errors
-    if ($uploaded_file['error'] !== UPLOAD_ERR_OK) {
-        return new WP_Error('image_upload_error', 'Image upload failed.', array('status' => 500));
-    }
+    // Perform necessary validations and save the file to a desired location
+    // Extract the file path or URL of the saved image file
+    // Ensure the directory where the file should be saved has proper write permissions
 
-    // Set the upload directory path
-    $upload_dir = wp_upload_dir();
-    $upload_path = $upload_dir['path'] . '/';
-
-    // Generate a unique filename for the uploaded image
-    $file_name = uniqid() . '_' . $uploaded_file['name'];
-
-    // Move the uploaded file to the desired directory
-    $moved = move_uploaded_file($uploaded_file['tmp_name'], $upload_path . $file_name);
-
-    if (!$moved) {
-        return new WP_Error('image_upload_error', 'Failed to move the uploaded file.', array('status' => 500));
-    }
-
-    // Get the full URL of the uploaded image
-    $file_url = $upload_dir['url'] . '/' . $file_name;
-
-    // Prepare the image data
     $image_data = array(
         'name' => $_POST['name'], // Optional: Set the name or title of the image
         'position' => $_POST['position'], // Optional: Set the position of the image in the product gallery
-        'src' => $file_url, // Set the URL of the saved image file
+        'src' => $image_file_url, // Set the path or URL of the saved image file
     );
 
     // WooCommerce API credentials
