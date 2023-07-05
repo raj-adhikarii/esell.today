@@ -199,9 +199,16 @@ function retrieve_products_by_user($request) {
         // Get the product data
         $product_data = $product_obj->get_data();
 
-        // Get the image URL
-        $image_id = $product_obj->get_image_id();
-        $image_url = wp_get_attachment_image_src($image_id, 'full');
+        // Get the featured image URL
+        $featured_image_id = $product_obj->get_image_id();
+        $featured_image_url = wp_get_attachment_image_src($featured_image_id, 'full');
+
+        // Get the gallery images URLs
+        $gallery_image_ids = $product_obj->get_gallery_image_ids();
+        $gallery_image_urls = array();
+        foreach ($gallery_image_ids as $gallery_image_id) {
+            $gallery_image_urls[] = wp_get_attachment_image_url($gallery_image_id, 'full');
+        }
 
         // Get the category information
         $categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'all'));
@@ -219,7 +226,8 @@ function retrieve_products_by_user($request) {
         update_post_meta($product->ID, 'views', $views);
 
         // Add the image, category, and views to the product data
-        $product_data['image_url'] = $image_url ? $image_url[0] : '';
+        $product_data['featured_image_url'] = $featured_image_url ? $featured_image_url[0] : '';
+        $product_data['gallery_image_urls'] = $gallery_image_urls;
         $product_data['category'] = $category_data;
         $product_data['views'] = $views;
 
@@ -237,8 +245,6 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
-
-
 
 
 /*===============================================================/*
