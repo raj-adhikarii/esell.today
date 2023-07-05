@@ -728,7 +728,6 @@ add_action('rest_api_init', function () {
 //         'callback' => 'create_product_image',
 //     ));
 // });
-
 function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
@@ -740,15 +739,18 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
+    // Validate file type
+    $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
+    $file_type = $uploaded_file['type'];
+    if (!in_array($file_type, $allowed_types)) {
+        return new WP_Error('image_upload_error', 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
+    }
 
-    var_dump($product_id);
-    var_dump($_FILES['image']);
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_dir = wp_upload_dir();
     $target_dir = $upload_dir['path'] . '/';
     $target_file = $target_dir . basename($uploaded_file['name']);
 
-    var_dump($target_file);
     // Set appropriate permissions for the target directory
     if (!file_exists($target_dir)) {
         wp_mkdir_p($target_dir);
@@ -756,7 +758,7 @@ function create_product_image($request) {
     }
 
     // Set appropriate permissions for the target file
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+    if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
     }
 
@@ -816,7 +818,6 @@ add_action('rest_api_init', function () {
         'callback' => 'create_product_image',
     ));
 });
-
 
 
 
