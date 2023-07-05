@@ -193,18 +193,18 @@ function retrieve_products_by_user($request) {
     // Process each product to add image, category, and views
     $processed_products = array();
     foreach ($products as $product) {
-        // Get the product data
-        $product_data = (array) $product;
-
         // Get the product object
         $product_obj = wc_get_product($product->ID);
+
+        // Get the product data
+        $product_data = $product_obj->get_data();
 
         // Get the image URL
         $image_id = $product_obj->get_image_id();
         $image_url = wp_get_attachment_image_src($image_id, 'full');
 
         // Get the category information
-        $categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'ids_and_names'));
+        $categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'all'));
         $category_data = array();
         foreach ($categories as $category) {
             $category_data[] = array(
@@ -235,6 +235,7 @@ add_action('rest_api_init', function () {
         'callback' => 'retrieve_products_by_user',
     ));
 });
+
 
 
 /*===============================================================/*
