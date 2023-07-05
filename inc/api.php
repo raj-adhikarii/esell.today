@@ -680,7 +680,7 @@ add_action('rest_api_init', function () {
 
 /*============================================/*
     Add Id of user which published the product
-    
+
     @see https://staging.e-sell.today/wp-json/wc/v3/products/867?
     consumer_key=ck_2bfdecd44427762646b056a79035f944fa22c88c&
     consumer_secret=cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3
@@ -703,24 +703,46 @@ function get_product_with_user_id($request) {
     // Get the product data
     $product_data = $product->get_data();
 
-    // Get the image URL
+    // Create an array to store all images
+    $images = array();
+
+    // Get the featured image URL
     $image_id = $product->get_image_id();
     $image_url = wp_get_attachment_image_url($image_id, 'full');
+    if ($image_url) {
+        $images[] = array(
+            'id' => $image_id,
+            'date_created' => get_the_time('c', $image_id),
+            'date_created_gmt' => get_the_time('c', $image_id, 'gmt'),
+            'date_modified' => get_the_modified_time('c', $image_id),
+            'date_modified_gmt' => get_the_modified_time('c', $image_id, 'gmt'),
+            'src' => $image_url,
+            'name' => '',
+            'alt' => '',
+        );
+    }
 
     // Get the gallery image URLs
     $gallery_image_ids = $product->get_gallery_image_ids();
-    $gallery_image_urls = array();
     foreach ($gallery_image_ids as $gallery_image_id) {
         $gallery_image_url = wp_get_attachment_image_url($gallery_image_id, 'full');
         if ($gallery_image_url) {
-            $gallery_image_urls[] = $gallery_image_url;
+            $images[] = array(
+                'id' => $gallery_image_id,
+                'date_created' => get_the_time('c', $gallery_image_id),
+                'date_created_gmt' => get_the_time('c', $gallery_image_id, 'gmt'),
+                'date_modified' => get_the_modified_time('c', $gallery_image_id),
+                'date_modified_gmt' => get_the_modified_time('c', $gallery_image_id, 'gmt'),
+                'src' => $gallery_image_url,
+                'name' => '',
+                'alt' => '',
+            );
         }
     }
 
-    // Add the author ID, image URL, and gallery image URLs to the product data
+    // Add the author ID and the array of images to the product data
     $product_data['user_id'] = $author_id;
-    $product_data['image_url'] = $image_url;
-    $product_data['gallery_image_urls'] = $gallery_image_urls;
+    $product_data['images'] = $images;
 
     return rest_ensure_response($product_data);
 }
