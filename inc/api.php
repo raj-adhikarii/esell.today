@@ -643,15 +643,20 @@ add_action('rest_api_init', function () {
 function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
+    // Check if the image file exists in the request
+    if (!isset($_FILES['image'])) {
+        return new WP_Error('image_upload_error', 'Image file is missing.');
+    }
+
     // Process the uploaded image file
-    $uploaded_file = $_FILES['file'];
+    $uploaded_file = $_FILES['image'];
 
     // Perform necessary validations and save the file to a desired location
     // Extract the file path or URL of the saved image file
-    // Ensure the directory where the file should be saved has proper write permissions
+    $image_file_url = 'path/to/saved/image.jpg'; // Replace with your logic
 
     $image_data = array(
-        'name' => $_POST['image'], // Optional: Set the name or title of the image
+        'name' => $_POST['name'], // Optional: Set the name or title of the image
         'position' => $_POST['position'], // Optional: Set the position of the image in the product gallery
         'src' => $image_file_url, // Set the path or URL of the saved image file
     );
