@@ -650,7 +650,7 @@ function get_product_with_user_id($request) {
 
     // Add the author ID and image URL to the product data
     $product_data['user_id'] = $author_id;
-    $product_data['image_url'] = $image_url[0];
+    $product_data['image_url'] = $image_url ? $image_url[0] : '';
 
     return rest_ensure_response($product_data);
 }
@@ -661,4 +661,5 @@ add_action('rest_api_init', function () {
         'callback' => 'get_product_with_user_id',
     ));
 });
+
 
