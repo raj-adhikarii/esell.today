@@ -15,7 +15,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
         if ( ! is_wp_error( $user ) ) {
             // Successful login
             wp_set_auth_cookie( $user->ID );
-            wp_redirect( site_url( '/dashboard/' ) ); // Redirect to home page after login
+            wp_redirect( site_url( '/profile/' ) ); // Redirect to home page after login
             exit;
         } else {
             // Login failed
@@ -127,6 +127,23 @@ function disable_add_to_cart() {
     remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 }
 add_action( 'init', 'disable_add_to_cart' );
+
+/*===================================/*
+	hide sale price from products
+/*===================================*/
+
+add_action('admin_head', 'hide_sale_price_backend');
+
+function hide_sale_price_backend()
+{
+    $screen = get_current_screen();
+    
+    if ($screen->post_type === 'product') {
+        echo '<style>.woocommerce_price_discount{display:none;}</style>';
+    }
+}
+
+
 
 /*==========================/*
 	ACF map widget setting

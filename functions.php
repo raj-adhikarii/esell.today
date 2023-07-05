@@ -145,6 +145,11 @@ require get_template_directory() . '/inc/cpt-dash.php';
 require get_template_directory() . '/inc/theme-option.php';
 
 /**
+ * Custom functions for site.
+ */
+require get_template_directory() . '/inc/custom-function.php';
+
+/**
  * Enqueue scripts and styles.
  */
 require get_template_directory() . '/inc/addscript.php';
@@ -174,10 +179,6 @@ require get_template_directory() . '/inc/customizer.php';
  */
 require get_template_directory() . '/inc/api.php';
 
-/**
- * Custom functions for site.
- */
-require get_template_directory() . '/inc/custom-function.php';
 
 
 /**

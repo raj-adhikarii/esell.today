@@ -646,11 +646,11 @@ function get_product_with_user_id($request) {
 
     // Get the image URL
     $image_id = $product->get_image_id();
-    $image_url = wp_get_attachment_image_url($image_id, 'full');
+    $image_url = wp_get_attachment_image_src($image_id, 'full');
 
     // Add the author ID and image URL to the product data
     $product_data['user_id'] = $author_id;
-    $product_data['image_url'] = $image_url;
+    $product_data['image_url'] = $image_url[0];
 
     return rest_ensure_response($product_data);
 }
@@ -661,3 +661,4 @@ add_action('rest_api_init', function () {
         'callback' => 'get_product_with_user_id',
     ));
 });
+
