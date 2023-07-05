@@ -780,9 +780,11 @@ function create_product_image($request) {
     $position = isset($json_data['position']) ? $json_data['position'] : '';
 
     $image_data = array(
-        'name' => $name, // Optional: Set the name or title of the image
-        'position' => $position, // Optional: Set the position of the image in the product gallery
-        'src' => $image_file_url, // Set the path or URL of the saved image file
+        $image_data = array(
+            'file' => $image_file_url,
+            'name' => $name,
+            'position' => $position,
+        )        
     );
 
     // WooCommerce API credentials
