@@ -203,10 +203,10 @@ function retrieve_products_by_user($request) {
         $featured_image_id = $product_obj->get_image_id();
         $featured_image_url = wp_get_attachment_image_src($featured_image_id, 'full');
 
-        // Get the gallery images URLs
-        $gallery_image_ids = $product_obj->get_gallery_image_ids();
+        // Get the image URL
+        $image_url = wp_get_attachment_image_url($image_id, 'full');
+
         // Get the gallery image URLs
-        $gallery_image_ids = $product_obj->get_gallery_image_ids();
         $gallery_image_urls = array();
         foreach ($gallery_image_ids as $gallery_image_id) {
             $gallery_image_url = wp_get_attachment_image_url($gallery_image_id, 'full');
@@ -232,6 +232,7 @@ function retrieve_products_by_user($request) {
 
         // Add the image, category, and views to the product data
         $product_data['featured_image_url'] = $featured_image_url ? $featured_image_url[0] : '';
+        $product_data['image_url'] = $image_url ? $image_url : '';
         $product_data['gallery_image_urls'] = $gallery_image_urls;
         $product_data['category'] = $category_data;
         $product_data['views'] = $views;
