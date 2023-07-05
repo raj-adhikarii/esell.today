@@ -214,7 +214,7 @@ function retrieve_products_by_user($request) {
         }
 
         // Get the number of views (example value, replace with your own logic)
-        $views = get_post_meta($product->ID, 'views', true);
+        $views = get_post_meta($product->get_id(), 'views', true);
 
         // Add the image, category, and views to the product data
         $product_data['image_url'] = $image_url ? $image_url[0] : '';
