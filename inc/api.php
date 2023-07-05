@@ -209,9 +209,9 @@ function retrieve_products_by_user($request) {
         $gallery_image_ids = $product_obj->get_gallery_image_ids();
         $gallery_image_urls = array();
         foreach ($gallery_image_ids as $gallery_image_id) {
-            $gallery_image_url = wp_get_attachment_image_src($gallery_image_id, 'full');
+            $gallery_image_url = wp_get_attachment_image_url($gallery_image_id, 'full');
             if ($gallery_image_url) {
-                $gallery_image_urls[] = $gallery_image_url[0];
+                $gallery_image_urls[] = $gallery_image_url;
             }
         }
 
