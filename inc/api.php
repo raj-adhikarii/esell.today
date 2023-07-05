@@ -644,7 +644,7 @@ function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
     // Check if the image file exists in the request
-    if (!isset($_FILES['image'])) {
+    if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
         return new WP_Error('image_upload_error', 'Image file is missing.');
     }
 
