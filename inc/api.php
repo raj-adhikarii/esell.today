@@ -739,9 +739,6 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
-
-    var_dump($product_id);
-    var_dump($_FILES['image']);
     // Validate file type
     $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
     $file_type = $uploaded_file['type'];
@@ -752,9 +749,8 @@ function create_product_image($request) {
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_dir = wp_upload_dir();
     $target_dir = $upload_dir['path'] . '/';
-    $target_file = $target_dir . basename($uploaded_file['tmp_name']);
+    $target_file = $target_dir . basename($uploaded_file['name']);
 
-    var_dump($target_file);
     // Set appropriate permissions for the target directory
     if (!file_exists($target_dir)) {
         wp_mkdir_p($target_dir);
@@ -765,7 +761,6 @@ function create_product_image($request) {
     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
     }
-
 
     // Set appropriate permissions for the uploaded file
     chmod($target_file, 0644);
@@ -780,10 +775,10 @@ function create_product_image($request) {
     $name = isset($json_data['name']) ? $json_data['name'] : '';
     $position = isset($json_data['position']) ? $json_data['position'] : '';
 
-        $image_data = array(
-            'file' => $image_file_url,
-            'name' => $name,
-            'position' => $position,
+    $image_data = array(
+        'file' => $image_file_url,
+        'name' => $name,
+        'position' => $position,
     );
 
     // WooCommerce API credentials
