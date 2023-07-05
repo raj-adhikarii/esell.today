@@ -651,9 +651,17 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
-    // Perform necessary validations and save the file to a desired location
-    // Extract the file path or URL of the saved image file
-    $image_file_url = 'path/to/saved/image.jpg'; // Replace with your logic
+    // Validate and save the uploaded file to the WordPress uploads directory
+    $upload_dir = wp_upload_dir();
+    $target_dir = $upload_dir['path'] . '/';
+    $target_file = $target_dir . basename($uploaded_file['name']);
+
+    if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
+        return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
+    }
+
+    // Obtain the file URL
+    $image_file_url = $upload_dir['url'] . '/' . basename($uploaded_file['name']);
 
     $image_data = array(
         'name' => $_POST['name'], // Optional: Set the name or title of the image
