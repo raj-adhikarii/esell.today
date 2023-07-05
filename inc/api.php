@@ -651,7 +651,7 @@ function create_product_image($request) {
     // Ensure the directory where the file should be saved has proper write permissions
 
     $image_data = array(
-        'name' => $_POST['name'], // Optional: Set the name or title of the image
+        'name' => $_POST['image'], // Optional: Set the name or title of the image
         'position' => $_POST['position'], // Optional: Set the position of the image in the product gallery
         'src' => $image_file_url, // Set the path or URL of the saved image file
     );
