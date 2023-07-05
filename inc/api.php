@@ -374,6 +374,9 @@ function get_related_products($request) {
         // Get the reviews count
         $review_count = $related_product->get_review_count();
 
+        // Get the views count
+        $views_count = get_post_meta($related_id, 'views', true);
+
         $related_products[] = array(
             'id' => $related_product->get_id(),
             'name' => $related_product->get_name(),
@@ -381,6 +384,7 @@ function get_related_products($request) {
             'image' => wp_get_attachment_image_src($related_product->get_image_id(), 'full')[0],
             'category' => $category_data,
             'reviews_count' => $review_count,
+            'views_count' => $views_count,
             // Add any additional product data you want to include
         );
     }
@@ -394,6 +398,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_related_products',
     ));
 });
+
 
 
 
