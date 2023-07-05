@@ -344,36 +344,48 @@ add_action('rest_api_init', function () {
 /*=========================================*/
 function get_related_products($request) {
     $product_id = $request->get_param('product_id');
-    
-    // Activate breakpoints for debugging
-    if (function_exists('xdebug_break')) {
-        xdebug_break();
-    }
 
+    // Get the current product
     $product = wc_get_product($product_id);
 
-    error_log(print_r($product_id, true));
-    if ($product) {
-        $related_ids = $product->get_related();
+    // Check if the product exists
+    if (!$product) {
+        return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
+    }
 
-        $related_products = array();
+    // Get the related product IDs
+    $related_ids = $product->get_related();
 
-        foreach ($related_ids as $related_id) {
-            $related_product = wc_get_product($related_id);
+    $related_products = array();
 
-            $related_products[] = array(
-                'id' => $related_product->get_id(),
-                'name' => $related_product->get_name(),
-                'price' => $related_product->get_price(),
-                'image' => wp_get_attachment_image_src($related_product->get_image_id(), 'full')[0],
-                // Add any additional product data you want to include
+    foreach ($related_ids as $related_id) {
+        $related_product = wc_get_product($related_id);
+
+        // Get the category information
+        $categories = wp_get_post_terms($related_id, 'product_cat', array('fields' => 'all'));
+        $category_data = array();
+        foreach ($categories as $category) {
+            $category_data[] = array(
+                'id' => $category->term_id,
+                'name' => $category->name,
             );
         }
 
-        return rest_ensure_response($related_products);
-    } else {
-        return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
+        // Get the reviews count
+        $review_count = $related_product->get_review_count();
+
+        $related_products[] = array(
+            'id' => $related_product->get_id(),
+            'name' => $related_product->get_name(),
+            'price' => $related_product->get_price(),
+            'image' => wp_get_attachment_image_src($related_product->get_image_id(), 'full')[0],
+            'category' => $category_data,
+            'reviews_count' => $review_count,
+            // Add any additional product data you want to include
+        );
     }
+
+    return rest_ensure_response($related_products);
 }
 
 add_action('rest_api_init', function () {
@@ -382,6 +394,7 @@ add_action('rest_api_init', function () {
         'callback' => 'get_related_products',
     ));
 });
+
 
 
 /*=======================/*
