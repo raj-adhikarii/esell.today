@@ -210,6 +210,7 @@ function retrieve_products_by_user($request) {
             $gallery_image_urls[] = wp_get_attachment_image_url($gallery_image_id, 'full');
         }
 
+
         // Get the category information
         $categories = wp_get_post_terms($product->ID, 'product_cat', array('fields' => 'all'));
         $category_data = array();
