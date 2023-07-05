@@ -715,7 +715,6 @@ add_action('rest_api_init', function () {
 });
 
 
-
 /*============================================/*
     Add Id of user which published the product
 
