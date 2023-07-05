@@ -255,7 +255,6 @@ add_action('rest_api_init', function () {
 });
 
 
-
 /*===============================================================/*
    Add custom REST API endpoint for retrieving user information
 /*===============================================================*/
