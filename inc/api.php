@@ -651,6 +651,7 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
+    var_dump($product_id);
     var_dump($_FILES['image']);
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_dir = wp_upload_dir();
