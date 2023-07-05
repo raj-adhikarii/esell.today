@@ -740,11 +740,15 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
+
+    var_dump($product_id);
+    var_dump($_FILES['image']);
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_dir = wp_upload_dir();
     $target_dir = $upload_dir['path'] . '/';
     $target_file = $target_dir . basename($uploaded_file['name']);
 
+    var_dump($target_file);
     // Set appropriate permissions for the target directory
     if (!file_exists($target_dir)) {
         wp_mkdir_p($target_dir);
