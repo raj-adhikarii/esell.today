@@ -627,47 +627,47 @@ add_action('rest_api_init', function () {
     Add Id of user which published the product
 /*============================================*/
 
-function get_product_with_user_id($request) {
-    $product_id = $request->get_param('product_id');
+// function get_product_with_user_id($request) {
+//     $product_id = $request->get_param('product_id');
 
-    // Get the product
-    $product = wc_get_product($product_id);
+//     // Get the product
+//     $product = wc_get_product($product_id);
 
-    // Check if the product exists
-    if (!$product) {
-        return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
-    }
+//     // Check if the product exists
+//     if (!$product) {
+//         return new WP_Error('invalid_product_id', 'Invalid product ID.', array('status' => 404));
+//     }
 
-    // Get the product's author ID
-    $author_id = get_post_field('post_author', $product_id);
+//     // Get the product's author ID
+//     $author_id = get_post_field('post_author', $product_id);
 
-    // Get the product data
-    $product_data = $product->get_data();
+//     // Get the product data
+//     $product_data = $product->get_data();
 
-    // Get the image URL
-    $image_id = $product->get_image_id();
-    $image_url = wp_get_attachment_image_src($image_id, 'full');
+//     // Get the image URL
+//     $image_id = $product->get_image_id();
+//     $image_url = wp_get_attachment_image_src($image_id, 'full');
 
-    // Get the category information
-    $categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'ids_and_names'));
+//     // Get the category information
+//     $categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'ids_and_names'));
 
-    // Get the number of views (example value, replace with your own logic)
-    $views = get_post_meta($product_id, 'views', true);
+//     // Get the number of views (example value, replace with your own logic)
+//     $views = get_post_meta($product_id, 'views', true);
 
-    // Add the author ID, image URL, category information, and views to the product data
-    $product_data['user_id'] = $author_id;
-    $product_data['image_url'] = $image_url ? $image_url[0] : '';
-    $product_data['category'] = $categories;
-    $product_data['views'] = $views;
+//     // Add the author ID, image URL, category information, and views to the product data
+//     $product_data['user_id'] = $author_id;
+//     $product_data['image_url'] = $image_url ? $image_url[0] : '';
+//     $product_data['category'] = $categories;
+//     $product_data['views'] = $views;
 
-    return rest_ensure_response($product_data);
-}
+//     return rest_ensure_response($product_data);
+// }
 
-add_action('rest_api_init', function () {
-    register_rest_route('wc/v3', '/products/(?P<product_id>\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'get_product_with_user_id',
-    ));
-});
+// add_action('rest_api_init', function () {
+//     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)', array(
+//         'methods' => 'GET',
+//         'callback' => 'get_product_with_user_id',
+//     ));
+// });
 
 
