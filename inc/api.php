@@ -640,6 +640,95 @@ add_action('rest_api_init', function () {
 });
 
 //============================handeling image=========================
+// function create_product_image($request) {
+//     $product_id = $request->get_param('product_id');
+
+//     // Check if the image file exists in the request
+//     if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
+//         return new WP_Error('image_upload_error', 'Image file is missing.');
+//     }
+
+//     // Process the uploaded image file
+//     $uploaded_file = $_FILES['image'];
+
+//     var_dump($product_id);
+//     var_dump($_FILES['image']);
+//     // Validate and save the uploaded file to the WordPress uploads directory
+//     $upload_dir = wp_upload_dir();
+//     $target_dir = $upload_dir['path'] . '/';
+//     $target_file = $target_dir . basename($uploaded_file['name']);
+
+
+//     var_dump($target_file);
+//     // Set appropriate permissions for the target directory
+//     if (!file_exists($target_dir)) {
+//         wp_mkdir_p($target_dir);
+//         chmod($target_dir, 0755);
+//     }
+
+//     // Set appropriate permissions for the target file
+//     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
+//         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
+//     }
+
+//     // Set appropriate permissions for the uploaded file
+//     chmod($target_file, 0644);
+
+//     // Obtain the file URL
+//     $image_file_url = $upload_dir['url'] . '/' . basename($uploaded_file['name']);
+
+
+//     // Get the JSON payload from the request body
+//     $json_data = $request->get_json_params();
+
+//     // Extract the image name and position from the JSON data
+//     $name = isset($json_data['name']) ? $json_data['name'] : '';
+//     $position = isset($json_data['position']) ? $json_data['position'] : '';
+
+//     $image_data = array(
+//         'name' => $name, // Optional: Set the name or title of the image
+//         'position' => $position, // Optional: Set the position of the image in the product gallery
+//         'src' => $image_file_url, // Set the path or URL of the saved image file
+//     );
+
+//     // WooCommerce API credentials
+//     $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
+//     $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
+
+//     // Create the image in WooCommerce using the REST API
+//     $response = wp_remote_post("https://staging.e-sell.today/wp-json/wc/v3/products/$product_id/images", array(
+//         'method' => 'POST',
+//         'timeout' => 45,
+//         'headers' => array(
+//             'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
+//             'Content-Type' => 'application/json',
+//         ),
+//         'body' => wp_json_encode($image_data),
+//     ));
+
+//     // Check for errors
+//     if (is_wp_error($response)) {
+//         $error_message = $response->get_error_message();
+//         return new WP_Error('image_upload_error', $error_message);
+//     }
+
+//     // Retrieve the response body
+//     $body = wp_remote_retrieve_body($response);
+
+//     // Convert the response to an array
+//     $created_image = json_decode($body, true);
+
+//     // Return the created image as a REST API response
+//     return rest_ensure_response($created_image);
+// }
+
+// add_action('rest_api_init', function () {
+//     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
+//         'methods' => 'POST',
+//         'callback' => 'create_product_image',
+//     ));
+// });
+
 function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
@@ -651,15 +740,11 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
-    var_dump($product_id);
-    var_dump($_FILES['image']);
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_dir = wp_upload_dir();
     $target_dir = $upload_dir['path'] . '/';
     $target_file = $target_dir . basename($uploaded_file['name']);
 
-
-    var_dump($target_file);
     // Set appropriate permissions for the target directory
     if (!file_exists($target_dir)) {
         wp_mkdir_p($target_dir);
@@ -676,7 +761,6 @@ function create_product_image($request) {
 
     // Obtain the file URL
     $image_file_url = $upload_dir['url'] . '/' . basename($uploaded_file['name']);
-
 
     // Get the JSON payload from the request body
     $json_data = $request->get_json_params();
@@ -728,6 +812,7 @@ add_action('rest_api_init', function () {
         'callback' => 'create_product_image',
     ));
 });
+
 
 
 
