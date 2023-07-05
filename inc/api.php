@@ -400,8 +400,6 @@ add_action('rest_api_init', function () {
 });
 
 
-
-
 /*=======================/*
 	password change API
 /*=======================*/
@@ -648,13 +646,30 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['file'];
 
-    // Perform necessary validations and save the file to a desired location
-    // Extract the file path or URL of the saved image file
+    // Check for errors during file upload
+    if ($uploaded_file['error'] !== UPLOAD_ERR_OK) {
+        return new WP_Error('image_upload_error', 'Image upload failed.');
+    }
+
+    // Generate a unique filename for the uploaded image
+    $file_name = md5(uniqid('', true)) . '-' . basename($uploaded_file['name']);
+
+    // Set the destination directory where the uploaded image will be saved
+    $upload_dir = wp_upload_dir();
+    $target_file = $upload_dir['path'] . '/' . $file_name;
+
+    // Move the uploaded image file to the target directory
+    if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
+        return new WP_Error('image_upload_error', 'Failed to save the uploaded image.');
+    }
+
+    // Get the URL of the saved image file
+    $image_file_url = $upload_dir['url'] . '/' . $file_name;
 
     $image_data = array(
         'name' => $_POST['name'], // Optional: Set the name or title of the image
         'position' => $_POST['position'], // Optional: Set the position of the image in the product gallery
-        'src' => $image_file_url, // Set the path or URL of the saved image file
+        'src' => $image_file_url, // Set the URL of the saved image file
     );
 
     // WooCommerce API credentials

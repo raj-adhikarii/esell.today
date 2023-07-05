@@ -172,7 +172,7 @@ get_header(); ?>
                                                 </span>
                                             </td>
 
-                                            <td style="display: flex; gap: 6px;">
+                                            <td style="height: 106px; gap: 6px; display: grid; place-items: center; grid-template-columns: 1fr 1fr;">
                                                 <a href="<?php echo site_url(); ?>/post-ad/?edit=true&product_id=<?php echo $product_id ?>" class="btn btn-outline-secondary btn-sm rounded-2" data-bs-toggle="tooltip" title="Edit"><i class="far fa-pen"></i></a>
                                                 <a href="#" class="btn btn-outline-danger btn-sm rounded-2" data-bs-toggle="tooltip" title="Delete"><i class="far fa-trash-can"></i></a>
                                             </td>

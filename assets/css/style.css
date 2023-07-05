@@ -4861,6 +4861,7 @@ user profile css
 .user-profile-card .table>:not(caption)>*>* {
   vertical-align: middle;
   padding: 0.8rem 0.8rem;
+  font-size: 14px;
 }
 
 
