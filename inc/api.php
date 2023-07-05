@@ -756,7 +756,7 @@ function create_product_image($request) {
     }
 
     // Set appropriate permissions for the target file
-    if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
+    if (!move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
     }
 
