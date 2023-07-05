@@ -754,6 +754,7 @@ function create_product_image($request) {
     $target_dir = $upload_dir['path'] . '/';
     $target_file = $target_dir . basename($uploaded_file['tmp_name']);
 
+    var_dump($target_file);
     // Set appropriate permissions for the target directory
     if (!file_exists($target_dir)) {
         wp_mkdir_p($target_dir);
