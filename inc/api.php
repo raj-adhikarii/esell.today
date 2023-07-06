@@ -651,8 +651,6 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
-    var_dump($product_id);
-    var_dump($uploaded_file); 
     // Validate file type
     $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
     $file_type = $uploaded_file['type'];
@@ -664,7 +662,7 @@ function create_product_image($request) {
     $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
     if (isset($upload_file['file'])) {
-        $attachment_id = media_handle_upload('image', 0);
+        $attachment_id = create_product_image_attachment($upload_file['file']);
         if (is_wp_error($attachment_id)) {
             $error_message = $attachment_id->get_error_message();
             return new WP_Error('image_upload_error', $error_message);
@@ -679,6 +677,24 @@ function create_product_image($request) {
     // Return success message
     $success_message = 'Image uploaded and set as the featured image successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
+}
+
+function create_product_image_attachment($file_path) {
+    $file_name = basename($file_path);
+
+    $attachment = array(
+        'post_mime_type' => wp_check_filetype($file_name)['type'],
+        'post_title' => preg_replace('/\.[^.]+$/', '', $file_name),
+        'post_content' => '',
+        'post_status' => 'inherit'
+    );
+
+    $attachment_id = wp_insert_attachment($attachment, $file_path);
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    $attachment_data = wp_generate_attachment_metadata($attachment_id, $file_path);
+    wp_update_attachment_metadata($attachment_id, $attachment_data);
+
+    return $attachment_id;
 }
 
 add_action('rest_api_init', function () {
