@@ -739,8 +739,9 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
-    var_dump($product_id);
-    var_dump($uploaded_file);
+
+        var_dump($product_id);
+    var_dump($_FILES['image']);
     // Validate file type
     $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
     $file_type = $uploaded_file['type'];
@@ -750,9 +751,8 @@ function create_product_image($request) {
 
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_dir = wp_upload_dir();
-    $target_dir = $upload_dir['basedir'] . '/';
+    $target_dir = $upload_dir['path'] . '/';
     $target_file = $target_dir . basename($uploaded_file['name']);
-
     var_dump($target_file);
     // Move the uploaded file to the target directory
     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
@@ -763,7 +763,18 @@ function create_product_image($request) {
     chmod($target_file, 0644);
 
     // Obtain the file URL
-    $image_file_url = $upload_dir['baseurl'] . '/' . basename($target_file);
+    $image_file_url = $upload_dir['url'] . '/' . basename($target_file);
+
+    // Set appropriate permissions for the target file
+    if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
+        return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
+    }
+
+    // Set appropriate permissions for the uploaded file
+    chmod($target_file, 0644);
+
+    // Obtain the file URL
+    $image_file_url = $upload_dir['url'] . '/' . basename($uploaded_file['name']);
 
     // Get the JSON payload from the request body
     $json_data = $request->get_json_params();
