@@ -784,8 +784,6 @@ function create_product_image($request) {
     $name = isset($json_data['name']) ? $json_data['name'] : '';
     $position = isset($json_data['position']) ? $json_data['position'] : '';
 
-    var_dump($name);
-    var_dump($position);
     $image_data = array(
         'file' => $image_file_url,
         'name' => $name,
@@ -815,6 +813,8 @@ function create_product_image($request) {
 
     // Retrieve the response body
     $body = wp_remote_retrieve_body($response);
+
+    print_r($body);
 
     // Convert the response to an array
     $created_image = json_decode($body, true);
