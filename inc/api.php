@@ -733,15 +733,15 @@ function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
     // Check if the image file exists in the request
-    if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
-        return new WP_Error('image_upload_error', 'Image file is missing.');
+    if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+        return new WP_Error('image_upload_error', 'Failed to upload the image file.');
     }
 
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
     var_dump($uploaded_file);
-    var_dump($product_id); 
+    var_dump($product_id);
     // Validate file type
     $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
     $file_type = $uploaded_file['type'];
@@ -754,7 +754,8 @@ function create_product_image($request) {
     $target_dir = $upload_dir['basedir'] . '/';
     $target_file = $target_dir . basename($uploaded_file['name']);
 
-    var_dump($target_file);
+
+    var_dump($target_file); 
     // Move the uploaded file to the target directory
     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
@@ -811,12 +812,13 @@ function create_product_image($request) {
 }
 
 add_action('rest_api_init', function () {
-    register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images',array(
+    register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
         'methods' => 'POST',
         'callback' => 'create_product_image',
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
+
 
 
 
