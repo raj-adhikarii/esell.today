@@ -740,7 +740,7 @@ function create_product_image($request) {
     // Process the uploaded image file
     $uploaded_file = $_FILES['image'];
 
-    var_dumb($product_id);
+    var_dump($product_id);
     var_dump($uploaded_file);
     // Validate file type
     $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
@@ -806,8 +806,13 @@ function create_product_image($request) {
     // Convert the response to an array
     $created_image = json_decode($body, true);
 
-    // Return the created image as a REST API response
-    return rest_ensure_response($created_image);
+    // Check if the image creation was successful
+    if (isset($created_image['id'])) {
+        $success_message = 'Image uploaded successfully.';
+        return rest_ensure_response(array('success' => true, 'message' => $success_message));
+    } else {
+        return new WP_Error('image_upload_error', 'Failed to create the image in WooCommerce.');
+    }
 }
 
 add_action('rest_api_init', function () {
