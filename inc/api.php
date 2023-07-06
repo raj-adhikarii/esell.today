@@ -640,101 +640,12 @@ add_action('rest_api_init', function () {
 });
 
 //============================handeling image=========================
-// function create_product_image($request) {
-//     $product_id = $request->get_param('product_id');
-
-//     // Check if the image file exists in the request
-//     if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
-//         return new WP_Error('image_upload_error', 'Image file is missing.');
-//     }
-
-//     // Process the uploaded image file
-//     $uploaded_file = $_FILES['image'];
-
-//     var_dump($product_id);
-//     var_dump($_FILES['image']);
-//     // Validate file type
-//     $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
-//     $file_type = $uploaded_file['type'];
-//     if (!in_array($file_type, $allowed_types)) {
-//         return new WP_Error('image_upload_error', 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
-//     }
-
-//     // Validate and save the uploaded file to the WordPress uploads directory
-//     $upload_dir = wp_upload_dir();
-//     $target_dir = $upload_dir['path'] . '/';
-//     $target_file = $target_dir . basename($uploaded_file['name']);
-
-//     var_dump($target_file);
-//     // Move the uploaded file to the target directory
-//     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
-//         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
-//     }
-
-//     // Set appropriate permissions for the uploaded file
-//     chmod($target_file, 0644);
-
-//     // Obtain the file URL
-//     $image_file_url = $upload_dir['url'] . '/' . basename($target_file);
-
-//     // Get the JSON payload from the request body
-//     $json_data = $request->get_json_params();
-
-//     // Extract the image name and position from the JSON data
-//     $name = isset($json_data['name']) ? $json_data['name'] : '';
-//     $position = isset($json_data['position']) ? $json_data['position'] : '';
-
-//     $image_data = array(
-//         'src' => $image_file_url,
-//         'name' => $name,
-//         'position' => $position,
-//     );
-
-//     // WooCommerce API credentials
-//     $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
-//     $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
-
-//     // Create the image in WooCommerce using the REST API
-//     $response = wp_safe_remote_post("https://staging.e-sell.today/wp-json/wc/v3/products/$product_id/images", array(
-//         'method' => 'POST',
-//         'timeout' => 45,
-//         'headers' => array(
-//             'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
-//             'Content-Type' => 'application/json',
-//         ),
-//         'body' => wp_json_encode($image_data),
-//     ));
-
-//     // Check for errors
-//     if (is_wp_error($response)) {
-//         $error_message = $response->get_error_message();
-//         return new WP_Error('image_upload_error', $error_message);
-//     }
-
-//     // Retrieve the response body
-//     $body = wp_remote_retrieve_body($response);
-
-//     // Convert the response to an array
-//     $created_image = json_decode($body, true);
-
-//     // Return the created image as a REST API response
-//     return rest_ensure_response($created_image);
-// }
-
-// add_action('rest_api_init', function () {
-//     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
-//         'methods' => 'POST',
-//         'callback' => 'create_product_image',
-//         'permission_callback' => '__return_true', // Allow public access
-//     ));
-// });
-
 function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
     // Check if the image file exists in the request
-    if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-        return new WP_Error('image_upload_error', 'Failed to upload the image file.');
+    if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
+        return new WP_Error('image_upload_error', 'Image file is missing.');
     }
 
     // Process the uploaded image file
@@ -751,10 +662,11 @@ function create_product_image($request) {
 
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_dir = wp_upload_dir();
-    $target_dir = $upload_dir['basedir'] . '/';
-    $target_file = $target_dir . $uploaded_file['name'];
+    $target_dir = $upload_dir['path'] . '/';
+    $target_file = $target_dir . basename($uploaded_file['name']);
 
-    var_dump($target_file);
+
+    var_dump(|$target_file);
     // Move the uploaded file to the target directory
     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
@@ -764,53 +676,19 @@ function create_product_image($request) {
     chmod($target_file, 0644);
 
     // Obtain the file URL
-    $image_file_url = $upload_dir['baseurl'] . '/' . basename($target_file);
+    $image_file_url = $upload_dir['url'] . '/' . basename($target_file);
 
-    // Get the JSON payload from the request body
-    $json_data = $request->get_json_params();
-
-    // Extract the image name and position from the JSON data
-    $name = isset($json_data['name']) ? $json_data['name'] : '';
-    $position = isset($json_data['position']) ? $json_data['position'] : '';
-
-    $image_data = array(
-        'src' => $image_file_url,
-        'name' => $name,
-        'position' => $position,
-    );
-
-    // WooCommerce API credentials
-    $consumer_key = 'ck_2bfdecd44427762646b056a79035f944fa22c88c';
-    $consumer_secret = 'cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3';
-
-    // Create the image in WooCommerce using the REST API
-    $response = wp_safe_remote_post("https://staging.e-sell.today/wp-json/wc/v3/products/$product_id/images", array(
-        'method' => 'POST',
-        'timeout' => 45,
-        'headers' => array(
-            'Authorization' => 'Basic ' . base64_encode($consumer_key . ':' . $consumer_secret),
-            'Content-Type' => 'application/json',
-        ),
-        'body' => wp_json_encode($image_data),
-    ));
-
-    // Check for errors
-    if (is_wp_error($response)) {
-        $error_message = $response->get_error_message();
-        return new WP_Error('image_upload_error', $error_message);
-    }
-
-    // Get the response code
-    $response_code = wp_remote_retrieve_response_code($response);
-
-    // Check if the image creation was successful
-    if ($response_code === 201) {
-        $success_message = 'Image uploaded successfully.';
-        return rest_ensure_response(array('success' => true, 'message' => $success_message));
+    // Set the uploaded image as the featured image
+    $attachment_id = attachment_url_to_postid($image_file_url);
+    if ($attachment_id) {
+        set_post_thumbnail($product_id, $attachment_id);
     } else {
-        $error_response= wp_remote_retrieve_body($response);
-        return new WP_Error('image_upload_error', $error_response);
+        return new WP_Error('image_upload_error', 'Failed to set the uploaded image as the featured image.');
     }
+
+    // Return success message
+    $success_message = 'Image uploaded and set as the featured image successfully.';
+    return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
 
 add_action('rest_api_init', function () {
@@ -820,8 +698,6 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
-
-
 
 
 /*============================================/*
