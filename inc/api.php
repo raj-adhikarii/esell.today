@@ -666,7 +666,6 @@ function create_product_image($request) {
     $target_file = $target_dir . basename($uploaded_file['name']);
 
 
-    var_dump($target_file);
     // Move the uploaded file to the target directory
     if (!move_uploaded_file($uploaded_file['tmp_name'], $target_file)) {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
