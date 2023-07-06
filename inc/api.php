@@ -670,6 +670,8 @@ function create_product_image($request) {
         }
 
         set_post_thumbnail($product_id, $attachment_id);
+
+        var_dump($attachment_id);
     } else {
         return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
     }
