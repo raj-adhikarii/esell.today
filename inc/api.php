@@ -800,18 +800,16 @@ function create_product_image($request) {
         return new WP_Error('image_upload_error', $error_message);
     }
 
-    // Retrieve the response body
-    $body = wp_remote_retrieve_body($response);
-
-    // Convert the response to an array
-    $created_image = json_decode($body, true);
+    // Get the response code
+    $response_code = wp_remote_retrieve_response_code($response);
 
     // Check if the image creation was successful
-    if (isset($created_image['id'])) {
+    if ($response_code === 201) {
         $success_message = 'Image uploaded successfully.';
         return rest_ensure_response(array('success' => true, 'message' => $success_message));
     } else {
-        return new WP_Error('image_upload_error', 'Failed to create the image in WooCommerce.');
+        $error_response= wp_remote_retrieve_body($response);
+        return new WP_Error('image_upload_error', $error_response);
     }
 }
 
@@ -822,6 +820,7 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
+
 
 
 
