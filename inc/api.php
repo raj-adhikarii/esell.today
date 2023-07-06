@@ -652,7 +652,7 @@ function create_product_image($request) {
     $uploaded_file = $_FILES['image'];
 
     var_dump($product_id);
-    var_dump($uploaded_file);
+    var_dump($uploaded_file); 
     // Validate file type
     $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
     $file_type = $uploaded_file['type'];
@@ -660,22 +660,21 @@ function create_product_image($request) {
         return new WP_Error('image_upload_error', 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
     }
 
-   // Validate and save the uploaded file to the WordPress uploads directory
+    // Validate and save the uploaded file to the WordPress uploads directory
     $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
     if (isset($upload_file['file'])) {
         $attachment_id = media_handle_upload('image', 0);
         if (is_wp_error($attachment_id)) {
-            return new WP_Error('image_upload_error', 'Failed to upload and set the image as the featured image.');
+            $error_message = $attachment_id->get_error_message();
+            return new WP_Error('image_upload_error', $error_message);
         }
 
         set_post_thumbnail($product_id, $attachment_id);
-
-        var_dump($attachment_id);
     } else {
-        return new WP_Error('image_upload_error', 'Failed to save the uploaded image file.');
+        $error_message = $upload_file['error'];
+        return new WP_Error('image_upload_error', $error_message);
     }
-
 
     // Return success message
     $success_message = 'Image uploaded and set as the featured image successfully.';
@@ -689,6 +688,7 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
+
 
 
 /*============================================/*
