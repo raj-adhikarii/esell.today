@@ -4868,7 +4868,7 @@ user profile css
 /* profile store */
 
 .alert.alert-danger:empty {
-  display: none;
+  display: none !important;
 }
 
 .profile-store .store-file{
