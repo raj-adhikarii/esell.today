@@ -459,8 +459,6 @@ function add_custom_fields_to_edit_store_information() {
 							reader.readAsDataURL(e.target.files[0]);
 						});
 					</script>
-
-
                     
 					<?php  
 						$store_name = get_user_meta( $user_id, 'store_name', true );
@@ -495,12 +493,13 @@ function save_custom_user_fields_on_edit_account( $user_id ) {
         update_user_meta( $user_id, 'billing_address_1', $address );
     }
 
-
+    
 	if ( isset( $_POST['store_name'] ) ) {
         $store_name = sanitize_text_field( $_POST['store_name'] );
         update_user_meta( $user_id, 'store_name', $store_name );
     }
 
+    var_dump($_POST);
 	// var_dump($_FILES );exit;
 	if ( isset( $_FILES['store_logo'] ) && ! empty( $_FILES['store_logo']['tmp_name'] ) ) {
         $uploaded_file = wp_handle_upload( $_FILES['store_logo'], array( 'test_form' => false ) );
