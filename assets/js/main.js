@@ -483,15 +483,6 @@ jQuery(document).ready(function($) {
 });
 
 
-  // Get the icon element
-  const wishlistIcon = document.getElementById('wishlist-icon');
-
-  // Check if there is at least one wishlist item
-  if (wishlistItemCount > 0) {
-    // Update the class to switch to the filled heart icon
-    wishlistIcon.className = 'fas fa-heart';
-  }
-
 // Add event listener to remove wishlist functionality
 document.addEventListener('DOMContentLoaded', function() {
     const removeButtons = document.querySelectorAll('.product-favorite');
@@ -528,3 +519,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+  // Get the icon element
+  const wishlistIcon = document.getElementById('wishlist-icon');
+
+  // Check if there is at least one wishlist item
+  if (wishlistItemCount > 0) {
+    // Update the class to switch to the filled heart icon
+    wishlistIcon.className = 'fas fa-heart';
+  }
