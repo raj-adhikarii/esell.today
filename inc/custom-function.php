@@ -3,39 +3,31 @@
 /*===================================/*
     loggedin server site validation
 /*===================================*/
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['login'] ) ) {
     // Verify the nonce for security
-    if (isset($_POST['custom_login_nonce']) && wp_verify_nonce($_POST['custom_login_nonce'], 'custom_login_nonce')) {
-        $username = sanitize_text_field($_POST['username']);
+    if ( isset( $_POST['custom_login_nonce'] ) && wp_verify_nonce( $_POST['custom_login_nonce'], 'custom_login_nonce' ) ) {
+        $username = sanitize_text_field( $_POST['username'] );
         $password = $_POST['password'];
-        $accepted_terms = isset($_POST['accepted_terms']) ? true : false;
 
-        // Check if the terms and conditions are accepted
-        if ($accepted_terms) {
-            // Perform your custom authentication logic here
-            $user = wp_authenticate($username, $password);
+        // Perform your custom authentication logic here
+        $user = wp_authenticate( $username, $password );
 
-            if (!is_wp_error($user)) {
-                // Successful login
-                wp_set_auth_cookie($user->ID);
-                wp_redirect(site_url('/profile/')); // Redirect to home page after login
-                exit;
-            } else {
-                // Login failed
-                $error_message = $user->get_error_message();
-                // Display the error message or perform any other desired action
-                echo 'Login failed: ' . $error_message;
-            }
+        if ( ! is_wp_error( $user ) ) {
+            // Successful login
+            wp_set_auth_cookie( $user->ID );
+            wp_redirect( site_url( '/profile/' ) ); // Redirect to home page after login
+            exit;
         } else {
-            // Terms and conditions not accepted
-            echo 'Please accept the terms and conditions.';
+            // Login failed
+            $error_message = $user->get_error_message();
+            // Display the error message or perform any other desired action
+            echo 'Login failed: ' . $error_message;
         }
     } else {
         // Invalid nonce
         echo 'Security check failed. Please try again.';
     }
 }
-
 
 /*======================/*
     signup validation
