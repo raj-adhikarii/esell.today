@@ -90,6 +90,7 @@ function custom_lost_password_validation($errors, $username) {
 }
 add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
 
+
 /*===============================/*
  	Update product views count
 /*===============================*/
@@ -447,7 +448,7 @@ function add_custom_fields_to_edit_store_information() {
 							<?php endif; ?>
 						</div>
 						<input type="file" class="woocommerce-Input woocommerce-Input--file input-file theme-btn store-upload" id="profile-image-upload profile-image-upload-button" name="store_logo">
-						<!-- <button type="button" class="theme-btn store-upload" id="profile-image-upload-button"><span class="far fa-upload"></span> Upload Profile Image</button> -->
+						<button type="button" class="theme-btn store-upload" id="profile-image-upload-button"><span class="far fa-upload"></span> Upload Profile Image</button>
 					</div>
 
 					<script>
