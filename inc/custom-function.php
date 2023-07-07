@@ -91,39 +91,31 @@ function custom_lost_password_validation($errors, $username) {
 add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
 
 
-function custom_woocommerce_login_form() {
-    if (is_user_logged_in()) {
-        // If the user is already logged in, display a logout link
-        echo '<a href="' . wp_logout_url() . '">Logout</a>';
-    } else {
-        // Display the custom login form
-        ?>
-        <form class="woocommerce-form woocommerce-form-login" method="post" action="<?php echo esc_url(wp_login_url()); ?>">
-            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                <label for="username"><?php esc_html_e('Username or email address', 'woocommerce'); ?>&nbsp;<span class="required">*</span></label>
-                <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="username" id="username" autocomplete="username" />
-            </p>
-            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                <label for="password"><?php esc_html_e('Password', 'woocommerce'); ?>&nbsp;<span class="required">*</span></label>
-                <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="password" id="password" autocomplete="current-password" />
-            </p>
-            <p class="form-row">
-                <label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-                    <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" />
-                    <span><?php esc_html_e('Remember me', 'woocommerce'); ?></span>
-                </label>
-                <input type="hidden" name="redirect_to" value="<?php echo esc_url(wc_get_page_permalink('myaccount')); ?>" />
-                <?php wp_nonce_field('woocommerce-login', 'woocommerce-login-nonce'); ?>
-                <button type="submit" class="woocommerce-Button button" name="login" value="<?php esc_attr_e('Log in', 'woocommerce'); ?>"><?php esc_html_e('Log in', 'woocommerce'); ?></button>
-            </p>
-            <p class="woocommerce-LostPassword lost_password">
-                <a href="<?php echo esc_url(wp_lostpassword_url()); ?>"><?php esc_html_e('Lost your password?', 'woocommerce'); ?></a>
-            </p>
-        </form>
-        <?php
+function custom_reset_password_message($message, $key, $user_login, $user_data) {
+    $reset_url = add_query_arg(array(
+        'key' => $key,
+        'login' => rawurlencode($user_login),
+    ), site_url('custom-password-reset'));
+
+    $message = __("Someone has requested a password reset for the following account:\n\n") . network_home_url('/') . "\n\n";
+    $message .= sprintf(__('Username: %s'), $user_login) . "\n\n";
+    $message .= __("If this was a mistake, just ignore this email and nothing will happen.\n\n");
+    $message .= __("To reset your password, visit the following address:") . "\n\n";
+    $message .= $reset_url . "\n\n";
+
+    return $message;
+}
+add_filter('retrieve_password_message', 'custom_reset_password_message', 10, 4);
+
+function custom_password_reset_page_redirect() {
+    global $wp;
+
+    if (isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] === 'custom-password-reset') {
+        include(get_template_directory() . '/custom-password-reset.php');
+        exit;
     }
 }
-add_shortcode('custom_woocommerce_login', 'custom_woocommerce_login_form');
+add_action('template_redirect', 'custom_password_reset_page_redirect');
 
 /*===============================/*
  	Update product views count
