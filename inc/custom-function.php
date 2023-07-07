@@ -91,6 +91,43 @@ function custom_lost_password_validation($errors, $username) {
 add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
 
 
+// Add a custom template for the password reset page
+function custom_password_reset_template($template) {
+    if (is_page('password-reset')) {
+        $new_template = locate_template(array('password-reset-template.php'));
+        if (!empty($new_template)) {
+            return $new_template;
+        }
+    }
+    return $template;
+}
+add_filter('page_template', 'custom_password_reset_template');
+
+// Handle password reset form submission
+function custom_handle_password_reset() {
+    // Check if it's a password reset form submission
+    if (isset($_POST['wc_reset_password'])) {
+        $reset_key = isset($_REQUEST['key']) ? $_REQUEST['key'] : '';
+        $login = isset($_REQUEST['login']) ? $_REQUEST['login'] : '';
+        $password = $_POST['password'];
+
+        // Validate the reset key and login
+        $user = check_password_reset_key($reset_key, $login);
+
+        if (is_wp_error($user) || empty($password)) {
+            // Invalid key, login, or password
+            wc_add_notice(__('Invalid password reset link or password.', 'woocommerce'), 'error');
+            return;
+        }
+
+        // Reset the password
+        reset_password($user, $password);
+        wc_add_notice(__('Password reset successfully!', 'woocommerce'), 'success');
+    }
+}
+add_action('init', 'custom_handle_password_reset');
+
+
 /*===============================/*
  	Update product views count
 /*===============================*/
