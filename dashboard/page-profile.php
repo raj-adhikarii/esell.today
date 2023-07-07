@@ -123,7 +123,6 @@ get_header(); ?>
                                                             <input type="hidden" name="action" value="save_account_details" />
                                                         </div>
                                                     </div>
-                                                
                                                 </div>
                                             </div>
                                             <div class="clear"></div>

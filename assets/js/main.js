@@ -395,9 +395,9 @@ Version         : 1.0
 var dataTransfer = new DataTransfer()
 
 const form = document.querySelector('#form')
-const input = document.querySelector('#input')
+const inp = document.querySelector('#input')
 
-input.addEventListener('change', () => {
+inp.addEventListener('change', () => {
 
   let files = input.files
 
