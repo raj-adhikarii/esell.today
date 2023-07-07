@@ -436,19 +436,18 @@ function add_custom_fields_to_edit_store_information() {
 
 	?>
 		<div class="user-profile-card profile-store">
-			<h4 class="user-profile-card-title">Personal Info</h4>
+			<h4 class="user-profile-card-title">Store logo</h4>
 			<div class="col-lg-12">
 				<div class="user-profile-form">
                                             
-					<div class="form-group">
-						<div class="store-logo-preview">
-							<?php if ( $store_logo ) : ?>
-								<img src="<?php echo esc_url( $store_logo ); ?>" alt="Store Logo" id="profile-image-preview" class="store-logo-preview" height="100px" width="100px">
-							<?php endif; ?>
-						</div>
-						<input type="file" class="woocommerce-Input woocommerce-Input--file input-file theme-btn store-upload" id="profile-image-upload profile-image-upload-button" name="store_logo">
-						<!-- <button type="button" class="theme-btn store-upload" id="profile-image-upload-button"><span class="far fa-upload"></span> Upload Profile Image</button> -->
-					</div>
+                <div class="form-group">
+                    <div class="store-logo-preview">
+                        <?php if ( $store_logo ) : ?>
+                            <img src="<?php echo esc_url( $store_logo ); ?>" alt="Store Logo" id="profile-image-preview" class="store-logo-preview" height="100px" width="100px">
+                        <?php endif; ?>
+                    </div>
+                    <input type="file" class="woocommerce-Input woocommerce-Input--file input-file theme-btn store-upload" id="profile-image-upload" name="store_logo">
+                </div>
 
 					<script>
 						document.getElementById('profile-image-upload').addEventListener('change', function (e) {
@@ -499,7 +498,6 @@ function save_custom_user_fields_on_edit_account( $user_id ) {
         update_user_meta( $user_id, 'store_name', $store_name );
     }
 
-    var_dump($_POST);
 	// var_dump($_FILES );exit;
 	if ( isset( $_FILES['store_logo'] ) && ! empty( $_FILES['store_logo']['tmp_name'] ) ) {
         $uploaded_file = wp_handle_upload( $_FILES['store_logo'], array( 'test_form' => false ) );
