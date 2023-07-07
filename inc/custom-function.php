@@ -56,9 +56,9 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         $errors[] = 'Please enter a password.';
     }
 
-    // if ( ! $agree ) {
-    //     $errors[] = 'You must agree to the Terms of Service.';
-    // }
+    if ( ! $agree ) {
+        $errors[] = 'You must agree to the Terms of Service.';
+    }
 
     if ( empty( $errors ) ) {
         $user_id = wp_create_user( $username, $password, $email );
