@@ -77,26 +77,18 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 /*==================================================== /*
     Server-side validation for forget password page 
 /*====================================================*/
-function custom_reset_password_message( $message, $key, $user_login, $user_data ) {
-    $reset_url = add_query_arg(
-        array(
-            'action' => 'reset_password',
-            'key' => $key,
-            'login' => rawurlencode( $user_login ),
-        ),
-        wp_login_url()
-    );
-    
-    $message = __('Someone has requested a password reset for the following account:') . "\r\n\r\n";
-    $message .= network_home_url( '/' ) . "\r\n\r\n";
-    $message .= sprintf( __('Username: %s'), $user_login ) . "\r\n\r\n";
-    $message .= __('If this was a mistake, just ignore this email and nothing will happen.') . "\r\n\r\n";
-    $message .= __('To reset your password, visit the following address:') . "\r\n\r\n";
-    $message .= $reset_url . "\r\n\r\n";
-
-    return $message;
+function custom_reset_password_redirect() {
+    // Check if it is a password reset request
+    if ( isset( $_GET['action'] ) && $_GET['action'] === 'rp' && isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
+        $user_login = $_GET['login'];
+        $reset_key = $_GET['key'];
+        
+        // Redirect to the custom password reset page
+        wp_redirect( home_url( '/password-reset/?login=' . $user_login . '&key=' . $reset_key ) );
+        exit;
+    }
 }
-add_filter( 'retrieve_password_message', 'custom_reset_password_message', 10, 4 );
+add_action( 'init', 'custom_reset_password_redirect' );
 
 /*===============================/*
  	Update product views count
