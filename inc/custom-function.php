@@ -90,6 +90,41 @@ function custom_lost_password_validation($errors, $username) {
 }
 add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
 
+
+function custom_woocommerce_login_form() {
+    if (is_user_logged_in()) {
+        // If the user is already logged in, display a logout link
+        echo '<a href="' . wp_logout_url() . '">Logout</a>';
+    } else {
+        // Display the custom login form
+        ?>
+        <form class="woocommerce-form woocommerce-form-login" method="post" action="<?php echo esc_url(wp_login_url()); ?>">
+            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                <label for="username"><?php esc_html_e('Username or email address', 'woocommerce'); ?>&nbsp;<span class="required">*</span></label>
+                <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="username" id="username" autocomplete="username" />
+            </p>
+            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                <label for="password"><?php esc_html_e('Password', 'woocommerce'); ?>&nbsp;<span class="required">*</span></label>
+                <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="password" id="password" autocomplete="current-password" />
+            </p>
+            <p class="form-row">
+                <label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
+                    <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" />
+                    <span><?php esc_html_e('Remember me', 'woocommerce'); ?></span>
+                </label>
+                <input type="hidden" name="redirect_to" value="<?php echo esc_url(wc_get_page_permalink('myaccount')); ?>" />
+                <?php wp_nonce_field('woocommerce-login', 'woocommerce-login-nonce'); ?>
+                <button type="submit" class="woocommerce-Button button" name="login" value="<?php esc_attr_e('Log in', 'woocommerce'); ?>"><?php esc_html_e('Log in', 'woocommerce'); ?></button>
+            </p>
+            <p class="woocommerce-LostPassword lost_password">
+                <a href="<?php echo esc_url(wp_lostpassword_url()); ?>"><?php esc_html_e('Lost your password?', 'woocommerce'); ?></a>
+            </p>
+        </form>
+        <?php
+    }
+}
+add_shortcode('custom_woocommerce_login', 'custom_woocommerce_login_form');
+
 /*===============================/*
  	Update product views count
 /*===============================*/
