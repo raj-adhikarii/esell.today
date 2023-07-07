@@ -44,6 +44,9 @@ function handle_password_change_submission() {
                 // Update the user's password
                 wp_set_password($new_password, $current_user->ID);
 
+                // Log out the user
+                wp_logout();
+
                 // Display success message or redirect to a success page
                 echo 'Password updated successfully!';
             } else {
@@ -57,4 +60,5 @@ function handle_password_change_submission() {
     }
 }
 add_action('init', 'handle_password_change_submission');
+
 
