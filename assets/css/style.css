@@ -4866,6 +4866,11 @@ user profile css
 
 
 /* profile store */
+
+.alert.alert-danger:empty {
+  display: none;
+}
+
 .profile-store .store-file{
   display: none;
 }
