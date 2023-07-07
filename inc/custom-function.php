@@ -446,8 +446,8 @@ function add_custom_fields_to_edit_store_information() {
 								<img src="<?php echo esc_url( $store_logo ); ?>" alt="Store Logo" id="profile-image-preview" class="store-logo-preview" height="100px" width="100px">
 							<?php endif; ?>
 						</div>
-						<input type="file" class="woocommerce-Input woocommerce-Input--file input-file" id="profile-image-upload" name="store_logo">
-						<button type="button" class="theme-btn store-upload" id="profile-image-upload-button"><span class="far fa-upload"></span> Upload Profile Image</button>
+						<input type="file" class="woocommerce-Input woocommerce-Input--file input-file theme-btn store-upload" id="profile-image-upload profile-image-upload-button" name="store_logo">
+						<!-- <button type="button" class="theme-btn store-upload" id="profile-image-upload-button"><span class="far fa-upload"></span> Upload Profile Image</button> -->
 					</div>
 
 					<script>
