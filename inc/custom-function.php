@@ -77,45 +77,26 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 /*==================================================== /*
     Server-side validation for forget password page 
 /*====================================================*/
-function custom_lost_password_validation($errors, $username) {
-    if (empty($username)) {
-        $errors->add('empty_username', __('Please enter your email address.', 'woocommerce'));
-    } elseif (!is_email($username)) {
-        $errors->add('invalid_username', __('Invalid email address.', 'woocommerce'));
-    } elseif (!email_exists($username)) {
-        $errors->add('email_not_found', __('The provided email address is not registered.', 'woocommerce'));
-    }
-
-    return $errors;
-}
-add_filter('woocommerce_lostpassword_post_errors', 'custom_lost_password_validation', 10, 2);
-
-
-function custom_reset_password_message($message, $key, $user_login, $user_data) {
-    $reset_url = add_query_arg(array(
-        'key' => $key,
-        'login' => rawurlencode($user_login),
-    ), site_url('custom-password-reset'));
-
-    $message = __("Someone has requested a password reset for the following account:\n\n") . network_home_url('/') . "\n\n";
-    $message .= sprintf(__('Username: %s'), $user_login) . "\n\n";
-    $message .= __("If this was a mistake, just ignore this email and nothing will happen.\n\n");
-    $message .= __("To reset your password, visit the following address:") . "\n\n";
-    $message .= $reset_url . "\n\n";
+function custom_reset_password_message( $message, $key, $user_login, $user_data ) {
+    $reset_url = add_query_arg(
+        array(
+            'action' => 'reset_password',
+            'key' => $key,
+            'login' => rawurlencode( $user_login ),
+        ),
+        wp_login_url()
+    );
+    
+    $message = __('Someone has requested a password reset for the following account:') . "\r\n\r\n";
+    $message .= network_home_url( '/' ) . "\r\n\r\n";
+    $message .= sprintf( __('Username: %s'), $user_login ) . "\r\n\r\n";
+    $message .= __('If this was a mistake, just ignore this email and nothing will happen.') . "\r\n\r\n";
+    $message .= __('To reset your password, visit the following address:') . "\r\n\r\n";
+    $message .= $reset_url . "\r\n\r\n";
 
     return $message;
 }
-add_filter('retrieve_password_message', 'custom_reset_password_message', 10, 4);
-
-function custom_password_reset_page_redirect() {
-    global $wp;
-
-    if (isset($wp->query_vars['pagename']) && $wp->query_vars['pagename'] === 'custom-password-reset') {
-        include(get_template_directory() . '/custom-password-reset.php');
-        exit;
-    }
-}
-add_action('template_redirect', 'custom_password_reset_page_redirect');
+add_filter( 'retrieve_password_message', 'custom_reset_password_message', 10, 4 );
 
 /*===============================/*
  	Update product views count
