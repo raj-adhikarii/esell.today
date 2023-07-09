@@ -398,6 +398,45 @@ function add_custom_menu_item_link( $items ) {
 
 add_filter( 'woocommerce_account_menu_items', 'add_custom_menu_item_link' );
 
+
+/*========================================/*
+	Add woocommerce user image profile
+/*========================================*/
+add_action('wp_ajax_upload_profile_image', 'upload_profile_image');
+add_action('wp_ajax_nopriv_upload_profile_image', 'upload_profile_image');
+
+function upload_profile_image() {
+    if (isset($_FILES['file']) && !empty($_FILES['file']['tmp_name'])) {
+        $file = $_FILES['file'];
+        
+        // Check for any errors during the file upload
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            wp_send_json_error('Error uploading file. Please try again.');
+        }
+        
+        // Set the desired upload directory
+        $upload_dir = wp_upload_dir();
+        $target_dir = $upload_dir['path'] . '/';
+        
+        // Generate a unique filename for the uploaded file
+        $filename = uniqid() . '-' . basename($file['name']);
+        
+        // Move the uploaded file to the target directory
+        $target_file = $target_dir . $filename;
+        if (!move_uploaded_file($file['tmp_name'], $target_file)) {
+            wp_send_json_error('Error moving uploaded file. Please try again.');
+        }
+        
+        // Update the user meta or perform any other necessary actions with the uploaded file
+        
+        // Return the file URL or any other relevant data in the success response
+        $file_url = $upload_dir['url'] . '/' . $filename;
+        wp_send_json_success('File uploaded successfully.', $file_url);
+    } else {
+        wp_send_json_error('No file uploaded.');
+    }
+}
+
 /*=======================================================================/*
 	Add phone and address fields to the WooCommerce "Edit Account" form
 /*=======================================================================*/

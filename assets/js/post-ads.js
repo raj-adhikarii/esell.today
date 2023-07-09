@@ -114,3 +114,49 @@ $('form').on('submit', function() {
 });
 }
 });
+
+
+// post wordpress user image 
+
+$(document).ready(function() {
+  // Handle file selection
+  $('#profile-img-upload').change(function(e) {
+      var file = e.target.files[0];
+      if (file) {
+          // Validate the file type (optional)
+          var allowedTypes = ['image/jpeg', 'image/png'];
+          if (allowedTypes.indexOf(file.type) === -1) {
+              alert('Invalid file type. Please select a JPEG or PNG image.');
+              return;
+          }
+
+          // Read the file and display the preview
+          var reader = new FileReader();
+          reader.onload = function(e) {
+              $('#profile-img-preview').attr('src', e.target.result);
+          };
+          reader.readAsDataURL(file);
+
+          // Upload the file via AJAX
+          var formData = new FormData();
+          formData.append('file', file);
+          formData.append('action', 'upload_profile_image');
+          $.ajax({
+              url: '/wp-admin/admin-ajax.php',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                  console.log(response); // Handle the response from the server
+
+                  // Optionally display a success message to the user
+                  alert('Image uploaded successfully!');
+              },
+              error: function(xhr, textStatus, errorThrown) {
+                  console.log('Upload failed: ' + errorThrown);
+              }
+          });
+      }
+  });
+});
