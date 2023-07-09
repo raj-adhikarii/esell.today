@@ -734,7 +734,7 @@ function save_account_details() {
         }
 
         // Redirect the user or display a success message
-        wp_redirect( 'http://localhost/esell.today/profile/' );
+        wp_redirect( 'https://staging.e-sell.today/profile/' );
         exit;
     }
 
