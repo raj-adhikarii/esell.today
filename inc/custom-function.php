@@ -704,4 +704,38 @@ function custom_save_image($base64Image) {
     return false;
 }
 
+// save profile information
+add_action( 'template_redirect', 'save_account_details' );
 
+function save_account_details() {
+    // Verify the form submission and nonce
+    if ( isset( $_POST['save_account_details'] ) && isset( $_POST['action'] ) && $_POST['action'] === 'save_account_details' && wp_verify_nonce( $_POST['save-account-details-nonce'], 'save_account_details' ) ) {
+        // Retrieve the user ID
+        $user_id = get_current_user_id();
+
+        // Retrieve the submitted form values
+        $first_name = sanitize_text_field( $_POST['account_first_name'] );
+        $last_name  = sanitize_text_field( $_POST['account_last_name'] );
+        $email      = sanitize_email( $_POST['account_email'] );
+        $password   = $_POST['password_1'];
+
+        // Update the user account information
+        $user_data = array(
+            'ID'         => $user_id,
+            'first_name' => $first_name,
+            'last_name'  => $last_name,
+            'user_email' => $email,
+        );
+        wp_update_user( $user_data );
+
+        // Change password if provided
+        if ( ! empty( $password ) ) {
+            wp_set_password( $password, $user_id );
+        }
+
+        // Redirect the user or display a success message
+        wp_redirect( 'http://localhost/esell.today/profile/' );
+        exit;
+    }
+
+}
