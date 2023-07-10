@@ -110,7 +110,7 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
 
             if ( ! $user ) {
                 // Handle invalid email address
-                wp_safe_redirect( home_url( '/password-reset?reset=invalid_email' ) );
+                wp_redirect( home_url( '/password-reset?reset=invalid_email' ) );
                 exit;
             }
 
@@ -126,7 +126,7 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
                     'key'  => $reset_key,
                     'user' => $user->ID,
                 ),
-                home_url( '/password-reset' )
+                wp_lostpassword_url()
             );
 
             // Send the password reset email with the reset URL
@@ -136,12 +136,16 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
             $sent    = wp_mail( $email, $subject, $message, $headers );
 
             if ( $sent ) {
-                // Handle successful password reset email sent
-                wp_safe_redirect( home_url( '/password-reset?reset=email_sent' ) );
+                // Display success message
+                $success_message = 'Please check your email to reset your password.';
+                set_transient( 'password_reset_success_message', $success_message, 10 );
+
+                // Redirect to current page
+                wp_redirect( home_url( add_query_arg( 'reset', 'email_sent' ) ) );
                 exit;
             } else {
                 // Handle password reset email sending failure
-                wp_safe_redirect( home_url( '/password-reset?reset=email_failed' ) );
+                wp_redirect( home_url( add_query_arg( 'reset', 'email_failed' ) ) );
                 exit;
             }
         }
@@ -153,6 +157,21 @@ if ( ! has_action( 'lostpassword_post', 'custom_password_reset_request' ) ) {
     // Hook the function to the 'lostpassword_post' action
     add_action( 'lostpassword_post', 'custom_password_reset_request' );
 }
+
+// Redirect to password reset page when clicking the link in the email
+function custom_password_reset_redirect() {
+    // Check if it is a password reset request
+    if ( isset( $_GET['action'] ) && $_GET['action'] === 'rp' && isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
+        $user_login = $_GET['login'];
+        $reset_key  = $_GET['key'];
+
+        // Redirect to the custom password reset page
+        wp_redirect( home_url( '/password-reset/?login=' . $user_login . '&key=' . $reset_key ) );
+        exit;
+    }
+}
+add_action( 'init', 'custom_password_reset_redirect' );
+
 
 /*===============================/*
  	Update product views count
