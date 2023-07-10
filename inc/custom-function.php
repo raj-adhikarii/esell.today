@@ -98,9 +98,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 //         exit;
 //     }
 // }
-// add_action( 'login_init', 'custom_reset_password_redirect' );
 
-// Handle password reset request
+// add_action( 'login_init', 'custom_reset_password_redirect' );
 if ( ! function_exists( 'handle_password_reset_request' ) ) {
     // Handle password reset request
     function handle_password_reset_request() {
@@ -150,8 +149,11 @@ if ( ! function_exists( 'handle_password_reset_request' ) ) {
     }
 }
 
-add_action( 'template_redirect', 'handle_password_reset_request' );
-
+// Check if the function is not already hooked to the 'template_redirect' action
+if ( ! has_action( 'template_redirect', 'handle_password_reset_request' ) ) {
+    // Hook the function to the 'template_redirect' action
+    add_action( 'template_redirect', 'handle_password_reset_request' );
+}
 
 /*===============================/*
  	Update product views count
