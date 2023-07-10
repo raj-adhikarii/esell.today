@@ -61,15 +61,72 @@ function custom_user_registration($request) {
 /*================================================/*
     Register custom endpoint for password reset
 /*================================================*/
-add_action('rest_api_init', 'register_password_reset_endpoint');
-function register_password_reset_endpoint() {
-    register_rest_route('esell/v1', '/password-reset', array(
-        'methods' => 'POST',
-        'callback' => 'handle_password_reset_request',
-    ));
-}
+// add_action('rest_api_init', 'register_password_reset_endpoint');
+// function register_password_reset_endpoint() {
+//     register_rest_route('esell/v1', '/password-reset', array(
+//         'methods' => 'POST',
+//         'callback' => 'handle_password_reset_request',
+//     ));
+// }
 
-// Handle password reset request
+// // Handle password reset request
+// function handle_password_reset_request(WP_REST_Request $request) {
+//     $email = sanitize_email($request->get_param('email'));
+
+//     // Get user by email
+//     $user = get_user_by('email', $email);
+
+//     if (!$user) {
+//         return new WP_Error('invalid_email', 'Invalid email address.', array('status' => 400));
+//     }
+
+//     // Generate new password
+//     $new_password = wp_generate_password();
+
+//     // Update user password
+//     wp_set_password($new_password, $user->ID);
+
+//     // Send password reset notification
+//     wp_mail(
+//         $user->user_email,
+//         'Password Reset',
+//         'Your new password: ' . $new_password
+//     );
+
+//     // Return success response
+//     return array(
+//         'message' => 'Password reset successful. Please check your email for the new password.',
+//     );
+// }
+
+// function get_products_by_user( $request ) {
+//     $user_id = $request['user_id'];
+
+//     $args = array(
+//         'status'     => 'publish',
+//         'author'     => $user_id,
+//         'paginate'   => true,
+//         'per_page'   => 10, // Adjust the number of products per page as needed
+//     );
+
+//     $products = wc_get_products( $args );
+
+//     // Process and format the products as desired
+//     $formatted_products = array();
+//     foreach ( $products as $product ) {
+//         // Extract relevant product data
+//         $formatted_product = array(
+//             'id'   => $product->get_id(),
+//             'name' => $product->get_name(),
+//             // Add more desired fields
+//         );
+
+//         $formatted_products[] = $formatted_product;
+//     }
+
+//     return rest_ensure_response( $formatted_products );
+// }
+
 function handle_password_reset_request(WP_REST_Request $request) {
     $email = sanitize_email($request->get_param('email'));
 
@@ -80,52 +137,23 @@ function handle_password_reset_request(WP_REST_Request $request) {
         return new WP_Error('invalid_email', 'Invalid email address.', array('status' => 400));
     }
 
-    // Generate new password
-    $new_password = wp_generate_password();
+    // Generate a password reset key
+    $reset_key = get_password_reset_key($user);
 
-    // Update user password
-    wp_set_password($new_password, $user->ID);
+    // Generate the password reset link
+    $reset_link = '<a href="' . wp_login_url() . '?action=rp&key=' . $reset_key . '&login=' . rawurlencode($user->user_login) . '">Reset Password</a>';
 
     // Send password reset notification
-    wp_mail(
-        $user->user_email,
-        'Password Reset',
-        'Your new password: ' . $new_password
-    );
+    $subject = 'Password Reset';
+    $message = 'Please click on the following link to reset your password: ' . $reset_link;
+    wp_mail($user->user_email, $subject, $message);
 
     // Return success response
     return array(
-        'message' => 'Password reset successful. Please check your email for the new password.',
+        'message' => 'Password reset link sent successfully. Please check your email to reset your password.',
     );
 }
 
-function get_products_by_user( $request ) {
-    $user_id = $request['user_id'];
-
-    $args = array(
-        'status'     => 'publish',
-        'author'     => $user_id,
-        'paginate'   => true,
-        'per_page'   => 10, // Adjust the number of products per page as needed
-    );
-
-    $products = wc_get_products( $args );
-
-    // Process and format the products as desired
-    $formatted_products = array();
-    foreach ( $products as $product ) {
-        // Extract relevant product data
-        $formatted_product = array(
-            'id'   => $product->get_id(),
-            'name' => $product->get_name(),
-            // Add more desired fields
-        );
-
-        $formatted_products[] = $formatted_product;
-    }
-
-    return rest_ensure_response( $formatted_products );
-}
 
 /*============================/*
    Post product via rest api

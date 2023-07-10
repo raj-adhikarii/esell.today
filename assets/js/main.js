@@ -391,6 +391,83 @@ Version         : 1.0
 
 })(jQuery);
 
+
+// USER IMAGEUPLAD  
+$('#wp-submit-register').click(function(e) {
+    e.preventDefault(); // Prevent form submission
+
+    wpestate_register();
+});
+
+function wpestate_register() {
+    var first_name = $('#first_name').val();
+    var file_data = new FormData();
+    file_data.append('id_proof', $('#id_proof')[0].files[0]);
+
+    $.ajax({
+        type: 'POST', 
+        url: ajaxurl,
+        data: {
+            'action': 'ajax_free_register_form',
+            'first_name': first_name,
+            'file_data': file_data
+        },
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            alert('success');
+        }
+    });
+}
+
+
+// new updated code for user image
+$(document).ready(function() {
+    // Handle file selection
+    $('#profile-img-upload').change(function(e) {
+      var file = e.target.files[0];
+      if (file) {
+        // Validate the file type (optional)
+        var allowedTypes = ['image/jpeg', 'image/png'];
+        if (allowedTypes.indexOf(file.type) === -1) {
+          alert('Invalid file type. Please select a JPEG or PNG image.');
+          return;
+        }
+  
+        // Read the file and display the preview
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          $('#profile-img-preview').attr('src', e.target.result);
+        };
+        reader.readAsDataURL(file);
+  
+        // Upload the file via AJAX
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('action', 'upload_profile_image');
+        $.ajax({
+          url: ajax_object.ajax_url,
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            console.log(response); // Handle the response from the server
+  
+            // Update the image source with the uploaded image URL
+            $('#profile-img-preview').attr('src', response.data);
+  
+            // Optionally display a success message to the user
+            alert('Image uploaded successfully!');
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            console.log('Upload failed: ' + errorThrown);
+          }
+        });
+      }
+    });
+  });
+
 // DataTransfer allows updating files in input shortable
 var dataTransfer = new DataTransfer()
 
