@@ -138,8 +138,8 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
 
             if ( $sent ) {
                 // Display success message
-                $success_message = 'Please check your email to reset your password.';
-                wc_add_notice( $success_message, 'success' );
+                wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/password-reset' ) ) );
+                exit;
             } else {
                 // Handle password reset email sending failure
                 $error_message = 'Failed to send the password reset email.';
@@ -149,11 +149,9 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
     }
 }
 
-// Check if the function is not already hooked to the 'lostpassword_post' action
-if ( ! has_action( 'lostpassword_post', 'custom_password_reset_request' ) ) {
-    // Hook the function to the 'lostpassword_post' action
-    add_action( 'lostpassword_post', 'custom_password_reset_request' );
-}
+// Hook the function to the 'lostpassword_post' action
+add_action( 'lostpassword_post', 'custom_password_reset_request' );
+
 
 
 /*===============================/*

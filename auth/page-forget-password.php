@@ -78,10 +78,11 @@ get_header(); ?>
                             <?php
                             // Display the message
                             if ( isset( $_GET['reset'] ) && $_GET['reset'] === 'email_sent' ) {
-                                echo '<p class="reset-message">Please check your email to reset your password.</p>';
+                                echo '<div class="alert alert-danger reset-message"><p>Please check your email to reset your password.</p> </div>';
                             }
                             ?>
                         </form>
+
 
 
                         </div>
