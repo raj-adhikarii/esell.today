@@ -77,28 +77,45 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 /*==================================================== /*
     Server-side validation for forget password page 
 /*====================================================*/
-function custom_reset_password_redirect() {
-    // Check if it is a password reset request
-    if ( isset( $_GET['action'] ) && $_GET['action'] === 'rp' && isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
-        $user_login = $_GET['login'];
-        $reset_key = $_GET['key'];
+// function custom_reset_password_redirect() {
+//     // Check if it is a password reset request
+//     if ( isset( $_GET['action'] ) && $_GET['action'] === 'rp' && isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
+//         $user_login = $_GET['login'];
+//         $reset_key = $_GET['key'];
 
-        // Create the password reset URL
-        $password_reset_url = add_query_arg(
-            array(
-                'action' => 'rp',
-                'login' => $user_login,
-                'key' => $reset_key,
-            ),
-            site_url('/password-reset')
-        );
+//         // Create the password reset URL
+//         $password_reset_url = add_query_arg(
+//             array(
+//                 'action' => 'rp',
+//                 'login' => $user_login,
+//                 'key' => $reset_key,
+//             ),
+//             site_url('/password-reset')
+//         );
 
-        // Redirect to the custom password reset page
-        wp_redirect( $password_reset_url );
+//         // Redirect to the custom password reset page
+//         wp_redirect( $password_reset_url );
+//         exit;
+//     }
+// }
+// add_action( 'login_init', 'custom_reset_password_redirect' );
+
+// Add custom query variable for password reset
+function add_custom_query_var( $vars ) {
+    $vars[] = 'reset';
+    return $vars;
+}
+add_filter( 'query_vars', 'add_custom_query_var' );
+
+// Redirect password reset link to custom password reset page
+function redirect_password_reset_page() {
+    if ( get_query_var( 'reset' ) ) {
+        wp_redirect( home_url( '/password-reset/' ) );
         exit;
     }
 }
-add_action( 'login_init', 'custom_reset_password_redirect' );
+add_action( 'template_redirect', 'redirect_password_reset_page' );
+
 
 
 /*===============================/*
