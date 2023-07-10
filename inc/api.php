@@ -127,6 +127,23 @@ function custom_user_registration($request) {
 //     return rest_ensure_response( $formatted_products );
 // }
 
+
+
+
+
+
+
+
+
+add_action('rest_api_init', 'register_password_reset_endpoint');
+function register_password_reset_endpoint() {
+    register_rest_route('esell/v1', '/password-reset', array(
+        'methods' => 'POST',
+        'callback' => 'handle_password_reset_request',
+    ));
+}
+
+// Handle password reset request
 function handle_password_reset_request(WP_REST_Request $request) {
     $email = sanitize_email($request->get_param('email'));
 
@@ -153,6 +170,35 @@ function handle_password_reset_request(WP_REST_Request $request) {
         'message' => 'Password reset link sent successfully. Please check your email to reset your password.',
     );
 }
+
+function get_products_by_user( $request ) {
+    $user_id = $request['user_id'];
+
+    $args = array(
+        'status'     => 'publish',
+        'author'     => $user_id,
+        'paginate'   => true,
+        'per_page'   => 10, // Adjust the number of products per page as needed
+    );
+
+    $products = wc_get_products( $args );
+
+    // Process and format the products as desired
+    $formatted_products = array();
+    foreach ( $products as $product ) {
+        // Extract relevant product data
+        $formatted_product = array(
+            'id'   => $product->get_id(),
+            'name' => $product->get_name(),
+            // Add more desired fields
+        );
+
+        $formatted_products[] = $formatted_product;
+    }
+
+    return rest_ensure_response( $formatted_products );
+}
+
 
 
 /*============================/*
