@@ -76,40 +76,6 @@ get_header(); ?>
                             <?php wp_nonce_field( 'lost_password', 'woocommerce-lost-password-nonce' ); ?>
                         </form>
 
-                        <div id="reset-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-                            <div class="toast-body">
-                                Please check your email to reset your password.
-                            </div>
-                        </div>
-
-                        <script>
-                            jQuery(document).ready(function($) {
-                                $('#reset-password-form').on('submit', function(e) {
-                                e.preventDefault();
-                                // Submit the form via AJAX
-                                $.ajax({
-                                    url: $(this).attr('action'),
-                                    method: $(this).attr('method'),
-                                    data: $(this).serialize(),
-                                    beforeSend: function() {
-                                    // Show the toast
-                                    $('#reset-toast').toast('show');
-                                    },
-                                    success: function(response) {
-                                    // Form submission success callback
-                                    echo 'success';
-                                    // Handle the response or redirect if necessary
-                                    },
-                                    error: function(xhr, textStatus, errorThrown) {
-                                    // Form submission error callback
-                                    echo 'failed';
-                                    // Handle the error or display an error toast
-                                    }
-                                });
-                                });
-                            });
-                        </script>
-
                         </div>
                         <?php
 
