@@ -56,13 +56,13 @@
                             
                             <div class="form-group">
                                 <label>New Password</label>
-                                <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
+                                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
                                 <i class="far fa-lock"></i>
                             </div>
 
                             <div class="form-group">
                                 <label>Confirm Password</label>
-                                <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
+                                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
                                 <i class="far fa-lock"></i>
                             </div>
 
