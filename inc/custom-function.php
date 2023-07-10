@@ -99,49 +99,53 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 //     }
 // }
 
-if ( ! function_exists( 'custom_password_reset_request' ) ) {
-    // Handle custom password reset request
-    function custom_password_reset_request() {
-        if ( isset( $_POST['wc_reset_password'] ) && $_POST['wc_reset_password'] === 'true' ) {
-            $email = sanitize_email( $_POST['user_login'] );
+// Handle custom password reset request
+function custom_password_reset_request() {
+    if ( isset( $_POST['wc_reset_password'] ) && $_POST['wc_reset_password'] === 'true' ) {
+        $email = sanitize_email( $_POST['user_login'] );
 
-            // Get user by email
-            $user = get_user_by( 'email', $email );
+        // Get user by email
+        $user = get_user_by( 'email', $email );
 
-            if ( ! $user ) {
-                // Handle invalid email address
-                wc_add_notice( 'Invalid email address.', 'error' );
-                return;
-            }
+        if ( ! $user ) {
+            // Handle invalid email address
+            wc_add_notice( 'Invalid email address.', 'error' );
+            return;
+        }
 
-            // Generate a unique key for password reset
-            $reset_key = wp_generate_password( 20, false );
+        // Generate a unique key for password reset
+        $reset_key = wp_generate_password( 20, false );
 
-            // Save the reset key in user meta
-            update_user_meta( $user->ID, 'reset_key', $reset_key );
+        // Save the reset key in user meta
+        update_user_meta( $user->ID, 'reset_key', $reset_key );
 
-            // Create the password reset URL
-            $reset_url = add_query_arg(
-                array(
-                    'key'  => $reset_key,
-                    'login' => $user->user_login,
-                ),
-                site_url( '/password-reset/' )
-            );
+        // Create the password reset URL
+        $reset_url = add_query_arg(
+            array(
+                'key'  => $reset_key,
+                'login' => $user->user_login,
+            ),
+            site_url( '/password-reset/' )
+        );
 
-            // Send the password reset email with the reset URL
-            $subject = 'Password Reset';
-            $message = 'Please click the following link to reset your password: ' . $reset_url;
-            $headers = 'Content-Type: text/html; charset=UTF-8';
-            $sent    = wp_mail( $email, $subject, $message, $headers );
+        // Send the password reset email with the reset URL
+        $subject = 'Password Reset';
+        $message = 'Please click the following link to reset your password: ' . $reset_url;
+        $headers = 'Content-Type: text/html; charset=UTF-8';
+        $sent    = wp_mail( $email, $subject, $message, $headers );
 
-            if ( $sent ) {
-                // Display success message
-                wc_add_notice( 'Please check your email to reset your password.', 'success' );
-            } else {
-                // Handle password reset email sending failure
-                wc_add_notice( 'Failed to send the password reset email.', 'error' );
-            }
+        if ( $sent ) {
+            // Display success message
+            wc_add_notice( 'Please check your email to reset your password.', 'success' );
+            // Redirect to the password reset page
+            wp_redirect( home_url( '/password-reset' ) );
+            exit;
+        } else {
+            // Handle password reset email sending failure
+            wc_add_notice( 'Failed to send the password reset email.', 'error' );
+            // Redirect to the password reset page
+            wp_redirect( home_url( '/password-reset' ) );
+            exit;
         }
     }
 }
@@ -151,27 +155,6 @@ if ( ! has_action( 'lostpassword_post', 'custom_password_reset_request' ) ) {
     // Hook the function to the 'lostpassword_post' action
     add_action( 'lostpassword_post', 'custom_password_reset_request' );
 }
-
-// Redirect to password reset page when clicking the link in the email
-function custom_password_reset_redirect() {
-    // Check if it is a password reset request
-    if ( isset( $_GET['action'] ) && $_GET['action'] === 'rp' && isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
-        $user_login = $_GET['login'];
-        $reset_key  = $_GET['key'];
-
-        // Redirect to the custom password reset page
-        wp_redirect( home_url( '/password-reset/?login=' . $user_login . '&key=' . $reset_key ) );
-        exit;
-    }
-}
-add_action( 'init', 'custom_password_reset_redirect' );
-
-// Display custom messages on the password reset form
-function custom_password_reset_messages() {
-    wc_print_notices();
-}
-add_action( 'woocommerce_before_lost_password_form', 'custom_password_reset_messages' );
-
 
 /*===============================/*
  	Update product views count

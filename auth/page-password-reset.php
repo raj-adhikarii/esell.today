@@ -51,7 +51,6 @@
                             <p>Reset your account password</p>
                         </div>
 
-                        <?php wc_print_notices(); ?>
                         <form class="" method="POST">
                             
                             <div class="form-group">
@@ -75,16 +74,9 @@
                                 <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e( 'Reset Password', 'woocommerce' ); ?></button>
                             </div>
 
-                            <?php
-                            // Assuming $login_errors is an array containing error messages
-                            if ( ! empty( $login_errors ) ) {
-                                echo '<div class="alert alert-danger mt-3">';
-                                foreach ( $login_errors as $error ) {
-                                    echo esc_html( $error );
-                                }
-                                echo ' </div>';
-                            }
-                            ?>
+                            <div class="alert alert-danger mt-3">
+                            <?php wc_print_notices(); ?>
+                            </div>
                         </form>
  
                     </div>
