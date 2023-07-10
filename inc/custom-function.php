@@ -100,6 +100,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 // }
 
 // Handle custom password reset request
+// Handle custom password reset request
 function custom_password_reset_request() {
     if ( isset( $_POST['wc_reset_password'] ) && $_POST['wc_reset_password'] === 'true' ) {
         $email = sanitize_email( $_POST['user_login'] );
@@ -135,16 +136,12 @@ function custom_password_reset_request() {
         $sent    = wp_mail( $email, $subject, $message, $headers );
 
         if ( $sent ) {
-            // Display success message
-            wc_add_notice( 'Please check your email to reset your password.', 'success' );
-            // Redirect to the password reset page
-            wp_redirect( home_url( '/password-reset' ) );
+            // Redirect to the password reset page with a success message as a query parameter
+            wp_redirect( home_url( '/password-reset/?reset=success' ) );
             exit;
         } else {
-            // Handle password reset email sending failure
-            wc_add_notice( 'Failed to send the password reset email.', 'error' );
-            // Redirect to the password reset page
-            wp_redirect( home_url( '/password-reset' ) );
+            // Redirect to the password reset page with an error message as a query parameter
+            wp_redirect( home_url( '/password-reset/?reset=error' ) );
             exit;
         }
     }
@@ -155,6 +152,7 @@ if ( ! has_action( 'lostpassword_post', 'custom_password_reset_request' ) ) {
     // Hook the function to the 'lostpassword_post' action
     add_action( 'lostpassword_post', 'custom_password_reset_request' );
 }
+
 
 /*===============================/*
  	Update product views count
