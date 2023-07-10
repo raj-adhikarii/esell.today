@@ -127,14 +127,6 @@ function custom_user_registration($request) {
 //     return rest_ensure_response( $formatted_products );
 // }
 
-
-
-
-
-
-
-
-
 add_action('rest_api_init', 'register_password_reset_endpoint');
 function register_password_reset_endpoint() {
     register_rest_route('esell/v1', '/password-reset', array(
@@ -198,8 +190,6 @@ function get_products_by_user( $request ) {
 
     return rest_ensure_response( $formatted_products );
 }
-
-
 
 /*============================/*
    Post product via rest api

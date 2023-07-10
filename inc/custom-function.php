@@ -99,58 +99,63 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 //     }
 // }
 
-// Handle custom password reset request
-// Handle custom password reset request
-function custom_password_reset_request() {
-    if ( isset( $_POST['wc_reset_password'] ) && $_POST['wc_reset_password'] === 'true' ) {
-        $email = sanitize_email( $_POST['user_login'] );
+add_action( 'woocommerce_lostpassword_post', 'custom_handle_password_reset' );
 
-        // Get user by email
-        $user = get_user_by( 'email', $email );
+function custom_handle_password_reset() {
+    $email = sanitize_email( $_POST['user_login'] );
 
-        if ( ! $user ) {
-            // Handle invalid email address
-            wc_add_notice( 'Invalid email address.', 'error' );
-            return;
-        }
+    // Get user by email
+    $user = get_user_by( 'email', $email );
 
-        // Generate a unique key for password reset
-        $reset_key = wp_generate_password( 20, false );
-
-        // Save the reset key in user meta
-        update_user_meta( $user->ID, 'reset_key', $reset_key );
-
-        // Create the password reset URL
-        $reset_url = add_query_arg(
-            array(
-                'key'  => $reset_key,
-                'login' => $user->user_login,
-            ),
-            site_url( '/password-reset/' )
-        );
-
-        // Send the password reset email with the reset URL
-        $subject = 'Password Reset';
-        $message = 'Please click the following link to reset your password: ' . $reset_url;
-        $headers = 'Content-Type: text/html; charset=UTF-8';
-        $sent    = wp_mail( $email, $subject, $message, $headers );
-
-        if ( $sent ) {
-            // Redirect to the password reset page with a success message as a query parameter
-            wp_redirect( home_url( '/password-reset/?reset=success' ) );
-            exit;
-        } else {
-            // Redirect to the password reset page with an error message as a query parameter
-            wp_redirect( home_url( '/password-reset/?reset=error' ) );
-            exit;
-        }
+    if ( ! $user ) {
+        // Handle invalid email address
+        $error_message = 'Invalid email address.';
+        wc_add_notice( $error_message, 'error' );
+        return;
     }
-}
 
-// Check if the function is not already hooked to the 'lostpassword_post' action
-if ( ! has_action( 'lostpassword_post', 'custom_password_reset_request' ) ) {
-    // Hook the function to the 'lostpassword_post' action
-    add_action( 'lostpassword_post', 'custom_password_reset_request' );
+    // Generate a password reset key
+    $reset_key = get_password_reset_key( $user );
+
+    // Generate the password reset link
+    $reset_link = wp_login_url() . '?action=rp&key=' . $reset_key . '&login=' . rawurlencode( $user->user_login );
+
+    // Create the password reset form
+    $reset_form = '
+        <form method="post" class="woocommerce-form woocommerce-form-reset-password" action="' . esc_url( $reset_link ) . '">
+            <div class="form-group">
+                <label for="password_1">' . esc_html__( 'New Password', 'woocommerce' ) . '</label>
+                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="password_1" id="password_1" placeholder="' . esc_attr__( 'New Password', 'woocommerce' ) . '" />
+            </div>
+            <div class="form-group">
+                <label for="password_2">' . esc_html__( 'Confirm Password', 'woocommerce' ) . '</label>
+                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="password_2" id="password_2" placeholder="' . esc_attr__( 'Confirm Password', 'woocommerce' ) . '" />
+            </div>
+            <div class="d-flex align-items-center">
+                <input type="hidden" name="wc_reset_password" value="true" />
+                <input type="hidden" name="rp_key" value="' . esc_attr( $reset_key ) . '" />
+                <input type="hidden" name="rp_login" value="' . esc_attr( $user->user_login ) . '" />
+                <button type="submit" class="theme-btn" value="' . esc_attr__( 'Reset Password', 'woocommerce' ) . '"><i class="far fa-key"></i> ' . esc_html__( 'Reset Password', 'woocommerce' ) . '</button>
+            </div>
+            ' . wp_nonce_field( 'reset_password', 'woocommerce-reset-password-nonce', true, false ) . '
+        </form>
+    ';
+
+    // Send password reset form in email
+    $subject  = 'Password Reset';
+    $message  = 'Please reset your password using the following form: <br>' . $reset_form;
+    $headers  = 'Content-Type: text/html; charset=UTF-8';
+    $sent     = wp_mail( $user->user_email, $subject, $message, $headers );
+
+    if ( $sent ) {
+        // Display success message
+        $success_message = 'Please check your email to reset your password.';
+        wc_add_notice( $success_message, 'success' );
+    } else {
+        // Handle password reset email sending failure
+        $error_message = 'Failed to send the password reset email.';
+        wc_add_notice( $error_message, 'error' );
+    }
 }
 
 
