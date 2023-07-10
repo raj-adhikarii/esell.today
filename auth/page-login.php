@@ -60,13 +60,24 @@ get_header(); ?>
                                 <button type="submit" class="theme-btn" name="login" value="<?php esc_attr_e('Log in', 'woocommerce'); ?>"><i class="far fa-sign-in"></i> Sign In</button>
                             </div>
                             <?php do_action('woocommerce_login_form_end'); ?>
-                            <div class="alert alert-danger mt-3"></div>
+
+                            <?php
+                            // Assuming $login_errors is an array containing error messages
+                            if ( ! empty( $login_errors ) ) {
+                                echo '<div class="alert alert-danger mt-3">';
+                                foreach ( $login_errors as $error ) {
+                                    echo esc_html( $error );
+                                }
+                                echo ' </div>';
+                            }
+                            ?>
                         </form>
+
 
                         <?php
                         // Redirect user to dashboard after login
                         function custom_login_redirect($redirect, $user) {
-                            $dashboard_url = home_url('/dashboard/'); // Replace with your desired dashboard URL
+                            $dashboard_url = home_url('/profile/'); // Replace with your desired dashboard URL
                             return $dashboard_url;
                         }
                         add_filter('woocommerce_login_redirect', 'custom_login_redirect', 10, 2);
