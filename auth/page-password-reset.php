@@ -26,31 +26,71 @@
      }
  }
  ?>
+
+<main class="main">
+    <!-- breadcrumb -->
+    <?php if(has_post_thumbnail($post ->ID)):
+            $image = wp_get_attachment_image_src(get_post_thumbnail_id($post -> ID), 'single-post-thumbnail'); ?>
+        <div class="site-breadcrumb" style="background: url(<?php echo $image[0]; ?>)">
+            <div class="container">
+                <h2 class="breadcrumb-title"><?php echo get_the_title(); ?></h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="<?php echo site_url(); ?>">Home</a></li>
+                    <li class="active"><?php echo get_the_title(); ?></li>
+                </ul>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div class="login-area py-120">
+            <div class="container">
+                <div class="col-md-5 mx-auto">
+                    <div class="login-form">
+                        <div class="login-header">
+                            <img src="<?php echo esc_url(get_theme_file_uri('assets/img/logo/logo.png')); ?>" alt="<?php _e('Asset description'); ?>">
+                            <p>Reset your account password</p>
+                        </div>
+
+                        <?php wc_print_notices(); ?>
+                        <form class="" method="POST">
+                            
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
+                                <i class="far fa-lock"></i>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
+                                <i class="far fa-lock"></i>
+                            </div>
+
+                            <input type="hidden" name="reset_submit" value="true" />
+                            <?php wp_nonce_field( 'reset_password', 'reset_password_nonce' ); ?>
+                            
+                            <div class="d-flex align-items-center">
+                                <input type="hidden" name="action" value="custom_login_authentication">
+                                <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
+                                <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e( 'Reset Password', 'woocommerce' ); ?></button>
+                            </div>
+
+                            <?php
+                            // Assuming $login_errors is an array containing error messages
+                            if ( ! empty( $login_errors ) ) {
+                                echo '<div class="alert alert-danger mt-3">';
+                                foreach ( $login_errors as $error ) {
+                                    echo esc_html( $error );
+                                }
+                                echo ' </div>';
+                            }
+                            ?>
+                        </form>
  
- <div id="primary" class="content-area">
-     <main id="main" class="site-main">
- 
-         <div class="woocommerce">
-             <?php wc_print_notices(); ?>
- 
-             <form method="post" class="woocommerce-form woocommerce-form-reset-password">
-                 <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                     <label for="new_password"><?php esc_html_e( 'New Password', 'woocommerce' ); ?><span class="required">*</span></label>
-                     <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
-                 </p>
-                 <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                     <label for="confirm_password"><?php esc_html_e( 'Confirm Password', 'woocommerce' ); ?><span class="required">*</span></label>
-                     <input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
-                 </p>
-                 <input type="hidden" name="reset_submit" value="true" />
-                 <?php wp_nonce_field( 'reset_password', 'reset_password_nonce' ); ?>
-                 <p class="form-row">
-                     <button type="submit" class="woocommerce-Button button" name="reset_submit"><?php esc_html_e( 'Reset Password', 'woocommerce' ); ?></button>
-                 </p>
-             </form>
-         </div>
- 
-     </main><!-- #main -->
- </div><!-- #primary -->
- 
+                    </div>
+                </div>
+            </div>
+        </div>
+</main><!-- #main -->
+
  <?php get_footer(); ?>
