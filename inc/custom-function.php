@@ -118,15 +118,8 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
             // Generate a password reset key
             $reset_key = get_password_reset_key( $user );
 
-            // Generate the password reset link
-            $reset_url = '<a href="' . esc_url( add_query_arg(
-                array(
-                    'action' => 'rp',
-                    'key'    => $reset_key,
-                    'login'  => rawurlencode( $user->user_login ),
-                ),
-                wp_login_url()
-            ) ) . '">Reset Password</a>';
+            // Create the password reset URL
+            $reset_url = home_url( '/password-reset/?action=rp&key=' . $reset_key . '&login=' . rawurlencode( $user->user_login ) );
 
             // Send password reset notification
             $subject = 'Password Reset';
