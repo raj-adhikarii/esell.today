@@ -90,15 +90,16 @@ function custom_reset_password_redirect() {
                 'login' => $user_login,
                 'key' => $reset_key,
             ),
-            site_url('password-reset')
+            site_url('/password-reset')
         );
 
         // Redirect to the custom password reset page
-        wp_safe_redirect( $password_reset_url );
+        wp_redirect( $password_reset_url );
         exit;
     }
 }
 add_action( 'login_init', 'custom_reset_password_redirect' );
+
 
 /*===============================/*
  	Update product views count
