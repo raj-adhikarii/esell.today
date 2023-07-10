@@ -115,36 +115,27 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
                 return;
             }
 
-            // Generate a unique key for password reset
-            $reset_key = wp_generate_password( 20, false );
+            // Generate a password reset key
+            $reset_key = get_password_reset_key( $user );
 
-            // Save the reset key in user meta
-            update_user_meta( $user->ID, 'reset_key', $reset_key );
-
-            // Create the password reset URL
-            $reset_url = add_query_arg(
+            // Generate the password reset link
+            $reset_url = '<a href="' . esc_url( add_query_arg(
                 array(
-                    'key'  => $reset_key,
-                    'user' => $user->ID,
+                    'action' => 'rp',
+                    'key'    => $reset_key,
+                    'login'  => rawurlencode( $user->user_login ),
                 ),
-                wp_lostpassword_url()
-            );
+                wp_login_url()
+            ) ) . '">Reset Password</a>';
 
-            // Send the password reset email with the reset URL
+            // Send password reset notification
             $subject = 'Password Reset';
-            $message = 'Please click the following link to reset your password: ' . $reset_url;
-            $headers = 'Content-Type: text/html; charset=UTF-8';
-            $sent    = wp_mail( $email, $subject, $message, $headers );
+            $message = 'Please click on the following link to reset your password: ' . $reset_url;
+            wp_mail( $user->user_email, $subject, $message );
 
-            if ( $sent ) {
-                // Display success message
-                wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/password-reset' ) ) );
-                exit;
-            } else {
-                // Handle password reset email sending failure
-                $error_message = 'Failed to send the password reset email.';
-                wc_add_notice( $error_message, 'error' );
-            }
+            // Display success message
+            wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/password-reset' ) ) );
+            exit;
         }
     }
 }

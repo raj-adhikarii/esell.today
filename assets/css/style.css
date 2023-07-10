@@ -2042,6 +2042,12 @@ Auth page css
   border: 2px solid #f69520;
 }
 
+.alert .woocommerce-error{
+  margin: 0;
+  color: #515151;
+  border-top: none;
+}
+
 /* ===================
 ACF map 
 ====================== */
