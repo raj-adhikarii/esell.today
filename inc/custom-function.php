@@ -148,12 +148,11 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
     }
 }
 
-// Check if the function is not already hooked to the 'template_redirect' action
-if ( ! has_action( 'template_redirect', 'custom_password_reset_request' ) ) {
-    // Hook the function to the 'template_redirect' action
-    add_action( 'template_redirect', 'custom_password_reset_request' );
+// Check if the function is not already hooked to the 'lostpassword_post' action
+if ( ! has_action( 'lostpassword_post', 'custom_password_reset_request' ) ) {
+    // Hook the function to the 'lostpassword_post' action
+    add_action( 'lostpassword_post', 'custom_password_reset_request' );
 }
-
 
 /*===============================/*
  	Update product views count
