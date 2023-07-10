@@ -110,8 +110,9 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
 
             if ( ! $user ) {
                 // Handle invalid email address
-                wp_redirect( home_url( '/password-reset?reset=invalid_email' ) );
-                exit;
+                $error_message = 'Invalid email address.';
+                set_transient( 'password_reset_error_message', $error_message, 10 );
+                return;
             }
 
             // Generate a unique key for password reset
@@ -139,14 +140,10 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
                 // Display success message
                 $success_message = 'Please check your email to reset your password.';
                 set_transient( 'password_reset_success_message', $success_message, 10 );
-
-                // Redirect to current page
-                wp_redirect( home_url( add_query_arg( 'reset', 'email_sent' ) ) );
-                exit;
             } else {
                 // Handle password reset email sending failure
-                wp_redirect( home_url( add_query_arg( 'reset', 'email_failed' ) ) );
-                exit;
+                $error_message = 'Failed to send the password reset email.';
+                set_transient( 'password_reset_error_message', $error_message, 10 );
             }
         }
     }
@@ -157,6 +154,20 @@ if ( ! has_action( 'lostpassword_post', 'custom_password_reset_request' ) ) {
     // Hook the function to the 'lostpassword_post' action
     add_action( 'lostpassword_post', 'custom_password_reset_request' );
 }
+
+// Display custom messages on the page
+function custom_password_reset_messages() {
+    if ( $success_message = get_transient( 'password_reset_success_message' ) ) {
+        echo '<div class="woocommerce-message">' . esc_html( $success_message ) . '</div>';
+        delete_transient( 'password_reset_success_message' );
+    }
+
+    if ( $error_message = get_transient( 'password_reset_error_message' ) ) {
+        echo '<div class="woocommerce-error">' . esc_html( $error_message ) . '</div>';
+        delete_transient( 'password_reset_error_message' );
+    }
+}
+add_action( 'woocommerce_before_lost_password_form', 'custom_password_reset_messages' );
 
 // Redirect to password reset page when clicking the link in the email
 function custom_password_reset_redirect() {
@@ -171,7 +182,6 @@ function custom_password_reset_redirect() {
     }
 }
 add_action( 'init', 'custom_password_reset_redirect' );
-
 
 /*===============================/*
  	Update product views count
