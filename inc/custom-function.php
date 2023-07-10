@@ -110,8 +110,7 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
 
             if ( ! $user ) {
                 // Handle invalid email address
-                $error_message = 'Invalid email address.';
-                wc_add_notice( $error_message, 'error' );
+                wc_add_notice( 'Invalid email address.', 'error' );
                 return;
             }
 
@@ -125,9 +124,9 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
             $reset_url = add_query_arg(
                 array(
                     'key'  => $reset_key,
-                    'user' => $user->ID,
+                    'login' => $user->user_login,
                 ),
-                wp_lostpassword_url()
+                site_url( '/password-reset/' )
             );
 
             // Send the password reset email with the reset URL
@@ -138,12 +137,10 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
 
             if ( $sent ) {
                 // Display success message
-                $success_message = 'Please check your email to reset your password.';
-                wc_add_notice( $success_message, 'success' );
+                wc_add_notice( 'Please check your email to reset your password.', 'success' );
             } else {
                 // Handle password reset email sending failure
-                $error_message = 'Failed to send the password reset email.';
-                wc_add_notice( $error_message, 'error' );
+                wc_add_notice( 'Failed to send the password reset email.', 'error' );
             }
         }
     }
@@ -168,6 +165,13 @@ function custom_password_reset_redirect() {
     }
 }
 add_action( 'init', 'custom_password_reset_redirect' );
+
+// Display custom messages on the password reset form
+function custom_password_reset_messages() {
+    wc_print_notices();
+}
+add_action( 'woocommerce_before_lost_password_form', 'custom_password_reset_messages' );
+
 
 /*===============================/*
  	Update product views count
