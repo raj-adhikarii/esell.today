@@ -94,12 +94,11 @@ function custom_reset_password_redirect() {
         );
 
         // Redirect to the custom password reset page
-        wp_redirect( $password_reset_url );
+        wp_safe_redirect( $password_reset_url );
         exit;
     }
 }
-add_action( 'init', 'custom_reset_password_redirect' );
-
+add_action( 'login_init', 'custom_reset_password_redirect' );
 
 /*===============================/*
  	Update product views count
@@ -168,7 +167,7 @@ add_action('acf/init', 'my_acf_init');
 	redirect annomous user to login page 
 /*========================================*/
 function redirect_unlogged_users() {
-    $restricted_pages = array( 'dashboard', 'my-ads', 'post-ad', 'profile-setting', 'profile-setting', 'profile' );
+    $restricted_pages = array( 'dashboard', 'my-ads', 'post-ad', 'profile-setting', 'profile-setting', 'profile', 'password-reset' );
 
     if ( ! is_user_logged_in() && in_array( get_post_field( 'post_name' ), $restricted_pages ) ) {
         wp_redirect( site_url( '/login/' ) );
