@@ -40,42 +40,23 @@ get_header(); ?>
 
                         ?>
                         <div class="woocommerce">
-                        <!-- <form method="post" class="woocommerce-form woocommerce-form-reset-password" action="<?php echo esc_url( wp_lostpassword_url() ); ?>">
-                            <div class="form-group">
-                                <label for="user_login"><?php esc_html_e( 'Email Address', 'woocommerce' ); ?></label>
-                                <input type="email" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="user_login" id="user_login" placeholder="<?php esc_attr_e( 'Your Email', 'woocommerce' ); ?>" />
-                                <i class="far fa-envelope"></i>
-                            </div>
+                            <form method="post" class="woocommerce-form woocommerce-form-reset-password" action="<?php echo esc_url( wp_lostpassword_url() ); ?>">
+                                <div class="form-group">
+                                    <label for="user_login"><?php esc_html_e( 'Email Address', 'woocommerce' ); ?></label>
+                                    <input type="email" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="user_login" id="user_login" placeholder="<?php esc_attr_e( 'Your Email', 'woocommerce' ); ?>" />
+                                    <i class="far fa-envelope"></i>
+                                </div>
 
-                            <?php do_action( 'woocommerce_lostpassword_form' ); ?>
+                                <?php do_action( 'woocommerce_lostpassword_form' ); ?>
 
-                            <div class="d-flex align-items-center">
-                                <input type="hidden" name="wc_reset_password" value="true" />
-                                <input type="hidden" name="redirect_to" value="<?php echo esc_url( home_url( '/password-reset' ) ); ?>" />
-                                <button type="submit" class="theme-btn" value="<?php esc_attr_e( 'Send Reset Link', 'woocommerce' ); ?>"><i class="far fa-key"></i> <?php esc_html_e( 'Send Reset Link', 'woocommerce' ); ?></button>
-                            </div>
+                                <div class="d-flex align-items-center">
+                                    <input type="hidden" name="wc_reset_password" value="true" />
+                                    <input type="hidden" name="redirect_to" value="<?php echo esc_url( home_url( '/password-reset' ) ); ?>" />
+                                    <button type="submit" class="theme-btn" value="<?php esc_attr_e( 'Send Reset Link', 'woocommerce' ); ?>"><i class="far fa-key"></i> <?php esc_html_e( 'Send Reset Link', 'woocommerce' ); ?></button>
+                                </div>
 
-                            <?php wp_nonce_field( 'lost_password', 'woocommerce-lost-password-nonce' ); ?>
-                        </form> -->
-
-                        <form method="post" class="woocommerce-form woocommerce-form-reset-password" action="<?php echo esc_url( wp_lostpassword_url() ); ?>">
-                            <div class="form-group">
-                                <label for="user_login"><?php esc_html_e( 'Email Address', 'woocommerce' ); ?></label>
-                                <input type="email" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="user_login" id="user_login" placeholder="<?php esc_attr_e( 'Your Email', 'woocommerce' ); ?>" />
-                                <i class="far fa-envelope"></i>
-                            </div>
-
-                            <?php do_action( 'woocommerce_lostpassword_form' ); ?>
-
-                            <div class="d-flex align-items-center">
-                                <input type="hidden" name="wc_reset_password" value="true" />
-                                <input type="hidden" name="redirect_to" value="<?php echo esc_url( home_url( '/password-reset' ) ); ?>" />
-                                <button type="submit" class="theme-btn" value="<?php esc_attr_e( 'Send Reset Link', 'woocommerce' ); ?>"><i class="far fa-key"></i> <?php esc_html_e( 'Send Reset Link', 'woocommerce' ); ?></button>
-                            </div>
-
-                            <?php wp_nonce_field( 'lost_password', 'woocommerce-lost-password-nonce' ); ?>
-                        </form>
-
+                                <?php wp_nonce_field( 'lost_password', 'woocommerce-lost-password-nonce' ); ?>
+                            </form>
                         </div>
                         <?php
 
