@@ -784,6 +784,7 @@ function create_product_image($request) {
 
     $attachment_ids = array();
 
+    var_dump($uploaded_files);
     // Loop through each uploaded file
     foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
         // Validate and save the uploaded file to the WordPress uploads directory
@@ -959,4 +960,79 @@ add_action('rest_api_init', function () {
         'callback' => 'get_product_with_user_id',
     ));
 });
+
+
+/*============================================/*
+    User avatars using local avetars plugin
+
+    @see https://staging.e-sell.today/wp-jso/user/v1/avatars/5
+/*============================================*/
+
+// Register custom REST routes for managing avatars
+function register_avatar_routes() {
+    // Get avatar by user ID
+    register_rest_route('user/v1', '/avatars/(?P<user_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_user_avatar',
+        'permission_callback' => '__return_true', // Allow public access
+    ));
+
+    // Update avatar for a user
+    register_rest_route('user/v1', '/avatars/(?P<user_id>\d+)', array(
+        'methods' => 'POST',
+        'callback' => 'update_user_avatar',
+        'permission_callback' => 'is_user_logged_in', // Allow only logged-in users
+    ));
+
+    // Delete avatar for a user
+    register_rest_route('user/v1', '/avatars/(?P<user_id>\d+)', array(
+        'methods' => 'DELETE',
+        'callback' => 'delete_user_avatar',
+        'permission_callback' => 'is_user_logged_in', // Allow only logged-in users
+    ));
+}
+add_action('rest_api_init', 'register_avatar_routes');
+
+// Get avatar for a user
+function get_user_avatar($request) {
+    $user_id = $request->get_param('user_id');
+    $avatar_url = get_avatar_url($user_id);
+    
+    return rest_ensure_response(array('avatar_url' => $avatar_url));
+}
+
+// Update avatar for a user
+function update_user_avatar($request) {
+    $user_id = $request->get_param('user_id');
+
+    // Process the uploaded avatar image
+    $uploaded_file = $_FILES['avatar'];
+
+    // Validate and save the uploaded file to the WordPress uploads directory
+    $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
+
+    if (isset($upload_file['file'])) {
+        // Update user avatar using the Simple Local Avatars plugin
+        $avatar_data = array(
+            'wp_user_avatar' => $upload_file['file'],
+        );
+        update_user_meta($user_id, 'simple_local_avatar', $avatar_data);
+        
+        return rest_ensure_response(array('success' => true, 'message' => 'Avatar updated successfully.'));
+    } else {
+        $error_message = $upload_file['error'];
+        return new WP_Error('avatar_upload_error', $error_message);
+    }
+}
+
+// Delete avatar for a user
+function delete_user_avatar($request) {
+    $user_id = $request->get_param('user_id');
+    
+    // Delete user avatar using the Simple Local Avatars plugin
+    delete_user_meta($user_id, 'simple_local_avatar');
+    
+    return rest_ensure_response(array('success' => true, 'message' => 'Avatar deleted successfully.'));
+}
+
 
