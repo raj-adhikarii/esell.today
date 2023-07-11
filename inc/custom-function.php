@@ -106,7 +106,10 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
             wp_mail( $user->user_email, $subject, $message );
 
             // Display success message
-            wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/' ) ) );
+            // wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/' ) ) );
+            echo '<div class="alert alert-success">';
+                echo '<pre> Please check your email to reset password.</pre>';
+            echo '</div>';
             exit;
         }
     }
