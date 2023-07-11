@@ -76,7 +76,7 @@
  
                         </form>
                         <?php wc_print_notices(); ?>
- 
+                        <a href="<?php echo site_url(); ?>/login/" class="theme-border-btn text-white">Click Here to Login <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
