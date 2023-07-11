@@ -784,18 +784,15 @@ function create_product_image($request) {
 
     $attachment_ids = array();
 
-    // Check if multiple images are uploaded
-    $is_multiple_images = is_array($uploaded_files['tmp_name']);
-
     // Loop through each uploaded file
     foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
         // Validate and save the uploaded file to the WordPress uploads directory
         $uploaded_file = array(
-            'name'     => $is_multiple_images ? $uploaded_files['name'][$key] : $uploaded_files['name'],
-            'type'     => $is_multiple_images ? $uploaded_files['type'][$key] : $uploaded_files['type'],
-            'tmp_name' => $is_multiple_images ? $tmp_name : $uploaded_files['tmp_name'],
-            'error'    => $is_multiple_images ? $uploaded_files['error'][$key] : $uploaded_files['error'],
-            'size'     => $is_multiple_images ? $uploaded_files['size'][$key] : $uploaded_files['size']
+            'name'     => $uploaded_files['name'][$key],
+            'type'     => $uploaded_files['type'][$key],
+            'tmp_name' => $tmp_name,
+            'error'    => $uploaded_files['error'][$key],
+            'size'     => $uploaded_files['size'][$key]
         );
 
         $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
@@ -814,26 +811,22 @@ function create_product_image($request) {
         }
     }
 
-    // Set the first uploaded image as the featured image if it's a single image
+    // Set the first uploaded image as the featured image
     if (!empty($attachment_ids)) {
-        if (!$is_multiple_images) {
-            set_post_thumbnail($product_id, $attachment_ids[0]);
-        } else {
-            // Add all uploaded images to the product gallery
-            $product = wc_get_product($product_id);
-            foreach ($attachment_ids as $attachment_id) {
-                $product->add_image($attachment_id);
-            }
-            $product->save();
+        set_post_thumbnail($product_id, $attachment_ids[0]);
+
+        // Add the rest of the uploaded images to the product gallery
+        $product = wc_get_product($product_id);
+        foreach (array_slice($attachment_ids, 1) as $attachment_id) {
+            $product->add_gallery_image($attachment_id);
         }
+        $product->save();
     }
 
     // Return success message
     $success_message = 'Images uploaded and set as the product images successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
-
-// Remaining code is the same
 
 function create_product_image_attachment($file_path) {
     $file_name = basename($file_path);
@@ -860,6 +853,7 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
+
 
 
 // new code ended
