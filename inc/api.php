@@ -784,7 +784,6 @@ function create_product_image($request) {
 
     $attachment_ids = array();
 
-    var_dump($uploaded_files);
     // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
@@ -799,6 +798,7 @@ function create_product_image($request) {
             'size'     => $is_multiple_images ? $uploaded_files['size'][$key] : $uploaded_files['size']
         );
 
+        // Validate and save the uploaded file to the WordPress uploads directory
         $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
         if (isset($upload_file['file'])) {
@@ -814,6 +814,8 @@ function create_product_image($request) {
             return new WP_Error('image_upload_error', $error_message);
         }
     }
+
+    var_dump($upload_file);
 
     // Set the first uploaded image as the featured image if it's a single image
     if (!empty($attachment_ids)) {
@@ -860,6 +862,7 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
+
 // new code end
 
 /*============================================/*

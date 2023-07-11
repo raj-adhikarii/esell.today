@@ -28,7 +28,7 @@
             <div class="error-wrapper">
                 <h2>Email Sent!</h2>
                 <p>Please check your email to reset your account password.</p>
-                <a href="<?php echo site_url(); ?>" class="theme-btn">Go Back Home <i class="far fa-home"></i></a>
+                <a href="<?php echo site_url(); ?>/login/" class="theme-btn">Go Back Login <i class="far fa-user"></i></a>
             </div>
         </div>
     </div>
