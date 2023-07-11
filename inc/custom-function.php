@@ -77,27 +77,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 /*==================================================== /*
     Server-side validation for forget password page 
 /*====================================================*/
-// function custom_reset_password_redirect() {
-//     // Check if it is a password reset request
-//     if ( isset( $_GET['action'] ) && $_GET['action'] === 'rp' && isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
-//         $user_login = $_GET['login'];
-//         $reset_key = $_GET['key'];
-
-//         // Create the password reset URL
-//         $password_reset_url = add_query_arg(
-//             array(
-//                 'action' => 'rp',
-//                 'login' => $user_login,
-//                 'key' => $reset_key,
-//             ),
-//             site_url('/password-reset')
-//         );
-
-//         // Redirect to the custom password reset page
-//         wp_redirect( $password_reset_url );
-//         exit;
-//     }
-// }
 
 if ( ! function_exists( 'custom_password_reset_request' ) ) {
     // Handle custom password reset request
@@ -127,7 +106,7 @@ if ( ! function_exists( 'custom_password_reset_request' ) ) {
             wp_mail( $user->user_email, $subject, $message );
 
             // Display success message
-            wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/password-reset' ) ) );
+            wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/' ) ) );
             exit;
         }
     }
