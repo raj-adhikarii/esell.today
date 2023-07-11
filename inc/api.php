@@ -774,67 +774,35 @@ add_action('rest_api_init', function () {
 function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
-    // Check if the image files exist in the request
-    if (!isset($_FILES['images']['tmp_name'][0]) || empty($_FILES['images']['tmp_name'][0])) {
-        return new WP_Error('image_upload_error', 'Image files are missing.');
+    // Check if the image file exists in the request
+    if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
+        return new WP_Error('image_upload_error', 'Image file is missing.');
     }
 
-    // Process the uploaded image files
-    $uploaded_files = $_FILES['images'];
+    // Process the uploaded image file
+    $uploaded_file = $_FILES['image'];
 
-    $attachment_ids = array();
+    var_dump($uploaded_file); 
+    // Validate and save the uploaded file to the WordPress uploads directory
+    $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
-    var_dump($uploaded_files);
-    // Check if multiple images are uploaded
-    $is_multiple_images = is_array($uploaded_files['tmp_name']);
-
-    // Loop through each uploaded file
-    foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
-        // Validate and save the uploaded file to the WordPress uploads directory
-        $uploaded_file = array(
-            'name'     => $is_multiple_images ? $uploaded_files['name'][$key] : $uploaded_files['name'],
-            'type'     => $is_multiple_images ? $uploaded_files['type'][$key] : $uploaded_files['type'],
-            'tmp_name' => $is_multiple_images ? $tmp_name : $uploaded_files['tmp_name'],
-            'error'    => $is_multiple_images ? $uploaded_files['error'][$key] : $uploaded_files['error'],
-            'size'     => $is_multiple_images ? $uploaded_files['size'][$key] : $uploaded_files['size']
-        );
-
-        $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
-
-        if (isset($upload_file['file'])) {
-            $attachment_id = create_product_image_attachment($upload_file['file']);
-            if (is_wp_error($attachment_id)) {
-                $error_message = $attachment_id->get_error_message();
-                return new WP_Error('image_upload_error', $error_message);
-            }
-
-            $attachment_ids[] = $attachment_id;
-        } else {
-            $error_message = $upload_file['error'];
+    if (isset($upload_file['file'])) {
+        $attachment_id = create_product_image_attachment($upload_file['file']);
+        if (is_wp_error($attachment_id)) {
+            $error_message = $attachment_id->get_error_message();
             return new WP_Error('image_upload_error', $error_message);
         }
-    }
 
-    // Set the first uploaded image as the featured image if it's a single image
-    if (!empty($attachment_ids)) {
-        if (!$is_multiple_images) {
-            set_post_thumbnail($product_id, $attachment_ids[0]);
-            $attachment_ids = array_slice($attachment_ids, 1);
-        }
-
-        // Add the rest of the uploaded images to the product gallery
-        $product = wc_get_product($product_id);
-        foreach ($attachment_ids as $attachment_id) {
-            $product->add_gallery_image($attachment_id);
-        }
-        $product->save();
+        set_post_thumbnail($product_id, $attachment_id);
+    } else {
+        $error_message = $upload_file['error'];
+        return new WP_Error('image_upload_error', $error_message);
     }
 
     // Return success message
-    $success_message = 'Images uploaded and set as the product images successfully.';
+    $success_message = 'Image uploaded and set as the featured image successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
-
 
 function create_product_image_attachment($file_path) {
     $file_name = basename($file_path);
