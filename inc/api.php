@@ -787,12 +787,20 @@ function create_product_image($request) {
     // Set the first uploaded image as the featured image
     if (!empty($attachment_ids)) {
         set_post_thumbnail($product_id, $attachment_ids[0]);
+
+        // Add the rest of the uploaded images to the product gallery
+        $product = wc_get_product($product_id);
+        foreach (array_slice($attachment_ids, 1) as $attachment_id) {
+            $product->add_gallery_image($attachment_id);
+        }
+        $product->save();
     }
 
     // Return success message
     $success_message = 'Images uploaded and set as the product images successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
+
 // new code ended
 
 function create_product_image_attachment($file_path) {
