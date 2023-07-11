@@ -741,6 +741,33 @@ add_action('rest_api_init', function () {
 //     // Return success message
 //     $success_message = 'Image uploaded and set as the featured image successfully.';
 //     return rest_ensure_response(array('success' => true, 'message' => $success_message));
+
+// function create_product_image_attachment($file_path) {
+//     $file_name = basename($file_path);
+
+//     $attachment = array(
+//         'post_mime_type' => wp_check_filetype($file_name)['type'],
+//         'post_title' => preg_replace('/\.[^.]+$/', '', $file_name),
+//         'post_content' => '',
+//         'post_status' => 'inherit'
+//     );
+
+//     $attachment_id = wp_insert_attachment($attachment, $file_path);
+//     require_once(ABSPATH . 'wp-admin/includes/image.php');
+//     $attachment_data = wp_generate_attachment_metadata($attachment_id, $file_path);
+//     wp_update_attachment_metadata($attachment_id, $attachment_data);
+
+//     return $attachment_id;
+// }
+
+// add_action('rest_api_init', function () {
+//     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
+//         'methods' => 'POST',
+//         'callback' => 'create_product_image',
+//         'permission_callback' => '__return_true', // Allow public access
+//     ));
+// });
+
 // }
 
 // new code 
@@ -791,15 +818,14 @@ function create_product_image($request) {
     if (!empty($attachment_ids)) {
         if (!$is_multiple_images) {
             set_post_thumbnail($product_id, $attachment_ids[0]);
-            $attachment_ids = array_slice($attachment_ids, 1);
+        } else {
+            // Add all uploaded images to the product gallery
+            $product = wc_get_product($product_id);
+            foreach ($attachment_ids as $attachment_id) {
+                $product->add_image($attachment_id);
+            }
+            $product->save();
         }
-
-        // Add the rest of the uploaded images to the product gallery
-        $product = wc_get_product($product_id);
-        foreach ($attachment_ids as $attachment_id) {
-            $product->add_gallery_image($attachment_id);
-        }
-        $product->save();
     }
 
     // Return success message
@@ -807,7 +833,7 @@ function create_product_image($request) {
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
 
-// new code ended
+// Remaining code is the same
 
 function create_product_image_attachment($file_path) {
     $file_name = basename($file_path);
@@ -834,6 +860,35 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
+
+
+// new code ended
+
+// function create_product_image_attachment($file_path) {
+//     $file_name = basename($file_path);
+
+//     $attachment = array(
+//         'post_mime_type' => wp_check_filetype($file_name)['type'],
+//         'post_title' => preg_replace('/\.[^.]+$/', '', $file_name),
+//         'post_content' => '',
+//         'post_status' => 'inherit'
+//     );
+
+//     $attachment_id = wp_insert_attachment($attachment, $file_path);
+//     require_once(ABSPATH . 'wp-admin/includes/image.php');
+//     $attachment_data = wp_generate_attachment_metadata($attachment_id, $file_path);
+//     wp_update_attachment_metadata($attachment_id, $attachment_data);
+
+//     return $attachment_id;
+// }
+
+// add_action('rest_api_init', function () {
+//     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
+//         'methods' => 'POST',
+//         'callback' => 'create_product_image',
+//         'permission_callback' => '__return_true', // Allow public access
+//     ));
+// });
 
 
 
