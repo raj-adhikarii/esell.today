@@ -78,43 +78,85 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     Server-side validation for forget password page 
 /*====================================================*/
 
-if ( ! function_exists( 'custom_password_reset_request' ) ) {
+// if ( ! function_exists( 'custom_password_reset_request' ) ) {
+//     // Handle custom password reset request
+//     function custom_password_reset_request() {
+//         if ( isset( $_POST['wc_reset_password'] ) && $_POST['wc_reset_password'] === 'true' ) {
+//             $email = sanitize_email( $_POST['user_login'] );
+
+//             // Get user by email
+//             $user = get_user_by( 'email', $email );
+
+//             if ( ! $user ) {
+//                 // Handle invalid email address
+//                 $error_message = 'Invalid email address.';
+//                 wc_add_notice( $error_message, 'error' );
+//                 return;
+//             }
+
+//             // Generate a password reset key
+//             $reset_key = get_password_reset_key( $user );
+
+//             // Create the password reset URL
+//             $reset_url = home_url( '/password-reset/?action=rp&key=' . $reset_key . '&login=' . rawurlencode( $user->user_login ) );
+
+//             // Send password reset notification
+//             $subject = 'Password Reset';
+//             $message = 'Please click on the following link to reset your password: ' . $reset_url;
+//             wp_mail( $user->user_email, $subject, $message );
+
+//             // Display success message
+//             // wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/' ) ) );
+//             echo '<div class="alert alert-success">';
+//                 echo '<pre> Please check your email to reset password.</pre>';
+//             echo '</div>';
+//             exit;
+//         }
+//     }
+// }
+
+if (!function_exists('custom_password_reset_request')) {
     // Handle custom password reset request
-    function custom_password_reset_request() {
-        if ( isset( $_POST['wc_reset_password'] ) && $_POST['wc_reset_password'] === 'true' ) {
-            $email = sanitize_email( $_POST['user_login'] );
+    function custom_password_reset_request()
+    {
+        if (isset($_POST['wc_reset_password']) && $_POST['wc_reset_password'] === 'true') {
+            $email = sanitize_email($_POST['user_login']);
 
             // Get user by email
-            $user = get_user_by( 'email', $email );
+            $user = get_user_by('email', $email);
 
-            if ( ! $user ) {
+            if (!$user) {
                 // Handle invalid email address
                 $error_message = 'Invalid email address.';
-                wc_add_notice( $error_message, 'error' );
+                wc_add_notice($error_message, 'error');
                 return;
             }
 
             // Generate a password reset key
-            $reset_key = get_password_reset_key( $user );
+            $reset_key = get_password_reset_key($user);
 
             // Create the password reset URL
-            $reset_url = home_url( '/password-reset/?action=rp&key=' . $reset_key . '&login=' . rawurlencode( $user->user_login ) );
+            $reset_url = home_url('/password-reset/?action=rp&key=' . $reset_key . '&login=' . rawurlencode($user->user_login));
 
             // Send password reset notification
             $subject = 'Password Reset';
             $message = 'Please click on the following link to reset your password: ' . $reset_url;
-            wp_mail( $user->user_email, $subject, $message );
+            wp_mail($user->user_email, $subject, $message);
 
             // Display success message
-            // wp_safe_redirect( add_query_arg( 'reset', 'email_sent', home_url( '/' ) ) );
             echo '<div class="alert alert-success">';
-                echo '<pre> Please check your email to reset password.</pre>';
+            echo '<pre> Please check your email to reset the password.</pre>';
             echo '</div>';
+
+            // Hide the form
+            echo '<style>.woocommerce-form-reset-password { display: none; }</style>';
+
             exit;
         }
     }
 }
 
+// add_action('init', 'custom_password_reset_request');
 // Hook the function to the 'lostpassword_post' action
 add_action( 'lostpassword_post', 'custom_password_reset_request' );
 
