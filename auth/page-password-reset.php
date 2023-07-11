@@ -73,10 +73,21 @@
                                 <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
                                 <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e( 'Reset Password', 'woocommerce' ); ?></button>
                             </div>
- 
+                            <!-- <?php wc_print_notices(); ?>
+                            <a href="<?php echo site_url(); ?>/login/" class="theme-border-btn">Click Here to Login <i class="fas fa-arrow-right"></i></a> -->
+                          <?php  if (isset($_POST['reset_submit']) && $_POST['reset_submit'] === 'true') {
+        // Handle password reset form submission
+        // ...
+
+        // Display success message
+        echo '<div class="alert alert-success">';
+        echo '<pre> Password reset successfully.</pre>';
+        echo '</div>';
+    }
+    ?>
+    <a href="<?php echo site_url(); ?>/login/" class="theme-border-btn">Click Here to Login <i class="fas fa-arrow-right"></i></a>
                         </form>
-                        <?php wc_print_notices(); ?>
-                        <a href="<?php echo site_url(); ?>/login/" class="theme-border-btn text-white">Click Here to Login <i class="fas fa-arrow-right"></i></a>
+                        
                     </div>
                 </div>
             </div>
