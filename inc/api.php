@@ -811,19 +811,17 @@ function create_product_image($request) {
         }
     }
 
-    var_dump($upload_file); 
     // Set the first uploaded image as the featured image
     if (!empty($attachment_ids)) {
         set_post_thumbnail($product_id, $attachment_ids[0]);
-
-        // Add the rest of the uploaded images to the product gallery
-        $product = wc_get_product($product_id);
-        foreach (array_slice($attachment_ids, 1) as $attachment_id) {
-            $product->add_gallery_image($attachment_id);
-        }
-        $product->save();
     }
-    var_dump($attachment_id);
+
+    // Add the rest of the uploaded images to the product gallery
+    $product = wc_get_product($product_id);
+    foreach ($attachment_ids as $attachment_id) {
+        $product->add_gallery_image($attachment_id);
+    }
+    $product->save();
 
     // Return success message
     $success_message = 'Images uploaded and set as the product images successfully.';
@@ -855,8 +853,6 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
-
-
 
 // new code ended
 
