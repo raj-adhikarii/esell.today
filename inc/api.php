@@ -784,8 +784,6 @@ function create_product_image($request) {
 
     $attachment_ids = array();
 
-    var_dump($uploaded_files);
-    var_dump($attachment_data);
     // Loop through each uploaded file
     foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
         // Validate and save the uploaded file to the WordPress uploads directory
@@ -813,6 +811,7 @@ function create_product_image($request) {
         }
     }
 
+    var_dump($upload_file); 
     // Set the first uploaded image as the featured image
     if (!empty($attachment_ids)) {
         set_post_thumbnail($product_id, $attachment_ids[0]);
@@ -824,6 +823,7 @@ function create_product_image($request) {
         }
         $product->save();
     }
+    var_dump($attachment_id);
 
     // Return success message
     $success_message = 'Images uploaded and set as the product images successfully.';
