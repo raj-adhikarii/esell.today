@@ -51,7 +51,7 @@
                             <p>Reset your account password</p>
                         </div>
 
-                        <form class="" method="POST">
+                        <form class="woocommerce-form-reset-password" method="POST">
                             
                             <div class="form-group">
                                 <label>New Password</label>
