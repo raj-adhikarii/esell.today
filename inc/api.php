@@ -716,11 +716,11 @@ function create_product_image($request) {
     $uploaded_file = $_FILES['image'];
 
     // Validate file type
-    $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
-    $file_type = $uploaded_file['type'];
-    if (!in_array($file_type, $allowed_types)) {
-        return new WP_Error('image_upload_error', 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
-    }
+    // $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
+    // $file_type = $uploaded_file['type'];
+    // if (!in_array($file_type, $allowed_types)) {
+    //     return new WP_Error('image_upload_error', 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
+    // }
 
     // Validate and save the uploaded file to the WordPress uploads directory
     $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
