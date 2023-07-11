@@ -704,44 +704,96 @@ add_action('rest_api_init', function () {
 });
 
 //============================handeling image=========================
+// function create_product_image($request) {
+//     $product_id = $request->get_param('product_id');
+
+//     // Check if the image file exists in the request
+//     if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
+//         return new WP_Error('image_upload_error', 'Image file is missing.');
+//     }
+
+//     // Process the uploaded image file
+//     $uploaded_file = $_FILES['image'];
+
+//     // Validate file type
+//     // $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
+//     // $file_type = $uploaded_file['type'];
+//     // if (!in_array($file_type, $allowed_types)) {
+//     //     return new WP_Error('image_upload_error', 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
+//     // }
+
+//     // Validate and save the uploaded file to the WordPress uploads directory
+//     $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
+
+//     if (isset($upload_file['file'])) {
+//         $attachment_id = create_product_image_attachment($upload_file['file']);
+//         if (is_wp_error($attachment_id)) {
+//             $error_message = $attachment_id->get_error_message();
+//             return new WP_Error('image_upload_error', $error_message);
+//         }
+
+//         set_post_thumbnail($product_id, $attachment_id);
+//     } else {
+//         $error_message = $upload_file['error'];
+//         return new WP_Error('image_upload_error', $error_message);
+//     }
+
+//     // Return success message
+//     $success_message = 'Image uploaded and set as the featured image successfully.';
+//     return rest_ensure_response(array('success' => true, 'message' => $success_message));
+// }
+
+// new code 
 function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
-    // Check if the image file exists in the request
-    if (!isset($_FILES['image']['tmp_name']) || empty($_FILES['image']['tmp_name'])) {
-        return new WP_Error('image_upload_error', 'Image file is missing.');
+    // Check if the image files exist in the request
+    if (!isset($_FILES['images']['tmp_name']) || empty($_FILES['images']['tmp_name'])) {
+        return new WP_Error('image_upload_error', 'Image files are missing.');
     }
 
-    // Process the uploaded image file
-    $uploaded_file = $_FILES['image'];
+    // Process the uploaded image files
+    $uploaded_files = $_FILES['images'];
 
-    // Validate file type
-    // $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
-    // $file_type = $uploaded_file['type'];
-    // if (!in_array($file_type, $allowed_types)) {
-    //     return new WP_Error('image_upload_error', 'Invalid file type. Only JPEG, JPG, and PNG files are allowed.');
-    // }
+    $attachment_ids = array();
 
-    // Validate and save the uploaded file to the WordPress uploads directory
-    $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
+    // Loop through each uploaded file
+    foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
+        // Validate and save the uploaded file to the WordPress uploads directory
+        $uploaded_file = array(
+            'name'     => $uploaded_files['name'][$key],
+            'type'     => $uploaded_files['type'][$key],
+            'tmp_name' => $tmp_name,
+            'error'    => $uploaded_files['error'][$key],
+            'size'     => $uploaded_files['size'][$key]
+        );
 
-    if (isset($upload_file['file'])) {
-        $attachment_id = create_product_image_attachment($upload_file['file']);
-        if (is_wp_error($attachment_id)) {
-            $error_message = $attachment_id->get_error_message();
+        $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
+
+        if (isset($upload_file['file'])) {
+            $attachment_id = create_product_image_attachment($upload_file['file']);
+            if (is_wp_error($attachment_id)) {
+                $error_message = $attachment_id->get_error_message();
+                return new WP_Error('image_upload_error', $error_message);
+            }
+
+            $attachment_ids[] = $attachment_id;
+        } else {
+            $error_message = $upload_file['error'];
             return new WP_Error('image_upload_error', $error_message);
         }
+    }
 
-        set_post_thumbnail($product_id, $attachment_id);
-    } else {
-        $error_message = $upload_file['error'];
-        return new WP_Error('image_upload_error', $error_message);
+    // Set the first uploaded image as the featured image
+    if (!empty($attachment_ids)) {
+        set_post_thumbnail($product_id, $attachment_ids[0]);
     }
 
     // Return success message
-    $success_message = 'Image uploaded and set as the featured image successfully.';
+    $success_message = 'Images uploaded and set as the product images successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
+// new code ended
 
 function create_product_image_attachment($file_path) {
     $file_name = basename($file_path);

@@ -73,7 +73,9 @@
                                 <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
                                 <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e( 'Reset Password', 'woocommerce' ); ?></button>
                             </div>
-                             <?php wc_print_notices(); ?>
+                            <div class="mt-3">
+                                <?php wc_print_notices(); ?>
+                            </div>
                         </form>
                     </div>
                 </div>

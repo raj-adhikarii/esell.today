@@ -10,10 +10,10 @@
     ?>
 <div class="site-breadcrumb" style="background: url(<?php echo $image[0]; ?>)">
     <div class="container">
-        <h2 class="breadcrumb-title">Faq's</h2>
+        <h2 class="breadcrumb-title"><?php echo get_the_title(); ?></h2>
         <ul class="breadcrumb-menu">
             <li><a href="<?php echo site_url(); ?>">Home</a></li>
-            <li class="active">Faq's</li>
+            <li class="active"><?php echo get_the_title(); ?></li>
         </ul>
     </div>
 </div>
