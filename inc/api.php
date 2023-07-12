@@ -787,7 +787,6 @@ function create_product_image($request) {
     // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
-    var_dump($uploaded_files);
     // Loop through each uploaded file
     foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
         // Validate and save the uploaded file to the WordPress uploads directory
@@ -832,7 +831,6 @@ function create_product_image($request) {
         $product->save();
     }
 
-    var_dump($product);
     // Return success message
     $success_message = 'Images uploaded and added to the product gallery successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
@@ -856,7 +854,6 @@ function create_product_image_attachment($file_path) {
     return $attachment_id;
 }
 
-var_dump($attachment_id);
 
 add_action('rest_api_init', function () {
     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
