@@ -787,6 +787,7 @@ function create_product_image($request) {
     // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
+    var_dump($uploaded_files);
     // Loop through each uploaded file
     foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
         // Validate and save the uploaded file to the WordPress uploads directory
