@@ -902,13 +902,11 @@ function display_all_customers_shortcode() {
                         $user_id = $customer->ID;
                         $user_email = $customer->user_email;
                         $user_display_name = $customer->display_name;
-                        $product_count = wc_get_product_count($user_id);
 
                         $store_logo = get_user_meta($user_id, 'store_logo', true);
                         $store_name = get_user_meta($user_id, 'store_name', true);
                 ?>
 
-                <?php var_dump($product_count); ?>
                         <div class="col-md-2">
                             <a href="#" class="store-item">
                                 <div class="store-img">
