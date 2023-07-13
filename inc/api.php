@@ -982,7 +982,6 @@ function yith_wishlist_rest_get_wishlist($request) {
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
 
 
-
 /*============================================/*
     User avatars using local avetars plugin
 
