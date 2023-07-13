@@ -941,11 +941,10 @@ add_action('rest_api_init', function () {
     ));
 });
 
-/*============================================/*
-    User avatars using local avetars plugin
-
+/*==========================================================/*
+    Retrive date from wish list page fpr s[ecific user
     @see https://staging.e-sell.today/wp-jso/user/v1/avatars/5
-/*============================================*/
+/*==========================================================*/
 
 function yith_wishlist_rest_register_routes() {
     register_rest_route('yith-wishlist/v1', '/wishlist', array(
@@ -955,38 +954,33 @@ function yith_wishlist_rest_register_routes() {
             return current_user_can('read');
         },
     ));
-
-    // Add more custom routes as needed
-
-    // Remember to replace 'yith-wishlist' with the desired namespace for your API routes
 }
 
-// Callback function for retrieving wishlist items
 function yith_wishlist_rest_get_wishlist($request) {
     $user_id = get_current_user_id();
 
-    // Retrieve the wishlist items for the user
     $wishlist_items = YITH_WCWL()->get_products($user_id);
-
-    // Process the wishlist items as needed
     $formatted_items = array();
 
     foreach ($wishlist_items as $item) {
-        $formatted_item = array(
-            'product_id' => $item['ID'],
-            'product_name' => get_the_title($item['ID']),
-            // Add more desired item details
-        );
+        $product = wc_get_product($item['prod_id']);
+        
+        if ($product) {
+            $formatted_item = array(
+                'product_id' => $product->get_id(),
+                'product_name' => $product->get_name(),
+                // Add more desired item details
+            );
 
-        $formatted_items[] = $formatted_item;
+            $formatted_items[] = $formatted_item;
+        }
     }
 
-    // Return the formatted wishlist items as the API response
     return rest_ensure_response($formatted_items);
 }
 
-// Hook into WordPress initialization to register the REST API routes
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
+
 
 
 /*============================================/*
