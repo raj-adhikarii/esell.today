@@ -902,15 +902,26 @@ function display_all_customers_shortcode() {
                         $user_id = $customer->ID;
                         $user_email = $customer->user_email;
                         $user_display_name = $customer->display_name;
+
+                        $store_logo = get_user_meta($user_id, 'store_logo', true);
+                        $store_name = get_user_meta($user_id, 'store_name', true);
                 ?>
                         <div class="col-md-2">
                             <a href="#" class="store-item">
                                 <div class="store-img">
-                                    <img src="assets/img/store/<?= $user_id; ?>.jpg" alt="">
+                                    <?php if ($store_logo) : ?>
+                                        <img src="<?php echo esc_url($store_logo); ?>" alt="">
+                                    <?php else : ?>
+                                        <img src="default-store-image.jpg" alt="">
+                                    <?php endif; ?>
                                 </div>
                                 <div class="store-content">
-                                    <h6><?= $user_display_name; ?></h6>
-                                    <span><?= $user_email; ?></span>
+                                    <?php if ($store_name) : ?>
+                                        <h6><?php echo esc_html($store_name); ?></h6>
+                                    <?php else : ?>
+                                        <h6>Store Name</h6>
+                                    <?php endif; ?>
+                                    <span><?php echo $user_email; ?></span>
                                 </div>
                             </a>
                         </div>
@@ -927,4 +938,3 @@ function display_all_customers_shortcode() {
     return ob_get_clean();
 }
 add_shortcode('display_customers', 'display_all_customers_shortcode');
-

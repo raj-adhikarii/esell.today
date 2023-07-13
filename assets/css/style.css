@@ -2049,6 +2049,14 @@ Auth page css
 }
 
 /* ===================
+    Store Page
+====================== */
+
+article.post-314 .entry-header {
+  display: none;
+}
+
+/* ===================
 ACF map 
 ====================== */
 .acf-map {
