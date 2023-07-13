@@ -919,9 +919,9 @@ function display_all_customers_shortcode() {
                             <a href="#" class="store-item">
                                 <div class="store-img">
                                     <?php if ($store_logo) : ?>
-                                        <img src="<?php echo esc_url($store_logo); ?>" alt="">
+                                        <img src="<?php echo esc_url($store_logo); ?>" alt="<?php echo esc_attr($image_name); ?>">
                                     <?php else : ?>
-                                        <img src="default-store-image.jpg" alt="">
+                                        <img src="https://staging.e-sell.today/wp-content/uploads/2023/03/cropped-fav-1.png" alt="default-store-image">
                                     <?php endif; ?>
                                 </div>
                                 <div class="store-content">
@@ -930,7 +930,7 @@ function display_all_customers_shortcode() {
                                     <?php else : ?>
                                         <h6>Store Name</h6>
                                     <?php endif; ?>
-                                    <span><?php echo esc_html($count); ?> Products</span>
+                                    <span><?php echo esc_html($count); ?> Ads</span>
                                 </div>
                             </a>
                         </div>

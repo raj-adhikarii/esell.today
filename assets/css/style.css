@@ -2982,7 +2982,9 @@ store css
 .store-img img{
   border-radius: 50%;
   width: 80px;
+  height: 80px;
   margin-bottom: 12px;
+  object-fit: cover;
 }
 
 .store-content span{
@@ -4898,6 +4900,8 @@ user profile css
 
 .profile-store .store-logo-preview img{
   width: 100px;
+  height: 100px;
+  object-fit: cover;
   border-radius: 50px;
 }
 
