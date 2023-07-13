@@ -1,5 +1,5 @@
 <?php
-/* Template Name: Store Single */
+/* Template Name: Single Customer */
 
 get_header(); ?>
 
