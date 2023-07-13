@@ -989,6 +989,47 @@ function yith_wishlist_rest_get_wishlist($request) {
 
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
 
+/*======================================================================/*
+    Add a product to wishlist
+    @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
+/*=======================================================================*/
+
+if (!function_exists('yith_wishlist_rest_register_routes')) {
+    function yith_wishlist_rest_register_routes() {
+        register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
+            'methods'  => 'POST',
+            'callback' => 'yith_wishlist_rest_add_to_wishlist',
+            'permission_callback' => function () {
+                return current_user_can('read');
+            },
+        ));
+    }
+}
+
+if (!function_exists('yith_wishlist_rest_add_to_wishlist')) {
+    function yith_wishlist_rest_add_to_wishlist($request) {
+        $product_id = $request->get_param('product_id');
+        $user_id = get_current_user_id();
+
+        if (empty($product_id)) {
+            return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
+        }
+
+        // Add the product to the wishlist
+        YITH_WCWL()->add($product_id, $user_id);
+
+        // Return a success response
+        $response = array(
+            'message' => 'Product added to wishlist successfully.',
+        );
+
+        return rest_ensure_response($response);
+    }
+}
+
+add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
+
+
 
 
 /*============================================/*
