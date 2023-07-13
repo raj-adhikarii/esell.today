@@ -958,32 +958,30 @@ function yith_wishlist_rest_register_routes() {
 
 function yith_wishlist_rest_get_wishlist($request) {
     $user_id = get_current_user_id();
-    $wishlist = YITH_WCWL()->get_wishlist($user_id);
-
+    $wishlist = YITH_WCWL()->get_products($user_id);
     $formatted_items = array();
 
-    if ($wishlist) {
-        foreach ($wishlist as $item) {
-            $product = wc_get_product($item['prod_id']);
+    foreach ($wishlist as $item) {
+        $product = wc_get_product($item['prod_id']);
+        if ($product) {
+            $formatted_item = array(
+                'product_id' => $product->get_id(),
+                'product_name' => $product->get_name(),
+                // Add more desired item details
+            );
 
-            if ($product) {
-                $formatted_item = array(
-                    'product_id' => $product->get_id(),
-                    'product_name' => $product->get_name(),
-                    // Add more desired item details
-                );
-
-                $formatted_items[] = $formatted_item;
-            }
+            $formatted_items[] = $formatted_item;
         }
     }
 
-    var_dump($formatted_items);
-
-    return rest_ensure_response($formatted_items);
+    $response = new WP_REST_Response($formatted_items);
+    $response->set_status(200);
+    $response->header( 'Access-Control-Allow-Origin', '*' );
+    return $response;
 }
 
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
+
 
 
 /*============================================/*
