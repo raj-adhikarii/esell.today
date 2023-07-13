@@ -1224,7 +1224,7 @@ hero css
   height: 100%;
   left: -0.5px;
   top: 0;
-  background: rgba(0, 0, 0, .7);
+  background: rgba(0, 0, 0, .42);
   z-index: -1;
 }
 
@@ -1338,7 +1338,7 @@ hero css
 @media all and (max-width: 991px) {
 
   .hero-single .hero-content .hero-title {
-    font-size: 45px;
+    font-size: 34px;
   }
 
   .hero-single .hero-content .hero-btn .theme-btn {
