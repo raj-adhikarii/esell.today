@@ -978,6 +978,8 @@ function yith_wishlist_rest_get_wishlist($request) {
         }
     }
 
+    var_dump($formatted_items);
+
     return rest_ensure_response($formatted_items);
 }
 
