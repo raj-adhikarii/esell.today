@@ -892,7 +892,7 @@ function my_save_extra_profile_fields( $user_id ) {
 function display_all_customers_shortcode() {
     ob_start();
     ?>
-    <div class="store-area py-120">
+    <div class="store-area py-5">
         <div class="container">
             <div class="row">
                 <?php

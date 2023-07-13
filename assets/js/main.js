@@ -446,7 +446,7 @@ $(document).ready(function() {
         formData.append('file', file);
         formData.append('action', 'upload_profile_image');
         $.ajax({
-          url: ajax_object.ajax_url,
+          url: '/wp-admin/admin-ajax.php',
           type: 'POST',
           data: formData,
           processData: false,
