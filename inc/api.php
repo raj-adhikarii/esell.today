@@ -945,7 +945,6 @@ add_action('rest_api_init', function () {
     Retrive date from wish list page fpr s[ecific user
     @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
 /*=======================================================================*/
-
 function yith_wishlist_rest_register_routes() {
     register_rest_route('yith-wishlist/v1', '/wishlist', array(
         'methods'  => 'GET',
@@ -979,6 +978,10 @@ function yith_wishlist_rest_get_wishlist($request) {
 
             $formatted_items[] = $formatted_item;
         }
+    }
+
+    if (empty($formatted_items)) {
+        return new WP_Error('no_items_found', 'No wishlist items found for the user.', array('status' => 404));
     }
 
     return rest_ensure_response($formatted_items);
