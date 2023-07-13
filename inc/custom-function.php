@@ -889,18 +889,42 @@ function my_save_extra_profile_fields( $user_id ) {
 /*========================================/*
 	Shortcode Add all store name in page
 /*========================================*/
+function display_all_customers_shortcode() {
+    ob_start();
+    ?>
+    <div class="store-area py-120">
+        <div class="container">
+            <div class="row">
+                <?php
+                $customers = get_users(array('role' => 'customer'));
+                if (!empty($customers)) {
+                    foreach ($customers as $customer) {
+                        $user_id = $customer->ID;
+                        $user_email = $customer->user_email;
+                        $user_display_name = $customer->display_name;
+                ?>
+                        <div class="col-md-2">
+                            <a href="#" class="store-item">
+                                <div class="store-img">
+                                    <img src="assets/img/store/<?= $user_id; ?>.jpg" alt="">
+                                </div>
+                                <div class="store-content">
+                                    <h6><?= $user_display_name; ?></h6>
+                                    <span><?= $user_email; ?></span>
+                                </div>
+                            </a>
+                        </div>
+                <?php
+                    }
+                } else {
+                    echo 'No customers found.';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('display_customers', 'display_all_customers_shortcode');
 
-function display_all_customers() {
-    $customers = get_users( array( 'role' => 'customer' ) );
-    if ( ! empty( $customers ) ) {
-        echo '<ul>';
-        foreach ( $customers as $customer ) {
-            echo '<li>' . esc_html( $customer->user_email ) . '</li>';
-        }
-        echo '</ul>';
-    } else {
-        echo 'No customers found.';
-    }
- }
- add_shortcode( 'display_customers', 'display_all_customers' );
- 
