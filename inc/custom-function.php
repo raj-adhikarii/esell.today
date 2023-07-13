@@ -892,7 +892,7 @@ function my_save_extra_profile_fields( $user_id ) {
 function display_all_customers_shortcode() {
     ob_start();
     ?>
-    <div class="store-area py-5">
+    <div class="store-area py-120">
         <div class="container">
             <div class="row">
                 <?php
@@ -900,12 +900,15 @@ function display_all_customers_shortcode() {
                 if (!empty($customers)) {
                     foreach ($customers as $customer) {
                         $user_id = $customer->ID;
+                        $user_email = $customer->user_email;
                         $user_display_name = $customer->display_name;
                         $product_count = wc_get_product_count($user_id);
 
                         $store_logo = get_user_meta($user_id, 'store_logo', true);
                         $store_name = get_user_meta($user_id, 'store_name', true);
                 ?>
+
+                <?php var_dump($product_count); ?>
                         <div class="col-md-2">
                             <a href="#" class="store-item">
                                 <div class="store-img">
@@ -921,7 +924,7 @@ function display_all_customers_shortcode() {
                                     <?php else : ?>
                                         <h6>Store Name</h6>
                                     <?php endif; ?>
-                                    <span><?php echo esc_html($product_count); ?> Ads</span>
+                                    <!-- <span><?php echo esc_html($product_count); ?> Products</span> -->
                                 </div>
                             </a>
                         </div>
