@@ -941,10 +941,10 @@ add_action('rest_api_init', function () {
     ));
 });
 
-/*==========================================================/*
+/*======================================================================/*
     Retrive date from wish list page fpr s[ecific user
-    @see https://staging.e-sell.today/wp-jso/user/v1/avatars/5
-/*==========================================================*/
+    @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
+/*=======================================================================*/
 
 function yith_wishlist_rest_register_routes() {
     register_rest_route('yith-wishlist/v1', '/wishlist', array(
@@ -958,21 +958,23 @@ function yith_wishlist_rest_register_routes() {
 
 function yith_wishlist_rest_get_wishlist($request) {
     $user_id = get_current_user_id();
+    $wishlist = YITH_WCWL()->get_wishlist($user_id);
 
-    $wishlist_items = YITH_WCWL()->get_products($user_id);
     $formatted_items = array();
 
-    foreach ($wishlist_items as $item) {
-        $product = wc_get_product($item['prod_id']);
-        
-        if ($product) {
-            $formatted_item = array(
-                'product_id' => $product->get_id(),
-                'product_name' => $product->get_name(),
-                // Add more desired item details
-            );
+    if ($wishlist) {
+        foreach ($wishlist as $item) {
+            $product = wc_get_product($item['prod_id']);
 
-            $formatted_items[] = $formatted_item;
+            if ($product) {
+                $formatted_item = array(
+                    'product_id' => $product->get_id(),
+                    'product_name' => $product->get_name(),
+                    // Add more desired item details
+                );
+
+                $formatted_items[] = $formatted_item;
+            }
         }
     }
 
