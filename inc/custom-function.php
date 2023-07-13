@@ -900,13 +900,21 @@ function display_all_customers_shortcode() {
                 if (!empty($customers)) {
                     foreach ($customers as $customer) {
                         $user_id = $customer->ID;
-                        $user_email = $customer->user_email;
                         $user_display_name = $customer->display_name;
 
                         $store_logo = get_user_meta($user_id, 'store_logo', true);
                         $store_name = get_user_meta($user_id, 'store_name', true);
-                ?>
 
+                        $product_count = new WP_Query(array(
+                            'post_type'      => 'product',
+                            'post_status'    => 'publish',
+                            'author'         => $user_id,
+                            'posts_per_page' => -1,
+                        ));
+
+                        $count = $product_count->post_count;
+                        wp_reset_postdata();
+                ?>
                         <div class="col-md-2">
                             <a href="#" class="store-item">
                                 <div class="store-img">
@@ -922,7 +930,7 @@ function display_all_customers_shortcode() {
                                     <?php else : ?>
                                         <h6>Store Name</h6>
                                     <?php endif; ?>
-                                    <!-- <span><?php echo esc_html($product_count); ?> Products</span> -->
+                                    <span><?php echo esc_html($count); ?> Products</span>
                                 </div>
                             </a>
                         </div>
