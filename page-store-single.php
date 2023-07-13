@@ -46,7 +46,7 @@ get_header(); ?>
                             ?>
                             <div class="store-banner">
                                 <div class="store-banner-img">
-                                    <img src="assets/img/store/banner.jpg" alt="">
+                                    <img src="https://staging.e-sell.today/wp-content/uploads/2023/06/banner.png" alt="">
                                 </div>
                                 <div class="store-banner-content">
                                     <div class="store-banner-logo">
