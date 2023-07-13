@@ -957,12 +957,19 @@ function yith_wishlist_rest_register_routes() {
 }
 
 function yith_wishlist_rest_get_wishlist($request) {
-    $user_id = get_current_user_id();
-    $wishlist = YITH_WCWL()->get_products($user_id);
+    $user_id = $request->get_param('user_id');
+
+    if (empty($user_id)) {
+        return new WP_Error('missing_parameter', 'Missing user_id parameter.', array('status' => 400));
+    }
+
+    $wishlist_items = YITH_WCWL()->get_products($user_id);
+
     $formatted_items = array();
 
-    foreach ($wishlist as $item) {
+    foreach ($wishlist_items as $item) {
         $product = wc_get_product($item['prod_id']);
+
         if ($product) {
             $formatted_item = array(
                 'product_id' => $product->get_id(),
@@ -974,10 +981,7 @@ function yith_wishlist_rest_get_wishlist($request) {
         }
     }
 
-    $response = new WP_REST_Response($formatted_items);
-    $response->set_status(200);
-    $response->header( 'Access-Control-Allow-Origin', '*' );
-    return $response;
+    return rest_ensure_response($formatted_items);
 }
 
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
