@@ -948,7 +948,7 @@ add_action('rest_api_init', function () {
 /*============================================*/
 
 function yith_wishlist_rest_register_routes() {
-    register_rest_route('wc/v1', '/wishlist', array(
+    register_rest_route('yith-wishlist/v1', '/wishlist', array(
         'methods'  => 'GET',
         'callback' => 'yith_wishlist_rest_get_wishlist',
         'permission_callback' => function () {
