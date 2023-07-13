@@ -885,3 +885,22 @@ function my_save_extra_profile_fields( $user_id ) {
     /* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
     update_usermeta( $user_id, 'image', $_POST['image'] );
 }
+
+/*========================================/*
+	Shortcode Add all store name in page
+/*========================================*/
+
+function display_all_customers() {
+    $customers = get_users( array( 'role' => 'customer' ) );
+    if ( ! empty( $customers ) ) {
+        echo '<ul>';
+        foreach ( $customers as $customer ) {
+            echo '<li>' . esc_html( $customer->user_email ) . '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo 'No customers found.';
+    }
+ }
+ add_shortcode( 'display_customers', 'display_all_customers' );
+ 
