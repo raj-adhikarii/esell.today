@@ -21,24 +21,55 @@ get_header(); ?>
 
     <!-- store single -->
     <div class="store-single py-120">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="store-banner">
-                            <div class="store-banner-img">
-                                <img src="assets/img/store/banner.jpg" alt="">
-                            </div>
-                            <div class="store-banner-content">
-                                <div class="store-banner-logo">
-                                    <img src="assets/img/store/01.jpg" alt="">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <?php
+                    $customers = get_users(array('role' => 'customer'));
+                    if (!empty($customers)) {
+                        foreach ($customers as $customer) {
+                            $user_id = $customer->ID;
+                            $user_display_name = $customer->display_name;
+
+                            $store_logo = get_user_meta($user_id, 'store_logo', true);
+                            $store_name = get_user_meta($user_id, 'store_name', true);
+
+                            $product_count = new WP_Query(array(
+                                'post_type'      => 'product',
+                                'post_status'    => 'publish',
+                                'author'         => $user_id,
+                                'posts_per_page' => -1,
+                            ));
+
+                            $count = $product_count->post_count;
+                            wp_reset_postdata();
+                            ?>
+                            <div class="store-banner">
+                                <div class="store-banner-img">
+                                    <img src="assets/img/store/banner.jpg" alt="">
                                 </div>
-                                <div class="store-banner-info">
-                                    <h4>Ritro Fashion</h4>
-                                    <span>25 Posted Ads</span>
+                                <div class="store-banner-content">
+                                    <div class="store-banner-logo">
+                                        <?php if ($store_logo) : ?>
+                                            <img src="<?php echo esc_url($store_logo); ?>" alt="">
+                                        <?php else : ?>
+                                            <img src="https://staging.e-sell.today/wp-content/uploads/2023/06/banner.png" alt="default-store-banner">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="store-banner-info">
+                                        <h4><?php echo esc_html($store_name); ?></h4>
+                                        <span><?php echo esc_html($count); ?> Posted Ads</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        <?php
+                        } // End of foreach loop
+                    } else {
+                        echo 'No customers found.';
+                    }
+                    ?>
+                </div>
+
                     <div class="col-lg-9 mt-5">
                         <div class="col-md-12">
                             <div class="product-sort">
