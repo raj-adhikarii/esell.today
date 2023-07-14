@@ -174,27 +174,28 @@ get_header(); ?>
                                                 </div>
                                             </div>
                                             <?php } ?>
-                                            <div class="images-section" <?php echo $edit_ad ?>>                                     
-                                                <div class="col-lg-12" <?php echo $toggle_id ?>>
-                                                    <?php if (empty($product_images)) { ?>
+                                            
+                                            <div class="images-section" <?php echo $edit_ad ?>>
+                                                <?php if (empty($product_images)) { ?>
+                                                    <div class="col-lg-12" <?php echo $toggle_id ?>>
                                                         <input type="file" name="product_images[]" id="input" class="product-img-file" multiple>
                                                         <div id="preview-parent"></div>
-                                                    <?php } ?>
+                                                    </div>
+                                                <?php } ?>
 
-                                                    <div class="form-group">
-                                                        <div class="product-upload-wrapper">
-                                                            <div class="product-img-upload">
-                                                                <span><i class="far fa-images"></i> Upload Product Images</span>
-                                                            </div>
-                                                            <?php if (empty($product_images)) { ?>
-                                                                <input type="file" name="product_images[]" class="product-img-file" multiple>
-                                                                <div class="alert alert-danger mt-2" id="error-message"></div>
-                                                            <?php } ?>
+                                                <div class="form-group">
+                                                    <div class="product-upload-wrapper">
+                                                        <div class="product-img-upload">
+                                                            <span><i class="far fa-images"></i> Upload Product Images</span>
                                                         </div>
+                                                        <?php if (empty($product_images)) { ?>
+                                                            <input type="file" name="product_images[]" class="product-img-file" multiple>
+                                                            <div class="alert alert-danger mt-2" id="error-message"></div>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+                                          
                                             
                                             <h6 class="fw-bold my-4">Detailed Information</h6>
                                             <div class="col-lg-12">

@@ -19,6 +19,8 @@ jQuery(document).ready(function(){
   
           toastr.success(response);
 
+          // Clear the checkbox
+        $('#agree').prop('checked', false);
       },
       error: function(xhr, status, error) {
           // Handle error
