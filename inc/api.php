@@ -869,8 +869,8 @@ add_action('rest_api_init', function () {
     Add Id of user which published the product
 
     @see https://staging.e-sell.today/wp-json/wc/v3/products/867?
-    consumer_key=ck_2bfdecd44427762646b056a79035f944fa22c88c&
-    consumer_secret=cs_efb95c59392223bf4eff7b67fc0d042f8930d4a3
+    consumer_key=ck&
+    consumer_secret=cs
 /*============================================*/
 
 function get_product_with_user_id($request) {
@@ -942,7 +942,7 @@ add_action('rest_api_init', function () {
 });
 
 /*======================================================================/*
-    Retrive date from wish list page fpr s[ecific user
+    Retrive date from wish list page for specific user
     @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
 /*=======================================================================*/
 function yith_wishlist_rest_register_routes() {
@@ -1078,11 +1078,10 @@ function update_user_avatar($request) {
     // Process the uploaded avatar image
     $uploaded_file = $_FILES['avatar'];
 
-
-    var_dump($uploaded_files);
     // Validate and save the uploaded file to the WordPress uploads directory
     require_once(ABSPATH . 'wp-admin/includes/file.php');
-    $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
+    $upload_overrides = array('test_form' => false);
+    $upload_file = wp_handle_upload($uploaded_file, $upload_overrides);
 
     if (isset($upload_file['file'])) {
         // Update user avatar using the Simple Local Avatars plugin
@@ -1103,6 +1102,7 @@ function update_user_avatar($request) {
         return new WP_Error('avatar_upload_error', $error_message);
     }
 }
+
 
 
 // Delete avatar for a user
