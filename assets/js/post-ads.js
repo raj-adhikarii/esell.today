@@ -19,7 +19,6 @@ jQuery(document).ready(function(){
   
           toastr.success(response);
 
-          window.location.href = "/profile";
       },
       error: function(xhr, status, error) {
           // Handle error

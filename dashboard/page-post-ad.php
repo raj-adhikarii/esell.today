@@ -103,13 +103,13 @@ get_header(); ?>
                                                         <?php	
                                                             if (isset($_GET['edit'])) {
                                                                 ?>
-                                                                <option value="<?php echo $category[0]->slug ?>" selected><?php echo $category[0]->name ?></option>
+                                                                <option value="<?php echo $category[0]->name ?>" selected><?php echo $category[0]->name ?></option>
                                                                 <?php
                                                             } else {
                                                                 if (!empty($terms)) {
                                                                     foreach ($terms as $item) {
                                                                         ?>
-                                                                        <option value="<?php echo $item->slug ?>"><?php echo $item->name ?></option>
+                                                                        <option value="<?php echo $item->name ?>"><?php echo $item->name ?></option>
                                                                         <?php
                                                                     }
                                                                 } else {
@@ -145,6 +145,7 @@ get_header(); ?>
                                                     </script>
                                                 </div>
                                             </div>
+
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">
