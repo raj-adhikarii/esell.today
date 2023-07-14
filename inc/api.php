@@ -1078,6 +1078,8 @@ function update_user_avatar($request) {
     // Process the uploaded avatar image
     $uploaded_file = $_FILES['avatar'];
 
+
+    var_dump($uploaded_files);
     // Validate and save the uploaded file to the WordPress uploads directory
     require_once(ABSPATH . 'wp-admin/includes/file.php');
     $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
