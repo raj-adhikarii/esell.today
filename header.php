@@ -99,14 +99,26 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="<?php echo site_url(); ?>">Home</a>
                             </li>
-                            <li class="nav-item"<?php if (is_page('about')) echo 'class="active"' ?>><a class="nav-link" href="<?php echo site_url(); ?>/about/">About</a></li>
+                            <li class="nav-item"<?php if (is_page('about')) echo 'class="active"' ?>><a class="nav-link" href="<?php echo site_url(); ?>/product-category/womens-fashion/">Fashion</a></li>
                            
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/service/">Services</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/location/">Location</a></li>
-                           
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/faqs/">FAQs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/contact/">Contact</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/help/">Help</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/home-lifestyle/">Lifestyle</a></li>
+                            
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/health-beauty/">Health & Beauty</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/groceries-pets/">Groceries</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/tv-home-appliances/">Appliances</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">More</a>
+                                <ul class="dropdown-menu fade-down">
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/electronic-devices/">Electronic Devices</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/groceries-pets/">Groceries & Pets</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/sports-outdoor/">Sports & Outdoor</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/babies-toys/">Babies & Toys</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/jewellery/">Jewellery</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/watches/">Watches</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/Bags/">Bags</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/tv-home-appliances/">TV & Home Appliances</a></li>
+                                </ul>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="<?php echo site_url(); ?>/wishlist/">
                                     <i class="far fa-heart" id="wishlist-icon"></i>

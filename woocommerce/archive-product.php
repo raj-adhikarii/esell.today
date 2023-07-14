@@ -12,7 +12,7 @@
  *
  * @see https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 3.4.0
+ * @version 3.4.0 
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -29,7 +29,19 @@ get_header( 'shop' );
 do_action( 'woocommerce_before_main_content' );
 
 ?>
-<header class="woocommerce-products-header">
+<main id="primary" class="site-main" style="margin-top: -10rem;">
+	<!-- breadcrumb -->
+	<div class="site-breadcrumb" style="background: url(https://staging.e-sell.today/wp-content/uploads/2023/04/head.jpeg)">
+		<div class="container mt-5">
+			<h2 class="breadcrumb-title">Shop</h2>
+			<ul class="breadcrumb-menu">
+				<li><a href="<?php echo site_url(); ?>">Home</a></li>
+				<li class="active">Shop</li>
+			</ul>
+		</div>
+	</div>
+
+<!-- <header class="woocommerce-products-header">
 	<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
 		<h1 class="woocommerce-products-header__title page-title"><?php woocommerce_page_title(); ?></h1>
 	<?php endif; ?>
@@ -43,7 +55,8 @@ do_action( 'woocommerce_before_main_content' );
 	 */
 	do_action( 'woocommerce_archive_description' );
 	?>
-</header>
+</header> -->
+<div class="container mt-5">
 <?php
 if ( woocommerce_product_loop() ) {
 
@@ -93,13 +106,15 @@ if ( woocommerce_product_loop() ) {
  *
  * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
  */
-do_action( 'woocommerce_after_main_content' );
-
+do_action( 'woocommerce_after_main_content' ); ?>
+</div>
+</main>
+<?php
 /**
  * Hook: woocommerce_sidebar.
  *
  * @hooked woocommerce_get_sidebar - 10
  */
-do_action( 'woocommerce_sidebar' );
+// do_action( 'woocommerce_sidebar' );
 
 get_footer( 'shop' );
