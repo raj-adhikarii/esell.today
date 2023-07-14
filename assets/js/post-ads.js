@@ -16,6 +16,8 @@ jQuery(document).ready(function(){
           // Handle success response
           console.log(response);
           jQuery("#custom_post_ads_form")[0].reset();
+
+          jQuery("#preview-parent").empty(); // Clear preview images
   
           toastr.success(response);
 
