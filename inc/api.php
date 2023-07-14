@@ -782,6 +782,7 @@ function create_product_image($request) {
     // Process the uploaded image files
     $uploaded_files = $_FILES['images'];
 
+    var_dump($uploaded_files);
     $attachment_ids = array();
 
     // Check if multiple images are uploaded
@@ -817,6 +818,7 @@ function create_product_image($request) {
 
             $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
+            var_dump($upload_file);
             if (isset($upload_file['file'])) {
                 $attachment_id = create_product_image_attachment($upload_file['file']);
                 if (is_wp_error($attachment_id)) {
@@ -829,6 +831,8 @@ function create_product_image($request) {
                 $error_message = $upload_file['error'];
                 return new WP_Error('image_upload_error', $error_message);
             }
+
+            var_dump($attachment_ids);
         }
 
         // Update the product gallery meta field
