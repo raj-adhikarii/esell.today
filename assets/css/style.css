@@ -5441,7 +5441,7 @@ shortable css
 
 #preview-parent {
   display: flex;
-  overflow-x: scroll;
+  overflow: hidden;
 }
 
 .preview {

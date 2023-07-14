@@ -89,40 +89,66 @@ get_header(); ?>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Category</label>
-                                                    
+
                                                     <?php 
                                                         $terms = get_terms( array(
                                                             'taxonomy'   => 'product_cat',
                                                             'hide_empty' => false, // Set to true if you want to exclude empty categories
                                                         ) );
                                                     ?>
-                                                    <select class="select" name="post_category">
-                                                        <option value="">Select Category</option>
+
+                                                    <input type="text" name="post_category" placeholder="Select Category" list="category-list" id="category-search">
+
+                                                    <datalist id="category-list">
                                                         <?php	
-                                                            if(isset($_GET['edit'])){
-                                                        ?>
+                                                            if (isset($_GET['edit'])) {
+                                                                ?>
                                                                 <option value="<?php echo $category[0]->slug ?>" selected><?php echo $category[0]->name ?></option>
-                                                        <?php
-                                                            }else{
-                                                            if(!empty($terms)){
-                                                                foreach($terms as $item){
-                                                        ?>
-                                                            <option value="<?php echo $item->slug  ?>"><?php echo $item->name ?></option>
-                                                        <?php 
+                                                                <?php
+                                                            } else {
+                                                                if (!empty($terms)) {
+                                                                    foreach ($terms as $item) {
+                                                                        ?>
+                                                                        <option value="<?php echo $item->slug ?>"><?php echo $item->name ?></option>
+                                                                        <?php
+                                                                    }
+                                                                } else {
+                                                                    ?>
+                                                                    <option value="uncategorized">Uncategorized</option>
+                                                                    <?php  
                                                                 }
-                                                            }else{
-                                                        ?>
-                                                            <option value="uncategorized">Uncategorized</option>
-                                                        <?php  
                                                             }
-                                                        }
                                                         ?>
-                                                    </select>
+                                                    </datalist>
+
+                                                    <script>
+                                                        jQuery(document).ready(function($) {
+                                                            $('#category-search').on('input', function() {
+                                                                var searchVal = $(this).val().toLowerCase();
+
+                                                                $('#category-list option').each(function() {
+                                                                    var categoryText = $(this).text().toLowerCase();
+                                                                    var categoryValue = $(this).val();
+
+                                                                    if (categoryText.indexOf(searchVal) !== -1) {
+                                                                        $(this).show();
+                                                                    } else {
+                                                                        $(this).hide();
+                                                                    }
+
+                                                                    if (categoryValue === "") {
+                                                                        $(this).show();
+                                                                    }
+                                                                });
+                                                            });
+                                                        });
+                                                    </script>
                                                 </div>
                                             </div>
+
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label>Price (USD)</label>
+                                                    <label>Price (NPR)</label>
                                                     <input type="text" name="product_price" class="form-control" placeholder="Enter price" value="<?php echo $price ?>">
                                                 </div>
                                             </div>
@@ -149,29 +175,22 @@ get_header(); ?>
                                             <?php } ?>
                                             <div class="images-section" <?php echo $edit_ad ?>>                                     
                                                 <div class="col-lg-12" <?php echo $toggle_id ?>>
-                                                    <input type="file" name="product_images[]" id="input" class="product-img-file" multiple>
-                                                    <div id="preview-parent"></div>
+                                                    <?php if (empty($product_images)) { ?>
+                                                        <input type="file" name="product_images[]" id="input" class="product-img-file" multiple>
+                                                        <div id="preview-parent"></div>
+                                                    <?php } ?>
 
-                                                        <div class="form-group">
-                                                            <div class="product-upload-wrapper">
-                                                                <div class="product-img-upload">
-                                                                    <span><i class="far fa-images"></i> Upload Product Images</span>
-                                                                </div>
-                                                                <input type="file" name="product_images[]" class="product-img-file" multiple>
-                                                                <div class="alert alert-danger mt-2" id="error-message"></div>
-                                                            </div>
-                                                        </div>
-
-
-                                                    <!-- <div class="form-group">
+                                                    <div class="form-group">
                                                         <div class="product-upload-wrapper">
                                                             <div class="product-img-upload">
                                                                 <span><i class="far fa-images"></i> Upload Product Images</span>
                                                             </div>
-                                                            <input type="file" name="product_images[]" class="product-img-file" multiple>
-                                                            <div class="alert alert-danger mt-2" id="error-message"></div>
-                                                        </div> 
-                                                    </div>-->
+                                                            <?php if (empty($product_images)) { ?>
+                                                                <input type="file" name="product_images[]" class="product-img-file" multiple>
+                                                                <div class="alert alert-danger mt-2" id="error-message"></div>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             

@@ -18,6 +18,8 @@ jQuery(document).ready(function(){
           jQuery("#custom_post_ads_form")[0].reset();
   
           toastr.success(response);
+
+          window.location.href = "/profile";
       },
       error: function(xhr, status, error) {
           // Handle error
@@ -70,21 +72,6 @@ jQuery(document).ready(function(){
 
   
 });
-
-//   jQuery(document).ready(function($) {
-//     var dataEdit = $('.images-section').data('edit');
-
-//     if (dataEdit !== undefined) {
-//         $('#upload-images-section').hide();
-//     }
-//     $('#change-images-checkbox').on('change', function() {
-//         if ($(this).is(':checked')) {
-//             $('#upload-images-section').show();
-//         } else {
-//             $('#upload-images-section').hide();
-//         }
-//     });
-// });
 
 jQuery(document).ready(function($) {
 var uploadSection = $('#upload-images-section');
