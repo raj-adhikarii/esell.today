@@ -830,15 +830,16 @@ function create_product_image($request) {
                 return new WP_Error('image_upload_error', $error_message);
             }
         }
-    }
 
-    // Add the remaining uploaded images to the product gallery
-    if (!empty($attachment_ids)) {
-        $product = wc_get_product($product_id);
-        foreach ($attachment_ids as $attachment_id) {
-            $product->add_gallery_image($attachment_id);
+        // Update the product gallery meta field
+        if (!empty($attachment_ids)) {
+            $existing_gallery = get_post_meta($product_id, '_product_image_gallery', true);
+            $gallery = explode(',', $existing_gallery);
+            $gallery = array_merge($gallery, $attachment_ids);
+            $updated_gallery = implode(',', $gallery);
+
+            update_post_meta($product_id, '_product_image_gallery', $updated_gallery);
         }
-        $product->save();
     }
 
     // Return success message
