@@ -799,7 +799,8 @@ function create_product_image($request) {
                 return new WP_Error('image_upload_error', $error_message);
             }
 
-            $attachment_ids[] = $attachment_id;
+            // Set as featured image
+            set_post_thumbnail($product_id, $attachment_id);
         } else {
             $error_message = $upload_file['error'];
             return new WP_Error('image_upload_error', $error_message);
@@ -831,14 +832,8 @@ function create_product_image($request) {
         }
     }
 
-    // Set the first uploaded image as the featured image if it's a single image
+    // Add the remaining uploaded images to the product gallery
     if (!empty($attachment_ids)) {
-        if (!$is_multiple_images) {
-            set_post_thumbnail($product_id, $attachment_ids[0]);
-            $attachment_ids = array_slice($attachment_ids, 1);
-        }
-
-        // Add the remaining uploaded images to the product gallery
         $product = wc_get_product($product_id);
         foreach ($attachment_ids as $attachment_id) {
             $product->add_gallery_image($attachment_id);
@@ -847,7 +842,7 @@ function create_product_image($request) {
     }
 
     // Return success message
-    $success_message = 'Images uploaded successfully.';
+    $success_message = 'Images uploaded and added to the product gallery successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
 
@@ -877,7 +872,6 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
-
 
 
 // new code end
