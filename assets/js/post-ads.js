@@ -23,6 +23,9 @@ jQuery(document).ready(function(){
 
           // Clear the checkbox
         $('#agree').prop('checked', false);
+
+        // Redirect to "/my-ads/" page
+        window.location.href = "/my-ads/";
       },
       error: function(xhr, status, error) {
           // Handle error
