@@ -784,6 +784,7 @@ function create_product_image($request) {
 
     $attachment_ids = array();
 
+    var_dump($uploaded_files);
     // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
