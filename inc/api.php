@@ -775,13 +775,16 @@ function create_product_image($request) {
     $product_id = $request->get_param('product_id');
 
     // Check if the image files exist in the request
-    if (empty($_FILES['images']['tmp_name'][0])) {
+    if (!isset($_FILES['images']['tmp_name'][0]) || empty($_FILES['images']['tmp_name'][0])) {
         return new WP_Error('image_upload_error', 'Image files are missing.');
     }
 
     // Process the uploaded image files
     $uploaded_files = $_FILES['images'];
+
     $attachment_ids = array();
+
+    // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
     // Loop through each uploaded file
@@ -837,13 +840,13 @@ function create_product_image_attachment($file_path) {
 
     $attachment = array(
         'post_mime_type' => wp_check_filetype($file_name)['type'],
-        'post_title'     => preg_replace('/\.[^.]+$/', '', $file_name),
-        'post_content'   => '',
-        'post_status'    => 'inherit'
+        'post_title' => preg_replace('/\.[^.]+$/', '', $file_name),
+        'post_content' => '',
+        'post_status' => 'inherit'
     );
 
     $attachment_id = wp_insert_attachment($attachment, $file_path);
-    require_once ABSPATH . 'wp-admin/includes/image.php';
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
     $attachment_data = wp_generate_attachment_metadata($attachment_id, $file_path);
     wp_update_attachment_metadata($attachment_id, $attachment_data);
 
@@ -852,8 +855,8 @@ function create_product_image_attachment($file_path) {
 
 add_action('rest_api_init', function () {
     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
-        'methods'             => 'POST',
-        'callback'            => 'create_product_image',
+        'methods' => 'POST',
+        'callback' => 'create_product_image',
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
