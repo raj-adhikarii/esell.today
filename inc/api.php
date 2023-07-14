@@ -782,20 +782,15 @@ function create_product_image($request) {
     // Process the uploaded image files
     $uploaded_files = $_FILES['images'];
 
+    var_dump($uploaded_files);
     $attachment_ids = array();
 
-    // Loop through each uploaded file
-    foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
-        // Validate and save the uploaded file to the WordPress uploads directory
-        $uploaded_file = array(
-            'name'     => $uploaded_files['name'][$key],
-            'type'     => $uploaded_files['type'][$key],
-            'tmp_name' => $tmp_name,
-            'error'    => $uploaded_files['error'][$key],
-            'size'     => $uploaded_files['size'][$key]
-        );
+    // Check if multiple images are uploaded
+    $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
-        // Validate and save the uploaded file to the WordPress uploads directory
+    // Handle single image upload
+    if (!$is_multiple_images) {
+        $uploaded_file = $uploaded_files;
         $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
         if (isset($upload_file['file'])) {
@@ -805,31 +800,56 @@ function create_product_image($request) {
                 return new WP_Error('image_upload_error', $error_message);
             }
 
-            $attachment_ids[] = $attachment_id;
+            // Set as featured image
+            set_post_thumbnail($product_id, $attachment_id);
         } else {
             $error_message = $upload_file['error'];
             return new WP_Error('image_upload_error', $error_message);
         }
-    }
+    } else { // Handle multiple image upload
+        foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
+            $uploaded_file = array(
+                'name'     => $uploaded_files['name'][$key],
+                'type'     => $uploaded_files['type'][$key],
+                'tmp_name' => $tmp_name,
+                'error'    => $uploaded_files['error'][$key],
+                'size'     => $uploaded_files['size'][$key]
+            );
 
-    // Set the first uploaded image as the featured image if it's a single image
-    if (!empty($attachment_ids)) {
-        set_post_thumbnail($product_id, $attachment_ids[0]);
-        $attachment_ids = array_slice($attachment_ids, 1);
+            $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
-        // Add the remaining uploaded images to the product gallery
-        $product = wc_get_product($product_id);
-        foreach ($attachment_ids as $attachment_id) {
-            $product->add_gallery_image($attachment_id);
+            var_dump($upload_file);
+            if (isset($upload_file['file'])) {
+                $attachment_id = create_product_image_attachment($upload_file['file']);
+                if (is_wp_error($attachment_id)) {
+                    $error_message = $attachment_id->get_error_message();
+                    return new WP_Error('image_upload_error', $error_message);
+                }
+
+                $attachment_ids[] = $attachment_id;
+            } else {
+                $error_message = $upload_file['error'];
+                return new WP_Error('image_upload_error', $error_message);
+            }
+
+            var_dump($attachment_ids);
         }
-        $product->save();
+
+        // Update the product gallery meta field
+        if (!empty($attachment_ids)) {
+            $existing_gallery = get_post_meta($product_id, '_product_image_gallery', true);
+            $gallery = explode(',', $existing_gallery);
+            $gallery = array_merge($gallery, $attachment_ids);
+            $updated_gallery = implode(',', $gallery);
+
+            update_post_meta($product_id, '_product_image_gallery', $updated_gallery);
+        }
     }
 
     // Return success message
     $success_message = 'Images uploaded and added to the product gallery successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
-
 
 function create_product_image_attachment($file_path) {
     $file_name = basename($file_path);
