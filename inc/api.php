@@ -784,6 +784,7 @@ function create_product_image($request) {
 
     $attachment_ids = array();
 
+    var_dump($product_id); 
     var_dump($uploaded_files);
     // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
@@ -854,6 +855,7 @@ function create_product_image_attachment($file_path) {
     return $attachment_id;
 }
 
+// Register the REST route for image upload
 add_action('rest_api_init', function () {
     register_rest_route('wc/v3', '/products/(?P<product_id>\d+)/images', array(
         'methods' => 'POST',
