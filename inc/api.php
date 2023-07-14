@@ -782,24 +782,14 @@ function create_product_image($request) {
     // Process the uploaded image files
     $uploaded_files = $_FILES['images'];
 
-    var_dump($uploaded_files);
     $attachment_ids = array();
 
     // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
-    // Loop through each uploaded file
-    foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
-        // Validate and save the uploaded file to the WordPress uploads directory
-        $uploaded_file = array(
-            'name'     => $is_multiple_images ? $uploaded_files['name'][$key] : $uploaded_files['name'],
-            'type'     => $is_multiple_images ? $uploaded_files['type'][$key] : $uploaded_files['type'],
-            'tmp_name' => $is_multiple_images ? $tmp_name : $uploaded_files['tmp_name'],
-            'error'    => $is_multiple_images ? $uploaded_files['error'][$key] : $uploaded_files['error'],
-            'size'     => $is_multiple_images ? $uploaded_files['size'][$key] : $uploaded_files['size']
-        );
-
-        // Validate and save the uploaded file to the WordPress uploads directory
+    // Handle single image upload
+    if (!$is_multiple_images) {
+        $uploaded_file = $uploaded_files;
         $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
         if (isset($upload_file['file'])) {
@@ -814,9 +804,32 @@ function create_product_image($request) {
             $error_message = $upload_file['error'];
             return new WP_Error('image_upload_error', $error_message);
         }
-    }
+    } else { // Handle multiple image upload
+        foreach ($uploaded_files['tmp_name'] as $key => $tmp_name) {
+            $uploaded_file = array(
+                'name'     => $uploaded_files['name'][$key],
+                'type'     => $uploaded_files['type'][$key],
+                'tmp_name' => $tmp_name,
+                'error'    => $uploaded_files['error'][$key],
+                'size'     => $uploaded_files['size'][$key]
+            );
 
-    var_dump($upload_file);
+            $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
+
+            if (isset($upload_file['file'])) {
+                $attachment_id = create_product_image_attachment($upload_file['file']);
+                if (is_wp_error($attachment_id)) {
+                    $error_message = $attachment_id->get_error_message();
+                    return new WP_Error('image_upload_error', $error_message);
+                }
+
+                $attachment_ids[] = $attachment_id;
+            } else {
+                $error_message = $upload_file['error'];
+                return new WP_Error('image_upload_error', $error_message);
+            }
+        }
+    }
 
     // Set the first uploaded image as the featured image if it's a single image
     if (!empty($attachment_ids)) {
@@ -834,7 +847,7 @@ function create_product_image($request) {
     }
 
     // Return success message
-    $success_message = 'Images uploaded and added to the product gallery successfully.';
+    $success_message = 'Images uploaded successfully.';
     return rest_ensure_response(array('success' => true, 'message' => $success_message));
 }
 
@@ -864,6 +877,7 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Allow public access
     ));
 });
+
 
 
 // new code end
