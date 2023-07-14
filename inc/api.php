@@ -782,10 +782,9 @@ function create_product_image($request) {
     // Process the uploaded image files
     $uploaded_files = $_FILES['images'];
 
+    var_dump($uploaded_files);
     $attachment_ids = array();
 
-    var_dump($product_id); 
-    var_dump($uploaded_files);
     // Check if multiple images are uploaded
     $is_multiple_images = is_array($uploaded_files['tmp_name']);
 
@@ -817,6 +816,8 @@ function create_product_image($request) {
         }
     }
 
+    var_dump($upload_file);
+
     // Set the first uploaded image as the featured image if it's a single image
     if (!empty($attachment_ids)) {
         if (!$is_multiple_images) {
@@ -824,7 +825,7 @@ function create_product_image($request) {
             $attachment_ids = array_slice($attachment_ids, 1);
         }
 
-        // Add the rest of the uploaded images to the product gallery
+        // Add the remaining uploaded images to the product gallery
         $product = wc_get_product($product_id);
         foreach ($attachment_ids as $attachment_id) {
             $product->add_gallery_image($attachment_id);
