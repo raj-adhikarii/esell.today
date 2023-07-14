@@ -1079,21 +1079,29 @@ function update_user_avatar($request) {
     $uploaded_file = $_FILES['avatar'];
 
     // Validate and save the uploaded file to the WordPress uploads directory
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
     $upload_file = wp_handle_upload($uploaded_file, array('test_form' => false));
 
     if (isset($upload_file['file'])) {
         // Update user avatar using the Simple Local Avatars plugin
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        require_once(ABSPATH . 'wp-includes/pluggable.php');
+
         $avatar_data = array(
-            'wp_user_avatar' => $upload_file['file'],
+            'full' => $upload_file['url'],
+            'thumb' => $upload_file['url'],
+            'type' => '',
         );
+
         update_user_meta($user_id, 'simple_local_avatar', $avatar_data);
-        
+
         return rest_ensure_response(array('success' => true, 'message' => 'Avatar updated successfully.'));
     } else {
         $error_message = $upload_file['error'];
         return new WP_Error('avatar_upload_error', $error_message);
     }
 }
+
 
 // Delete avatar for a user
 function delete_user_avatar($request) {
