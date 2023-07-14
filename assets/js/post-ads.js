@@ -109,7 +109,52 @@ $('form').on('submit', function() {
 });
 
 
-// post wordpress user image 
+/*===================/*
+    Delete product
+/*===================*/
+jQuery(document).ready(function($) {
+  $('.delete-product').on('click', function(e) {
+      e.preventDefault();
+
+      var productId = $(this).data('product-id');
+
+      // Confirm deletion with the user
+      if (confirm('Are you sure you want to delete this product?')) {
+          // Make AJAX call to delete the product
+          $.ajax({
+              url: '/wp-admin/admin-ajax.php',
+              type: 'POST',
+              data: {
+                  action: 'delete_product',
+                  product_id: productId
+              },
+              success: function(response) {
+                  // Handle success response
+                  console.log(response);
+
+                  // Parse the JSON response
+                  var data = JSON.parse(response);
+
+                  // Check if the deletion was successful
+                  if (data.success) {
+                      
+                      location.reload();
+                  } else {
+                      console.log(data.message);
+                  }
+              },
+              error: function(xhr, status, error) {
+                  // Handle error
+                  console.log(error);
+              }
+          });
+      }
+  });
+});
+
+/*=============================/*
+   post wordpress user image 
+/*============================*/
 
 $(document).ready(function() {
   // Handle file selection
