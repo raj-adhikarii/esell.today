@@ -1054,7 +1054,6 @@ add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
     Add a product to wishlist
     @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
 /*=======================================================================*/
-
 function custom_yith_wishlist_rest_register_routes() {
     register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
         'methods'  => 'POST',
@@ -1069,30 +1068,26 @@ function yith_wishlist_rest_add_to_wishlist($request) {
     $product_id = $request->get_param('product_id');
     $user_id = get_current_user_id();
 
-    var_dump(class_exists('YITH_WCWL_Add_to_Wishlist'));
     if (empty($product_id)) {
         return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
     }
 
     // Load YITH Wishlist class
-    if (class_exists('YITH_WCWL_Add_to_Wishlist')) {
-        $wishlist = new YITH_WCWL_Add_to_Wishlist();
+    if (class_exists('YITH_WCWL')) {
+        global $YITH_WCWL;
+        $wishlist = $YITH_WCWL->get_wishlist($user_id, true);
 
-        // Set wishlist parameters
-        $wishlist_params = array(
-            'user_id' => $user_id,
-            'product_id' => $product_id,
-        );
+        if ($wishlist) {
+            // Add the product to the wishlist
+            $result = $wishlist->add_product($product_id);
 
-        // Add the product to the wishlist
-        $result = $wishlist->add($wishlist_params);
-
-        if ($result) {
-            // Return a success response
-            $response = array(
-                'message' => 'Product added to wishlist successfully.',
-            );
-            return rest_ensure_response($response);
+            if ($result) {
+                // Return a success response
+                $response = array(
+                    'message' => 'Product added to wishlist successfully.',
+                );
+                return rest_ensure_response($response);
+            }
         }
     }
 
@@ -1101,6 +1096,7 @@ function yith_wishlist_rest_add_to_wishlist($request) {
 }
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
+
 
 
 /*===============================================================/*
