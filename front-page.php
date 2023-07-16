@@ -399,9 +399,13 @@ get_header();
                                     <?php if ($product_image_url) : ?>
                                         <img src="<?php echo esc_url($product_image_url); ?>" alt="<?php echo esc_attr($product_name); ?>">
                                     <?php endif; ?>
-                                    <?php if (is_user_logged_in()) : ?>
-                                        <a href="#" class="product-favorite" data-product-id="<?php echo get_the_ID(); ?>" data-product-name="<?php echo esc_attr($product_name); ?>"><i class="far fa-heart"></i></a>
-                                    <?php endif; ?>
+                                    <?php
+                                    // Display the Add to Wishlist button
+                                    if (is_user_logged_in()) {
+                                        echo do_shortcode('[yith_wcwl_add_to_wishlist product_id="' . $product_id . '"]');
+                                    }
+                                    ?>
+
                                 </a>
                             </div>
                             <div class="product-content">
@@ -431,6 +435,7 @@ get_header();
                                 <div class="product-bottom">
                                     <div class="product-price"><?php echo wc_price($product_price); ?></div>
                                     <a href="<?php the_permalink(); ?>" class="product-text-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -443,39 +448,6 @@ get_header();
             endif; ?>
         </div>
 
-        <script>
-            jQuery(document).ready(function($) {
-                $('.product-favorite').on('click', function(e) {
-                    e.preventDefault();
-
-                    <?php if (is_user_logged_in()) : ?>
-                        var productId = $(this).data('product-id');
-                        var productName = $(this).data('product-name');
-                        var data = {
-                            action: 'add_to_wishlist',
-                            product_id: productId,
-                            product_name: productName
-                        };
-
-                        $.ajax({
-                            url: "/wp-admin/admin-ajax.php",
-                            type: 'POST',
-                            data: data,
-                            success: function(response) {
-                                if (response.success) {
-                                    alert('Product added to wishlist successfully!');
-                                } else {
-                                    alert('Failed to add product to wishlist!');
-                                }
-                            },
-                            error: function() {
-                                alert('Error occurred while adding product to wishlist!');
-                            }
-                        });
-                    <?php endif; ?>
-                });
-            });
-        </script>
     </div>
 </div>
 <!-- product area end -->

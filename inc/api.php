@@ -961,15 +961,49 @@ add_action('rest_api_init', function () {
     Retrive date from wish list page for specific user
     @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
 /*=======================================================================*/
-function yith_wishlist_rest_register_routes() {
-    register_rest_route('yith-wishlist/v1', '/wishlist', array(
-        'methods'  => 'GET',
-        'callback' => 'yith_wishlist_rest_get_wishlist',
-        'permission_callback' => function () {
-            return current_user_can('read');
-        },
-    ));
-}
+// function yith_wishlist_rest_register_routes() {
+//     register_rest_route('yith-wishlist/v1', '/wishlist', array(
+//         'methods'  => 'GET',
+//         'callback' => 'yith_wishlist_rest_get_wishlist',
+//         'permission_callback' => function () {
+//             return current_user_can('read');
+//         },
+//     ));
+// }
+
+// function yith_wishlist_rest_get_wishlist($request) {
+//     $user_id = $request->get_param('user_id');
+
+//     if (empty($user_id)) {
+//         return new WP_Error('missing_parameter', 'Missing user_id parameter.', array('status' => 400));
+//     }
+
+//     $wishlist_items = YITH_WCWL()->get_products($user_id);
+
+//     $formatted_items = array();
+
+//     foreach ($wishlist_items as $item) {
+//         $product = wc_get_product($item['prod_id']);
+
+//         if ($product) {
+//             $formatted_item = array(
+//                 'product_id' => $product->get_id(),
+//                 'product_name' => $product->get_name(),
+//                 // Add more desired item details
+//             );
+
+//             $formatted_items[] = $formatted_item;
+//         }
+//     }
+
+//     if (empty($formatted_items)) {
+//         return new WP_Error('no_items_found', 'No wishlist items found for the user.', array('status' => 404));
+//     }
+
+//     return rest_ensure_response($formatted_items);
+// }
+
+// add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
 
 function yith_wishlist_rest_get_wishlist($request) {
     $user_id = $request->get_param('user_id');
@@ -980,6 +1014,10 @@ function yith_wishlist_rest_get_wishlist($request) {
 
     $wishlist_items = YITH_WCWL()->get_products($user_id);
 
+    if (empty($wishlist_items)) {
+        return new WP_Error('no_items_found', 'No wishlist items found for the user.', array('status' => 404));
+    }
+
     $formatted_items = array();
 
     foreach ($wishlist_items as $item) {
@@ -989,6 +1027,7 @@ function yith_wishlist_rest_get_wishlist($request) {
             $formatted_item = array(
                 'product_id' => $product->get_id(),
                 'product_name' => $product->get_name(),
+                'product_price' => $product->get_price(),
                 // Add more desired item details
             );
 
@@ -996,14 +1035,21 @@ function yith_wishlist_rest_get_wishlist($request) {
         }
     }
 
-    if (empty($formatted_items)) {
-        return new WP_Error('no_items_found', 'No wishlist items found for the user.', array('status' => 404));
-    }
-
     return rest_ensure_response($formatted_items);
 }
 
+function yith_wishlist_rest_register_routes() {
+    register_rest_route('yith-wishlist/v1', '/wishlist/(?P<user_id>\d+)', array(
+        'methods'  => 'GET',
+        'callback' => 'yith_wishlist_rest_get_wishlist',
+        'permission_callback' => function () {
+            return current_user_can('read');
+        },
+    ));
+}
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
+
+
 
 /*======================================================================/*
     Add a product to wishlist

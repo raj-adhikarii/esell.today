@@ -3551,11 +3551,26 @@ form.woocommerce-ordering select {
   clear: both;
 }
 
+.yith-wcwl-wishlistexistsbrowse span.feedback, .yith-wcwl-wishlistexistsbrowse a, .yith-wcwl-add-button a.add_to_wishlist {
+  font-size: 13px;
+}
+
+.yith-wcwl-wishlistexistsbrowse a:last-child {
+  display: none;
+}
+
+.yith-wcwl-add-to-wishlist{
+  margin-top: 0;
+}
+
+.yith-wcwl-wishlistexistsbrowse a:hover{
+    color: var(--accent-color)
+}
 .wishlist-count {
     position: absolute;
     top: 16px;
     color: #fff;
-    background: #f69520;
+    background: var(--accent-color);
     border-radius: 130px;
     padding: 0px 10px;
 
