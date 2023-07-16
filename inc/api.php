@@ -1074,18 +1074,10 @@ function yith_wishlist_rest_add_to_wishlist($request) {
 
     // Load YITH Wishlist class
     if (class_exists('YITH_WCWL_Add_to_Wishlist')) {
-        $wishlist = new YITH_WCWL_Add_to_Wishlist();
+        global $yith_wcwl;
+        $result = $yith_wcwl->add_product_to_wishlist($user_id, $product_id);
 
-        // Set wishlist parameters
-        $wishlist_params = array(
-            'user_id' => $user_id,
-            'product_id' => $product_id,
-        );
-
-        // Add the product to the wishlist
-        $result = $wishlist->add($wishlist_params);
-
-        if ($result) {
+        if ($result['result'] === 'true') {
             // Return a success response
             $response = array(
                 'message' => 'Product added to wishlist successfully.',
