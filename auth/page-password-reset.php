@@ -51,7 +51,8 @@
                             <p>Reset your account password</p>
                         </div>
                         
-                            <form class="woocommerce-form-reset-password" method="POST">
+                        <form class="woocommerce-form-reset-password" method="POST">
+                            <?php if (!password_reset_was_successful()) : ?>
                                 <div class="form-group">
                                     <label>New Password</label>
                                     <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
@@ -72,11 +73,13 @@
                                     <?= wp_nonce_field('custom_login_nonce', 'custom_login_nonce', false, false); ?>
                                     <button type="submit" class="theme-btn" name="reset_submit"><?= esc_html_e('Reset Password', 'woocommerce'); ?></button>
                                 </div>
+                            <?php endif; ?>
 
-                                <div class="mt-3">
-                                    <?php wc_print_notices(); ?>
-                                </div>
-                            </form>
+                            <div class="mt-3">
+                                <?php wc_print_notices(); ?>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
