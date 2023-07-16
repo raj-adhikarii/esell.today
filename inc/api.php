@@ -1073,26 +1073,24 @@ function yith_wishlist_rest_add_to_wishlist($request) {
     }
 
     // Check if YITH Wishlist plugin is active
-    if (class_exists('YITH_WCWL')) {
-        global $YITH_WCWL;
+    if (class_exists('YITH_WCWL_Wishlist')) {
+        $wishlist = YITH_WCWL_Wishlist::get_default_wishlist();
         
-        // Check if the product is already in the wishlist
-        $is_product_in_wishlist = $YITH_WCWL->is_product_in_wishlist($product_id);
-
-        if (!$is_product_in_wishlist) {
-            // Add the product to the wishlist
-            $YITH_WCWL->add_to_wishlist($product_id, $user_id);
+        if ($wishlist) {
+            $result = $wishlist->add_product($product_id);
+            
+            if ($result) {
+                // Return a success response
+                $response = array(
+                    'message' => 'Product added to wishlist successfully.',
+                );
+                return rest_ensure_response($response);
+            }
         }
-
-        // Return a success response
-        $response = array(
-            'message' => 'Product added to wishlist successfully.',
-        );
-        return rest_ensure_response($response);
     }
 
-    // If YITH Wishlist is not active, return an error response
-    return new WP_Error('wishlist_not_active', 'YITH Wishlist plugin is not active.', array('status' => 500));
+    // If YITH Wishlist is not active or failed to add the product, return an error response
+    return new WP_Error('add_to_wishlist_error', 'Failed to add product to wishlist.', array('status' => 500));
 }
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
