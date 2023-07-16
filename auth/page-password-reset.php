@@ -51,39 +51,43 @@
                             <p>Reset your account password</p>
                         </div>
                         
-                        <form class="woocommerce-form-reset-password" method="POST">
-                            
-                            <div class="form-group">
-                                <label>New Password</label>
-                                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
-                                <i class="far fa-lock"></i>
-                            </div>
+                        <?php if (!password_reset_was_successful()) : ?>
+                            <form class="woocommerce-form-reset-password" method="POST">
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
+                                    <i class="far fa-lock"></i>
+                                </div>
 
-                            <div class="form-group">
-                                <label>Confirm Password</label>
-                                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
-                                <i class="far fa-lock"></i>
-                            </div>
+                                <div class="form-group">
+                                    <label>Confirm Password</label>
+                                    <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
+                                    <i class="far fa-lock"></i>
+                                </div>
 
-                            <input type="hidden" name="reset_submit" value="true" />
-                            <?php wp_nonce_field( 'reset_password', 'reset_password_nonce' ); ?>
-                            
-                            <div class="d-flex align-items-center">
-                                <input type="hidden" name="action" value="custom_login_authentication">
-                                <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
-                                <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e( 'Reset Password', 'woocommerce' ); ?></button>
-                            </div>
-                            
-                        </form>
+                                <input type="hidden" name="reset_submit" value="true" />
+                                <?= wp_nonce_field('reset_password', 'reset_password_nonce', false, false); ?>
+
+                                <div class="d-flex align-items-center">
+                                    <input type="hidden" name="action" value="custom_login_authentication">
+                                    <?= wp_nonce_field('custom_login_nonce', 'custom_login_nonce', false, false); ?>
+                                    <button type="submit" class="theme-btn" name="reset_submit"><?= esc_html_e('Reset Password', 'woocommerce'); ?></button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
+
                         <div class="mt-3">
-                                <?php wc_print_notices(); 
-                                 if (is_user_logged_in()) {
+                            <?php
+                            wc_print_notices();
+                            if (password_reset_was_successful()) {
+                                echo '<p>Password reset successfully!</p>';
+                                if (is_user_logged_in()) {
                                     echo '<a href="/login" class="theme-btn text-center">Login</a>';
                                 }
-                            
-                                echo '</div>';
-                                ?>
-                            </div>
+                            }
+                            ?>
+                        </div>
+
                     </div>
                 </div>
             </div>
