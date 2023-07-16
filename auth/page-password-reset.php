@@ -50,13 +50,10 @@
                             <img src="<?php echo esc_url(get_theme_file_uri('assets/img/logo/logo.png')); ?>" alt="<?php _e('Asset description'); ?>">
                             <p>Reset your account password</p>
                         </div>
-                        <?php
-                            if ( password_reset_was_successful() ) {
-                                // Password reset successful message here
-                                echo '<p>Password reset successful!</p>';
-                                echo '<a href="/login" class="theme-btn">Back to Login</a>';
-                            } else {
-                        ?>
+                        <?php if (password_reset_was_successful()): ?>
+                            <p>Password reset successful!</p>
+                            <a href="/login" class="theme-btn">Back to Login</a>
+                        <?php else: ?>
                             <form class="woocommerce-form-reset-password" method="POST">
                                 <div class="form-group">
                                     <label>New Password</label>
@@ -71,19 +68,20 @@
                                 </div>
 
                                 <input type="hidden" name="reset_submit" value="true" />
-                                <?php wp_nonce_field( 'reset_password', 'reset_password_nonce' ); ?>
+                                <?= wp_nonce_field('reset_password', 'reset_password_nonce', false, false); ?>
 
                                 <div class="d-flex align-items-center">
                                     <input type="hidden" name="action" value="custom_login_authentication">
-                                    <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
-                                    <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e( 'Reset Password', 'woocommerce' ); ?></button>
+                                    <?= wp_nonce_field('custom_login_nonce', 'custom_login_nonce', false, false); ?>
+                                    <button type="submit" class="theme-btn" name="reset_submit"><?= esc_html_e('Reset Password', 'woocommerce'); ?></button>
                                 </div>
 
                                 <div class="mt-3">
                                     <?php wc_print_notices(); ?>
                                 </div>
                             </form>
-                        <?php } ?>
+                        <?php endif; ?>
+
                     </div>
                 </div>
             </div>
