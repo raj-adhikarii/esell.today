@@ -1034,6 +1034,9 @@ function yith_wishlist_rest_get_wishlist($request) {
             $formatted_item = array(
                 'product_id' => $product->get_id(),
                 'product_name' => $product->get_name(),
+                'product_description' => $product->get_description(),
+                'product_price' => $product->get_price(),
+                'product_image' => wp_get_attachment_url($product->get_image_id()),
                 // Add more desired item details
             );
 
