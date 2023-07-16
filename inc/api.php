@@ -1004,12 +1004,12 @@ add_action('rest_api_init', function () {
 // }
 
 // add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
+
 function yith_wishlist_rest_get_wishlist($request) {
-    // Retrieve the current user ID
-    $user_id = get_current_user_id();
+    $user_id = $request->get_param('user_id');
 
     if (empty($user_id)) {
-        return new WP_Error('not_logged_in', 'User is not logged in.', array('status' => 401));
+        return new WP_Error('missing_parameter', 'Missing user_id parameter.', array('status' => 400));
     }
 
     $wishlist_items = YITH_WCWL()->get_products($user_id);
@@ -1039,7 +1039,7 @@ function yith_wishlist_rest_get_wishlist($request) {
 }
 
 function yith_wishlist_rest_register_routes() {
-    register_rest_route('yith-wishlist/v1', '/wishlist', array(
+    register_rest_route('yith-wishlist/v1', '/wishlist/(?P<user_id>\d+)', array(
         'methods'  => 'GET',
         'callback' => 'yith_wishlist_rest_get_wishlist',
         'permission_callback' => function () {
@@ -1049,8 +1049,6 @@ function yith_wishlist_rest_register_routes() {
 }
 
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
-
-
 
 /*======================================================================/*
     Add a product to wishlist
