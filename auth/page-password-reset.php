@@ -53,7 +53,7 @@
 
                         <form class="woocommerce-form-reset-password" method="POST">
                             <?php if ( password_reset_was_successful() ) : ?>
-                                <p> Password reset successful <p>
+                                <!-- Password reset successful message here -->
                             <?php else : ?>
                                 <div class="form-group">
                                     <label>New Password</label>
@@ -78,7 +78,8 @@
                             <?php endif; ?>
 
                             <div class="mt-3">
-                                <?php wc_print_notices(); 
+                                <?php
+                                wc_print_notices();
                                 if ( is_user_logged_in() ) {
                                     echo '<a href="/login" class="theme-btn text-center">Login</a>';
                                 }
