@@ -1055,8 +1055,7 @@ add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
     @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
 /*=======================================================================*/
 
-if (!function_exists('yith_wishlist_rest_register_routes')) {
-    function yith_wishlist_rest_register_routes() {
+    function custom_yith_wishlist_rest_register_routes() {
         register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
             'methods'  => 'POST',
             'callback' => 'yith_wishlist_rest_add_to_wishlist',
@@ -1065,7 +1064,6 @@ if (!function_exists('yith_wishlist_rest_register_routes')) {
             },
         ));
     }
-}
 
 if (!function_exists('yith_wishlist_rest_add_to_wishlist')) {
     function yith_wishlist_rest_add_to_wishlist($request) {
@@ -1088,9 +1086,7 @@ if (!function_exists('yith_wishlist_rest_add_to_wishlist')) {
     }
 }
 
-add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
-
-
+add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
 
 
 /*===============================================================/*
