@@ -965,7 +965,7 @@ function add_to_wishlist_callback() {
             // Load the YITH Wishlist class
             if (class_exists('YITH_WCWL_Add_to_Wishlist')) {
                 $wishlist = new YITH_WCWL_Add_to_Wishlist();
-                $result = $wishlist->add_to_wishlist($product_id);
+                $result = $wishlist->add($product_id);
                 if ($result) {
                     // Wishlist add success
                     wp_send_json_success();
