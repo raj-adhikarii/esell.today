@@ -1068,32 +1068,20 @@ function yith_wishlist_rest_add_to_wishlist($request) {
     $product_id = $request->get_param('product_id');
     $user_id = get_current_user_id();
 
-    var_dump($product_id);
-    var_dump($user_id);
     if (empty($product_id)) {
         return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
     }
 
     // Check if YITH Wishlist plugin is active
     if (class_exists('YITH_WCWL')) {
-        global $wpdb;
-
+        global $YITH_WCWL;
+        
         // Check if the product is already in the wishlist
-        $is_product_in_wishlist = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT COUNT(*) FROM {$wpdb->prefix}yith_wcwl WHERE user_id = %d AND prod_id = %d",
-                $user_id,
-                $product_id
-            )
-        );
+        $is_product_in_wishlist = $YITH_WCWL->is_product_in_wishlist($product_id);
 
         if (!$is_product_in_wishlist) {
             // Add the product to the wishlist
-            YITH_WCWL()->details['products'][$product_id] = array();
-
-            // Save the wishlist data
-            YITH_WCWL()->details['user_id'] = $user_id;
-            YITH_WCWL()->save_wishlist();
+            $YITH_WCWL->add_to_wishlist($product_id, $user_id);
         }
 
         // Return a success response
@@ -1108,7 +1096,6 @@ function yith_wishlist_rest_add_to_wishlist($request) {
 }
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
-
 
 
 /*===============================================================/*
