@@ -947,3 +947,37 @@ function display_all_customers_shortcode() {
     return ob_get_clean();
 }
 add_shortcode('display_customers', 'display_all_customers_shortcode');
+
+/*==============================/*
+	Add a product to wishlist
+/*==============================*/
+// Add to Wishlist AJAX Callback
+add_action('wp_ajax_add_to_wishlist', 'add_to_wishlist_callback');
+add_action('wp_ajax_nopriv_add_to_wishlist', 'add_to_wishlist_callback');
+function add_to_wishlist_callback() {
+    // Check if the user is logged in
+    if (is_user_logged_in()) {
+        // Get the product ID from the AJAX request
+        $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
+
+        // Check if the product ID is valid
+        if ($product_id > 0) {
+            // Load the YITH Wishlist class
+            if (class_exists('YITH_WCWL_Add_to_Wishlist')) {
+                $wishlist = new YITH_WCWL_Add_to_Wishlist();
+                $result = $wishlist->add_to_wishlist($product_id);
+                if ($result) {
+                    // Wishlist add success
+                    wp_send_json_success();
+                } else {
+                    // Wishlist add failure
+                    wp_send_json_error();
+                }
+            }
+        }
+    }
+
+    // If the user is not logged in or the request is invalid, send a JSON error response
+    wp_send_json_error();
+}
+

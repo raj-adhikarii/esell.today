@@ -399,7 +399,9 @@ get_header();
                                     <?php if ($product_image_url) : ?>
                                         <img src="<?php echo esc_url($product_image_url); ?>" alt="<?php echo esc_attr($product_name); ?>">
                                     <?php endif; ?>
-                                    <a href="#" class="product-favorite" data-product-id="<?php echo get_the_ID(); ?>" data-product-name="<?php echo esc_attr($product_name); ?>"><i class="far fa-heart"></i></a>
+                                    <?php if (is_user_logged_in()) : ?>
+                                        <a href="#" class="product-favorite" data-product-id="<?php echo get_the_ID(); ?>" data-product-name="<?php echo esc_attr($product_name); ?>"><i class="far fa-heart"></i></a>
+                                    <?php endif; ?>
                                 </a>
                             </div>
                             <div class="product-content">
@@ -441,18 +443,39 @@ get_header();
             endif; ?>
         </div>
 
-        <?php if (class_exists('YITH_WCWL')) : ?>
-            <script>
-                jQuery(document).ready(function($) {
-                    $('.product-favorite').on('click', function(e) {
-                        e.preventDefault();
+        <script>
+            jQuery(document).ready(function($) {
+                $('.product-favorite').on('click', function(e) {
+                    e.preventDefault();
+
+                    <?php if (is_user_logged_in()) : ?>
                         var productId = $(this).data('product-id');
                         var productName = $(this).data('product-name');
-                        yith_wcwl_add_to_wishlist(productId, productName);
-                    });
+                        var data = {
+                            action: 'add_to_wishlist',
+                            product_id: productId,
+                            product_name: productName
+                        };
+
+                        $.ajax({
+                            url: "/wp-admin/admin-ajax.php",
+                            type: 'POST',
+                            data: data,
+                            success: function(response) {
+                                if (response.success) {
+                                    alert('Product added to wishlist successfully!');
+                                } else {
+                                    alert('Failed to add product to wishlist!');
+                                }
+                            },
+                            error: function() {
+                                alert('Error occurred while adding product to wishlist!');
+                            }
+                        });
+                    <?php endif; ?>
                 });
-            </script>
-        <?php endif; ?>
+            });
+        </script>
     </div>
 </div>
 <!-- product area end -->
@@ -460,7 +483,7 @@ get_header();
 
 
 <!-- choose area -->
-<div class="choose-area py-120">
+<!-- <div class="choose-area py-120">
     <div class="container">
         <?php if(have_rows('why_choose_us')) : ?>
         <div class="row align-items-center">
@@ -511,7 +534,7 @@ get_header();
         </div>
         <?php endif; ?>
     </div>
-</div>
+</div> -->
 <!-- choose area end -->
 
 
