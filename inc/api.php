@@ -1004,7 +1004,6 @@ add_action('rest_api_init', function () {
 // }
 
 // add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
-
 function yith_wishlist_rest_get_wishlist($request) {
     $user_id = $request->get_param('user_id');
 
@@ -1012,7 +1011,15 @@ function yith_wishlist_rest_get_wishlist($request) {
         return new WP_Error('missing_parameter', 'Missing user_id parameter.', array('status' => 400));
     }
 
-    $wishlist_items = YITH_WCWL()->get_products($user_id);
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'yith_wcwl';
+
+    $wishlist_items = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT prod_id FROM $table_name WHERE user_id = %d",
+            $user_id
+        )
+    );
 
     if (empty($wishlist_items)) {
         return new WP_Error('no_items_found', 'No wishlist items found for the user.', array('status' => 404));
@@ -1021,13 +1028,12 @@ function yith_wishlist_rest_get_wishlist($request) {
     $formatted_items = array();
 
     foreach ($wishlist_items as $item) {
-        $product = wc_get_product($item['prod_id']);
+        $product = wc_get_product($item->prod_id);
 
         if ($product) {
             $formatted_item = array(
                 'product_id' => $product->get_id(),
                 'product_name' => $product->get_name(),
-                'product_price' => $product->get_price(),
                 // Add more desired item details
             );
 
@@ -1050,6 +1056,7 @@ function yith_wishlist_rest_register_routes() {
 
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
 
+
 /*======================================================================/*
     Add a product to wishlist
     @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
@@ -1068,9 +1075,6 @@ function yith_wishlist_rest_add_to_wishlist($request) {
     $product_id = $request->get_param('product_id');
     $user_id = get_current_user_id();
 
-
-    var_dump($product_id);
-    var_dump($user_id);
     if (empty($product_id)) {
         return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
     }
