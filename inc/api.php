@@ -1072,22 +1072,37 @@ function yith_wishlist_rest_add_to_wishlist($request) {
         return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
     }
 
-    // Load YITH Wishlist class
-    if (class_exists('YITH_WCWL_Add_to_Wishlist')) {
-        global $yith_wcwl_add_to_wishlist;
-        $result = $yith_wcwl_add_to_wishlist->add($product_id);
+    // Check if YITH Wishlist plugin is active
+    if (class_exists('YITH_WCWL')) {
+        global $wpdb;
 
-        if ($result) {
-            // Return a success response
-            $response = array(
-                'message' => 'Product added to wishlist successfully.',
-            );
-            return rest_ensure_response($response);
+        // Check if the product is already in the wishlist
+        $is_product_in_wishlist = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->prefix}yith_wcwl WHERE user_id = %d AND prod_id = %d",
+                $user_id,
+                $product_id
+            )
+        );
+
+        if (!$is_product_in_wishlist) {
+            // Add the product to the wishlist
+            YITH_WCWL()->details['products'][$product_id] = array();
+
+            // Save the wishlist data
+            YITH_WCWL()->details['user_id'] = $user_id;
+            YITH_WCWL()->save_wishlist();
         }
+
+        // Return a success response
+        $response = array(
+            'message' => 'Product added to wishlist successfully.',
+        );
+        return rest_ensure_response($response);
     }
 
-    // If adding to wishlist fails or YITH Wishlist is not loaded, return an error response
-    return new WP_Error('add_to_wishlist_error', 'Failed to add product to wishlist.', array('status' => 500));
+    // If YITH Wishlist is not active, return an error response
+    return new WP_Error('wishlist_not_active', 'YITH Wishlist plugin is not active.', array('status' => 500));
 }
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
