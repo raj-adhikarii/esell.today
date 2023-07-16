@@ -1087,16 +1087,24 @@ function yith_wishlist_rest_add_to_wishlist($request) {
                     'message' => 'Product added to wishlist successfully.',
                 );
                 return rest_ensure_response($response);
+            } else {
+                // Debug: Failed to add product to wishlist
+                error_log('Failed to add product to wishlist');
+                return new WP_Error('add_to_wishlist_error', 'Failed to add product to wishlist.', array('status' => 500));
             }
+        } else {
+            // Debug: Wishlist not found
+            error_log('Wishlist not found');
+            return new WP_Error('wishlist_not_found', 'Wishlist not found.', array('status' => 500));
         }
+    } else {
+        // Debug: YITH Wishlist class not found
+        error_log('YITH Wishlist class not found');
+        return new WP_Error('yith_wishlist_class_not_found', 'YITH Wishlist class not found.', array('status' => 500));
     }
-
-    // If adding to wishlist fails or YITH Wishlist is not loaded, return an error response
-    return new WP_Error('add_to_wishlist_error', 'Failed to add product to wishlist.', array('status' => 500));
 }
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
-
 
 
 /*===============================================================/*
