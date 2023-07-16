@@ -1113,6 +1113,53 @@ function yith_wishlist_rest_add_to_wishlist($request) {
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
 
+/*===============================================================/*
+    Delete a product form wishlist for perticular user
+    @see 
+/*===============================================================*/
+function yith_wishlist_rest_delete_item($request) {
+    $user_id = $request->get_param('user_id');
+    $product_id = $request->get_param('product_id');
+
+    if (empty($user_id) || empty($product_id)) {
+        return new WP_Error('missing_parameter', 'Missing user_id or product_id parameter.', array('status' => 400));
+    }
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'yith_wcwl';
+
+    $result = $wpdb->delete(
+        $table_name,
+        array(
+            'user_id' => $user_id,
+            'prod_id' => $product_id
+        )
+    );
+
+    if (!$result) {
+        return new WP_Error('delete_error', 'Failed to delete product from wishlist.', array('status' => 500));
+    }
+
+    // Return a success response
+    $response = array(
+        'message' => 'Product deleted from wishlist successfully.',
+    );
+    return rest_ensure_response($response);
+}
+
+function delete_yith_wishlist_rest_register_routes() {
+    register_rest_route('yith-wishlist/v1', '/wishlist/delete/(?P<user_id>\d+)/(?P<product_id>\d+)', array(
+        'methods'  => 'DELETE',
+        'callback' => 'yith_wishlist_rest_delete_item',
+        'permission_callback' => function () {
+            return current_user_can('read');
+        },
+    ));
+}
+
+add_action('rest_api_init', 'delete_yith_wishlist_rest_register_routes');
+
+
 
 /*===============================================================/*
     User avatars using local avetars plugin
