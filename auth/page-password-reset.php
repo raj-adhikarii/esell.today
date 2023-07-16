@@ -50,10 +50,7 @@
                             <img src="<?php echo esc_url(get_theme_file_uri('assets/img/logo/logo.png')); ?>" alt="<?php _e('Asset description'); ?>">
                             <p>Reset your account password</p>
                         </div>
-                        <?php if (password_reset_was_successful()): ?>
-                            <p>Password reset successful!</p>
-                            <a href="/login" class="theme-btn">Back to Login</a>
-                        <?php else: ?>
+                        
                             <form class="woocommerce-form-reset-password" method="POST">
                                 <div class="form-group">
                                     <label>New Password</label>
@@ -80,8 +77,6 @@
                                     <?php wc_print_notices(); ?>
                                 </div>
                             </form>
-                        <?php endif; ?>
-
                     </div>
                 </div>
             </div>
