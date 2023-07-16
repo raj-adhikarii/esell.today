@@ -1055,35 +1055,48 @@ add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
     @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
 /*=======================================================================*/
 
-    function custom_yith_wishlist_rest_register_routes() {
-        register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
-            'methods'  => 'POST',
-            'callback' => 'yith_wishlist_rest_add_to_wishlist',
-            'permission_callback' => function () {
-                return current_user_can('read');
-            },
-        ));
+function custom_yith_wishlist_rest_register_routes() {
+    register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
+        'methods'  => 'POST',
+        'callback' => 'yith_wishlist_rest_add_to_wishlist',
+        'permission_callback' => function () {
+            return current_user_can('read');
+        },
+    ));
+}
+
+function yith_wishlist_rest_add_to_wishlist($request) {
+    $product_id = $request->get_param('product_id');
+    $user_id = get_current_user_id();
+
+    if (empty($product_id)) {
+        return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
     }
 
-if (!function_exists('yith_wishlist_rest_add_to_wishlist')) {
-    function yith_wishlist_rest_add_to_wishlist($request) {
-        $product_id = $request->get_param('product_id');
-        $user_id = get_current_user_id();
+    // Load YITH Wishlist class
+    if (class_exists('YITH_WCWL_Add_to_Wishlist')) {
+        $wishlist = new YITH_WCWL_Add_to_Wishlist();
 
-        if (empty($product_id)) {
-            return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
-        }
-
-        // Add the product to the wishlist
-        YITH_WCWL()->add($product_id, $user_id);
-
-        // Return a success response
-        $response = array(
-            'message' => 'Product added to wishlist successfully.',
+        // Set wishlist parameters
+        $wishlist_params = array(
+            'user_id' => $user_id,
+            'product_id' => $product_id,
         );
 
-        return rest_ensure_response($response);
+        // Add the product to the wishlist
+        $result = $wishlist->add($wishlist_params);
+
+        if ($result) {
+            // Return a success response
+            $response = array(
+                'message' => 'Product added to wishlist successfully.',
+            );
+            return rest_ensure_response($response);
+        }
     }
+
+    // If adding to wishlist fails or YITH Wishlist is not loaded, return an error response
+    return new WP_Error('add_to_wishlist_error', 'Failed to add product to wishlist.', array('status' => 500));
 }
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
