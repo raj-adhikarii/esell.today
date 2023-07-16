@@ -1073,35 +1073,29 @@ function yith_wishlist_rest_add_to_wishlist($request) {
     }
 
     // Load YITH Wishlist class
-    if (class_exists('YITH_WCWL')) {
-        global $YITH_WCWL;
-        $wishlist = $YITH_WCWL->get_wishlist($user_id, true);
+    if (class_exists('YITH_WCWL_Add_to_Wishlist')) {
+        $wishlist = new YITH_WCWL_Add_to_Wishlist();
 
-        if ($wishlist) {
-            // Add the product to the wishlist
-            $result = $wishlist->add_product($product_id);
+        // Set wishlist parameters
+        $wishlist_params = array(
+            'user_id' => $user_id,
+            'product_id' => $product_id,
+        );
 
-            if ($result) {
-                // Return a success response
-                $response = array(
-                    'message' => 'Product added to wishlist successfully.',
-                );
-                return rest_ensure_response($response);
-            } else {
-                // Debug: Failed to add product to wishlist
-                error_log('Failed to add product to wishlist');
-                return new WP_Error('add_to_wishlist_error', 'Failed to add product to wishlist.', array('status' => 500));
-            }
-        } else {
-            // Debug: Wishlist not found
-            error_log('Wishlist not found');
-            return new WP_Error('wishlist_not_found', 'Wishlist not found.', array('status' => 500));
+        // Add the product to the wishlist
+        $result = $wishlist->add($wishlist_params);
+
+        if ($result) {
+            // Return a success response
+            $response = array(
+                'message' => 'Product added to wishlist successfully.',
+            );
+            return rest_ensure_response($response);
         }
-    } else {
-        // Debug: YITH Wishlist class not found
-        error_log('YITH Wishlist class not found');
-        return new WP_Error('yith_wishlist_class_not_found', 'YITH Wishlist class not found.', array('status' => 500));
     }
+
+    // If adding to wishlist fails or YITH Wishlist is not loaded, return an error response
+    return new WP_Error('add_to_wishlist_error', 'Failed to add product to wishlist.', array('status' => 500));
 }
 
 add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
