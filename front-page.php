@@ -399,7 +399,7 @@ get_header();
                             <?php if ($product_image_url) : ?>
                                 <img src="<?php echo esc_url($product_image_url); ?>" alt="<?php echo esc_attr($product_name); ?>">
                             <?php endif; ?>
-                            <a href="#" class="product-favorite" data-product-id="<?php echo get_the_ID(); ?>"><i class="far fa-heart"></i></a>
+                            <a href="#" class="product-favorite" data-product-id="<?php echo get_the_ID(); ?>" data-product-name="<?php echo esc_attr($product_name); ?>"><i class="far fa-heart"></i></a>
                         </a>
                     </div>
                     <div class="product-content">
@@ -446,43 +446,12 @@ get_header();
         $('.product-favorite').on('click', function(e) {
             e.preventDefault();
             var productId = $(this).data('product-id');
-            var data = {
-                action: 'add_to_wishlist',
-                product_id: productId,
-            };
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: '<?php echo admin_url('admin-ajax.php'); ?>',
-                data: data,
-                beforeSend: function() {
-                    // Show loading spinner or any UI indication
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Wishlist addition successful
-                        // You can add your own success message or perform any other action
-                        console.log('Product added to wishlist');
-                        alert('Product added to wishlist successfully!');
-                    } else {
-                        // Wishlist addition failed
-                        // You can add your own error message or perform any other action
-                        console.log('Failed to add product to wishlist');
-                        alert('Failed to add product to wishlist!');
-                    }
-                },
-                error: function(error) {
-                    // Error handling
-                    console.log('AJAX error:', error);
-                    alert('AJAX error occurred!');
-                },
-                complete: function() {
-                    // Hide loading spinner or any UI indication
-                }
-            });
+            var productName = $(this).data('product-name');
+            yith_wcwl_add_to_wishlist(productId, productName);
         });
     });
 </script>
+
 
 
     </div>
