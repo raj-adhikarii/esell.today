@@ -75,8 +75,8 @@
                             </div>
                             <div class="mt-3">
                                 <?php wc_print_notices(); 
-                                 if (is_user_logged_in()) {
-                                    echo '<a href="/login" class="theme-btn text-center">Back to Login</a>';
+                                 if (!is_user_logged_in()) {
+                                    echo '<a href="/login" class="theme-btn text-center">Back To Login</a>';
                                 }
                             
                                 echo '</div>';
