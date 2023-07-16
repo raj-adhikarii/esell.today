@@ -127,70 +127,6 @@ get_header();
 <?php endif; ?>
 <!-- hero area end -->
 
-<!-- process area -->
-
-<div class="process-area pt-120">
-    <div class="container">
-        <?php if(have_rows('how_it_works')): ?>
-            <div class="row">
-                <?php while(have_rows('how_it_works')): the_row(); ?>
-                    <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
-                        <div class="site-heading text-center">
-                            <span class="site-title-tagline">Process</span>
-                            <?php $title = get_sub_field('how_it_works_title'); ?>
-                                <?php if(!empty($title)): ?>
-                                    <h2 class="section-title"><?php echo $title; ?></h2>
-                                <?php endif; ?>
-
-                            <?php $desc = get_sub_field('how_it_works_desc'); ?>
-                                <?php if(!empty($desc)): ?>
-                                    <?php echo $desc; ?>
-                                <?php endif; ?>
-                        </div>
-                    </div>
-
-                    
-                    <?php
-                    $counter = 1;
-                    if(have_rows('how_it_works_cards')): ?>
-                        <div class="row">
-                            <?php while(have_rows('how_it_works_cards')): the_row(); ?>
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="process-item wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".50s">
-                                        <span class="process-count"><?php echo $counter; ?></span>
-                                        <div class="process-icon">
-                                            <?php $ico_class = get_sub_field('cards_icon_class'); ?>
-                                                <?php if(!empty($ico_class)): ?> 
-                                                    <i class="fal <?php echo $ico_class; ?>"></i>
-                                                <?php endif; ?>
-                                        </div>
-                                        <div class="process-content">
-                                            <?php $card_title = get_sub_field('cards_title'); ?>
-                                                <?php if(!empty($card_title)): ?>
-                                                    <h5><?php echo $card_title; ?></h5>
-                                                <?php endif; ?>
-
-                                            <?php $card_desc = get_sub_field('cards_desc'); ?>
-                                                <?php if(!empty($card_desc)): ?>
-                                                    <?php echo $card_desc; ?>
-                                                <?php endif; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            <?php 
-                            $counter++; 
-                            endwhile; ?>
-                        </div>
-                    <?php endif; ?>
-                <?php endwhile; ?>
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
-
-<!-- process area end -->
-
 <!-- product area -->
 <div class="product-area py-120">
     <div class="container">
@@ -724,9 +660,70 @@ get_header();
 
 <!-- testimonial-area end -->
 
+<!--process area -->
+<div class="process-area bg pt-120">
+    <div class="container">
+        <?php if(have_rows('how_it_works')): ?>
+            <div class="row">
+                <?php while(have_rows('how_it_works')): the_row(); ?>
+                    <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Process</span>
+                            <?php $title = get_sub_field('how_it_works_title'); ?>
+                                <?php if(!empty($title)): ?>
+                                    <h2 class="section-title"><?php echo $title; ?></h2>
+                                <?php endif; ?>
+
+                            <?php $desc = get_sub_field('how_it_works_desc'); ?>
+                                <?php if(!empty($desc)): ?>
+                                    <?php echo $desc; ?>
+                                <?php endif; ?>
+                        </div>
+                    </div>
+
+                    
+                    <?php
+                    $counter = 1;
+                    if(have_rows('how_it_works_cards')): ?>
+                        <div class="row">
+                            <?php while(have_rows('how_it_works_cards')): the_row(); ?>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="process-item wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".50s">
+                                        <span class="process-count"><?php echo $counter; ?></span>
+                                        <div class="process-icon">
+                                            <?php $ico_class = get_sub_field('cards_icon_class'); ?>
+                                                <?php if(!empty($ico_class)): ?> 
+                                                    <i class="fal <?php echo $ico_class; ?>"></i>
+                                                <?php endif; ?>
+                                        </div>
+                                        <div class="process-content">
+                                            <?php $card_title = get_sub_field('cards_title'); ?>
+                                                <?php if(!empty($card_title)): ?>
+                                                    <h5><?php echo $card_title; ?></h5>
+                                                <?php endif; ?>
+
+                                            <?php $card_desc = get_sub_field('cards_desc'); ?>
+                                                <?php if(!empty($card_desc)): ?>
+                                                    <?php echo $card_desc; ?>
+                                                <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            <?php 
+                            $counter++; 
+                            endwhile; ?>
+                        </div>
+                    <?php endif; ?>
+                <?php endwhile; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+<!-- process area end -->
 
 <!-- blog-area -->
-<div class="blog-area pb-120">
+<!-- <div class="blog-area pb-120">
     <div class="container">
         <div class="row">
             <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
@@ -776,7 +773,7 @@ get_header();
        <?php wp_reset_postdata(); ?>
         <?php endif; ?>
     </div>
-</div>
+</div> -->
 <!-- blog-area end -->
 
 

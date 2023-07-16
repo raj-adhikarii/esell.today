@@ -5624,7 +5624,7 @@ footer css
 .copyright .copyright-text {
   color: #808996;
   margin-bottom: 0px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .copyright .copyright-text a {
@@ -5668,7 +5668,7 @@ footer css
 .footer-list {
   display: flex;
   flex-direction: column;
-  gap: .8rem;
+  gap: .3rem;
 }
 
 .footer-list li a {
@@ -5703,14 +5703,15 @@ footer css
 }
 
 .footer-social li a i {
-  height: 38px;
-  width: 38px;
-  line-height: 38px;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
   text-align: center;
   border-radius: 50px;
   background: rgba(255, 255, 255, .04);
   color: var(--accent-color);
   transition: all .5s ease-in-out;
+  font-size: 13px;
 }
 
 .footer-social li a i:hover {
@@ -5725,7 +5726,7 @@ footer css
   align-items: center;
   color: #808996;
   font-size: 13px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .footer-contact li a {
