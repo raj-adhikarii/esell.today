@@ -886,9 +886,9 @@ function my_save_extra_profile_fields( $user_id ) {
     update_usermeta( $user_id, 'image', $_POST['image'] );
 }
 
-/*========================================/*
-	Shortcode Add all store name in page
-/*========================================*/
+/*=================================================/*
+	Shortcode Add all customer store name in page
+/*=================================================*/
 function display_all_customers_shortcode() {
     ob_start();
     ?>
