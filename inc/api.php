@@ -1068,6 +1068,9 @@ function yith_wishlist_rest_add_to_wishlist($request) {
     $product_id = $request->get_param('product_id');
     $user_id = get_current_user_id();
 
+
+    var_dump($product_id);
+    var_dump($user_id);
     if (empty($product_id)) {
         return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
     }
