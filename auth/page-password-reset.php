@@ -76,10 +76,17 @@
                             <?php endif; ?>
 
                             <div class="mt-3">
-                                <?php wc_print_notices(); ?>
+                                <?php
+                                wc_print_notices();
+                                if (password_reset_was_successful()) {
+                                    wp_safe_redirect('/login');
+                                    exit;
+                                } elseif (is_user_logged_in()) {
+                                    echo '<a href="/login" class="theme-btn text-center">Login</a>';
+                                }
+                                ?>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
