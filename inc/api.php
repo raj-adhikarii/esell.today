@@ -1070,10 +1070,30 @@ function yith_wishlist_rest_add_to_wishlist($request) {
         );
     }
 
-    // Return a success response
+    // Retrieve wishlist items for the user
+    $wishlist_items = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT prod_id FROM $table_name WHERE user_id = %d",
+            $user_id
+        )
+    );
+
+    // Prepare an array to store the product IDs
+    $product_ids = array();
+
+    // Loop through the wishlist items and collect the product IDs
+    if (!empty($wishlist_items)) {
+        foreach ($wishlist_items as $item) {
+            $product_ids[] = $item->prod_id;
+        }
+    }
+
+    // Return the product IDs in the response
     $response = array(
         'message' => 'Product added to wishlist successfully.',
+        'wishlist_items' => $product_ids,
     );
+
     return rest_ensure_response($response);
 }
 
