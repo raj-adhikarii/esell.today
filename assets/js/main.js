@@ -391,6 +391,13 @@ Version         : 1.0
 
 })(jQuery);
 
+//hide form after submission
+jQuery(document).ready(function($) {
+    $('#my-reset-form').on('submit', function() {
+       $('.d-none-after-submit').hide();
+    });
+ });
+//hide form after submission end
 
 // USER IMAGEUPLAD  
 $('#wp-submit-register').click(function(e) {

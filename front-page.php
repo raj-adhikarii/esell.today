@@ -225,8 +225,8 @@ get_header();
 </div>
 <!-- product area end -->
 
-<!-- location area -->
-<div class="location-area py-120">
+<!-- featured area -->
+<div class="location-area">
     <div class="container">
         <div class="row">
             <div class="col-lg-7 mx-auto">
@@ -275,7 +275,7 @@ get_header();
         </div>
     </div>
 </div>
-<!-- location area end -->
+<!-- featured area end -->
 
 <!-- category area -->
 <div class="location-area bg py-120">
