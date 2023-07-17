@@ -74,12 +74,10 @@
                                     <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e('Reset Password', 'woocommerce'); ?></button>
                                 </div>
                             </div>
-                             <div class="mt-3">
+                             <div class="mt-3" id="backtologin">
                                  <?php
                                  wc_print_notices();
-                                 if (!is_user_logged_in()) {
-                                     echo '<a href="/login" class="theme-btn text-center">Back To Login</a>';
-                                 }
+                                     echo '<a href="/login" class="theme-btn text-center d-none">Back To Login</a>';
                                  ?>
                              </div>
                         </form>

@@ -454,6 +454,27 @@ document.addEventListener('DOMContentLoaded', function() {
     checkHideCookie();
  });
 
+//  btn show
+jQuery(document).ready(function($) {
+    var form = document.getElementById('my-reset-form');
+    var backToLogin = document.getElementById('backtologin');
+    var loginLink = document.getElementById('loginLink');
+ 
+    form.addEventListener('submit', function(event) {
+       event.preventDefault(); // Prevent form submission
+ 
+       // Hide the form
+       form.style.display = 'none';
+ 
+       // Show the back to login link
+       backToLogin.classList.remove('d-none');
+       backToLogin.classList.add('d-block');
+ 
+       // Remove the d-none class from the login link
+       loginLink.classList.remove('d-none');
+    });
+ });
+
 // new updated code for user image
 $(document).ready(function() {
     // Handle file selection
