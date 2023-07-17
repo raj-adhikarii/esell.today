@@ -1022,6 +1022,16 @@ add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
     Add a product to wishlist
     @see /wp-json/yith-wishlist/v1/wishlist
 /*==============================================*/
+function custom_yith_wishlist_rest_register_routes() {
+    register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
+        'methods'  => 'POST',
+        'callback' => 'yith_wishlist_rest_add_to_wishlist',
+        'permission_callback' => function () {
+            return current_user_can('read');
+        },
+    ));
+}
+
 function yith_wishlist_rest_add_to_wishlist($request) {
     $data = $request->get_json_params(); // Retrieve JSON data from the request body
     $product_id = isset($data['product_id']) ? $data['product_id'] : null; // Get the product ID from the JSON data
