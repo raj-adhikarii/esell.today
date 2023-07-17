@@ -231,7 +231,7 @@ get_header();
         <div class="row">
             <div class="col-lg-7 mx-auto">
                 <div class="site-heading text-center">
-                    <span class="site-title-tagline">Location</span>
+                    <span class="site-title-tagline">Featured</span>
                     <h2 class="section-title">Featured Ads</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.
                     </p>
