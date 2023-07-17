@@ -225,6 +225,58 @@ get_header();
 </div>
 <!-- product area end -->
 
+<!-- location area -->
+<div class="location-area py-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto">
+                <div class="site-heading text-center">
+                    <span class="site-title-tagline">Location</span>
+                    <h2 class="site-title">Most Popular Location</h2>
+                    <p>It is a long established fact that a reader will be distracted by the readable content.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-md-12 col-lg-6">
+                <a href="#" class="location-item">
+                    <div class="location-img">
+                        <img src="https://images.unsplash.com/photo-1483134529005-4c93495107d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80" alt="">
+                    </div>
+                    <div class="location-info">
+                        <h4>New York</h4>
+                        <span><i class="far fa-location-dot"></i> 30 Ads</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="#" class="location-item">
+                    <div class="location-img">
+                        <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=704&q=80" alt="">
+                    </div>
+                    <div class="location-info">
+                        <h4>San Francisco</h4>
+                        <span><i class="far fa-location-dot"></i> 25 Ads</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="#" class="location-item">
+                    <div class="location-img">
+                        <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=715&q=80" alt="">
+                    </div>
+                    <div class="location-info">
+                        <h4>Florida</h4>
+                        <span><i class="far fa-location-dot"></i> 15 Ads</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- location area end -->
+
 <!-- category area -->
 <div class="location-area bg py-120">
     <div class="container">
@@ -316,6 +368,103 @@ get_header();
 </div>
 <!-- category area end -->
 
+<!-- product area -->
+<div class="product-area py-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
+                <div class="site-heading text-center">
+                    <span class="site-title-tagline">Apperals</span>
+                    <h2 class="section-title">Womens Fashion</h2>
+                    <p>It is a long established fact that a reader will be distracted by the readable content.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <?php
+            $args = array(
+                'post_type'      => 'product',
+                'posts_per_page' => 8,
+                'orderby'        => 'date',
+                'order'          => 'DESC',
+            );
+
+            $products = new WP_Query($args);
+
+            if ($products->have_posts()) :
+                while ($products->have_posts()) : $products->the_post();
+                    global $product;
+                    $product_id = $product->get_id();
+                    $product_name = $product->get_name();
+                    $product_price = $product->get_price();
+                    $product_sku = $product->get_sku();
+                    $product_image_url = wp_get_attachment_image_src(get_post_thumbnail_id($product_id), 'medium')[0];
+                    ?>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="product-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".25s">
+                            <div class="product-img">
+                                <a href="<?php the_permalink(); ?>">
+                                    <span class="product-status trending"><i class="fas fa-bolt-lightning"></i></span>
+                                    <?php if ($product_image_url) : ?>
+                                        <img src="<?php echo esc_url($product_image_url); ?>" alt="<?php echo esc_attr($product_name); ?>">
+                                    <?php endif; ?>
+                                    <?php
+                                    // Display the Add to Wishlist button
+                                    if (is_user_logged_in()) {
+                                        echo do_shortcode('[yith_wcwl_add_to_wishlist product_id="' . $product_id . '"]');
+                                    }
+                                    ?>
+
+                                </a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-top">
+                                    <div class="product-category">
+                                        <div class="product-category-icon">
+                                            <i class="far fa-tv"></i>
+                                        </div>
+                                        <h6 class="product-category-title"><a href="#"><?php echo $product->get_categories(); ?></a></h6>
+                                    </div>
+                                    <div class="product-rate">
+                                        <i class="fas fa-star"></i>
+                                        <span>4.5</span>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <h5><a href="<?php the_permalink(); ?>"><?php echo $product_name; ?></a></h5>
+                                    <?php
+                                    $posted_time = get_the_time('U'); // get the post published time
+                                    $current_time = current_time('timestamp'); // get the current time
+
+                                    $time_diff = human_time_diff($posted_time, $current_time); // get the time elapsed since post was published
+
+                                    echo ' <div class="product-date"><i class="far fa-clock"></i> ' . $time_diff . ' ago' . ' </div>'; // display the time elapsed
+                                    ?>
+                                </div>
+                                <div class="product-bottom">
+                                    <div class="product-price"><?php echo wc_price($product_price); ?></div>
+                                    <a href="<?php the_permalink(); ?>" class="product-text-btn">View Details <i class="fas fa-arrow-right"></i></a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <?php endwhile;
+                wp_reset_postdata();
+            else :
+                echo '<p>No products found</p>';
+            endif; ?>
+        </div>
+
+    </div>
+</div>
+<!-- product area end -->
+
+
 <!-- counter area -->
 <div class="counter-area bg pt-60 pb-60">
     <div class="container">
@@ -362,8 +511,8 @@ get_header();
         <div class="row">
             <div class="col-lg-7 mx-auto wow fadeInDown" data-wow-duration="1s" data-wow-delay=".25s">
                 <div class="site-heading text-center">
-                    <span class="site-title-tagline">Featured Ads</span>
-                    <h2 class="section-title">Explore Our Featured Ads</h2>
+                    <span class="site-title-tagline">Apperals</span>
+                    <h2 class="section-title">Mens Fashion</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.
                     </p>
                 </div>

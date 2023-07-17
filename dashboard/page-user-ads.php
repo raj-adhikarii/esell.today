@@ -186,7 +186,7 @@ get_header(); ?>
                                 if($count>8):
                             ?>
                             <!-- pagination -->
-                            <div class="pagination-area">
+                            <!-- <div class="pagination-area">
                                 <div aria-label="Page navigation example">
                                     <ul class="pagination my-3">
                                         <li class="page-item">
@@ -204,6 +204,11 @@ get_header(); ?>
                                         </li>
                                     </ul>
                                 </div>
+                            </div> -->
+                            <div class="text-center">
+                                <?php  
+                                    pagination( $paged, $query->max_num_pages); // Pagination Function
+                                ?> 
                             </div>
                             <?php  
                                 endif;

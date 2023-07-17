@@ -278,7 +278,6 @@ get_header() ?>
     </div>
     <!-- user-profile end -->
 
-
 </main>
 
 <?php get_footer(); 

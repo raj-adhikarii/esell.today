@@ -3559,6 +3559,25 @@ form.woocommerce-ordering select {
   display: none;
 }
 
+.page-numbers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.page-numbers li a {
+  background: #cacac8;
+  padding: 0 10px;
+  border-radius: 140px;
+}
+
+.page-numbers li a:hover, 
+.page-numbers li span.current{
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
 .yith-wcwl-add-to-wishlist{
   margin-top: 0;
 }
