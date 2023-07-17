@@ -51,7 +51,7 @@
                             <p>Reset your account password</p>
                         </div>
                         
-                        <form class="woocommerce-form-reset-password" id="my-reset-form" method="POST">
+                        <form class="woocommerce-form-reset-password" method="POST">
                             <div class="d-none-after-submit">
                                 <div class="form-group">
                                     <label>New Password</label>
@@ -74,9 +74,13 @@
                                     <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e('Reset Password', 'woocommerce'); ?></button>
                                 </div>
                             </div>
-                             <div class="mt-3" id="backtologin">
+                             <div class="mt-3">
                                  <?php
-                                 wc_print_notices(); ?>
+                                 wc_print_notices();
+                                 if (!is_user_logged_in()) {
+                                     echo '<a href="/login" class="theme-btn text-center">Back To Login</a>';
+                                 }
+                                 ?>
                              </div>
                         </form>
                     </div>
