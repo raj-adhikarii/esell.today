@@ -1023,7 +1023,7 @@ add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
     @see /wp-json/yith-wishlist/v1/wishlist
 /*==============================================*/
 function custom_yith_wishlist_rest_register_routes() {
-    register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
+    register_rest_route('yith-wishlist/v1', '/add-to-wishlist/', array(
         'methods'  => 'POST',
         'callback' => 'yith_wishlist_rest_add_to_wishlist',
         'permission_callback' => function () {
@@ -1035,14 +1035,14 @@ function custom_yith_wishlist_rest_register_routes() {
 function yith_wishlist_rest_add_to_wishlist($request) {
     $data = $request->get_json_params(); // Retrieve JSON data from the request body
     $product_id = isset($data['product_id']) ? $data['product_id'] : null; // Get the product ID from the JSON data
-    $user_id = get_current_user_id();
+    $user_id = isset($data['user_id']) ? $data['user_id'] : null; // Get the user ID from the JSON data
 
     if (empty($product_id)) {
         return new WP_Error('missing_parameter', 'Missing product_id parameter.', array('status' => 400));
     }
 
     if (empty($user_id)) {
-        return new WP_Error('not_authenticated', 'User is not authenticated.', array('status' => 401));
+        return new WP_Error('missing_parameter', 'Missing user_id parameter.', array('status' => 400));
     }
 
     global $wpdb;
@@ -1076,6 +1076,9 @@ function yith_wishlist_rest_add_to_wishlist($request) {
     );
     return rest_ensure_response($response);
 }
+
+add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
+
 
 /*===============================================================/*
     Delete a product form wishlist for perticular user
