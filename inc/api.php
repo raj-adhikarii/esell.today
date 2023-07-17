@@ -959,51 +959,9 @@ add_action('rest_api_init', function () {
 
 /*======================================================================/*
     Retrive date from wish list page for specific user
-    @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
+    @see https://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
 /*=======================================================================*/
-// function yith_wishlist_rest_register_routes() {
-//     register_rest_route('yith-wishlist/v1', '/wishlist', array(
-//         'methods'  => 'GET',
-//         'callback' => 'yith_wishlist_rest_get_wishlist',
-//         'permission_callback' => function () {
-//             return current_user_can('read');
-//         },
-//     ));
-// }
 
-// function yith_wishlist_rest_get_wishlist($request) {
-//     $user_id = $request->get_param('user_id');
-
-//     if (empty($user_id)) {
-//         return new WP_Error('missing_parameter', 'Missing user_id parameter.', array('status' => 400));
-//     }
-
-//     $wishlist_items = YITH_WCWL()->get_products($user_id);
-
-//     $formatted_items = array();
-
-//     foreach ($wishlist_items as $item) {
-//         $product = wc_get_product($item['prod_id']);
-
-//         if ($product) {
-//             $formatted_item = array(
-//                 'product_id' => $product->get_id(),
-//                 'product_name' => $product->get_name(),
-//                 // Add more desired item details
-//             );
-
-//             $formatted_items[] = $formatted_item;
-//         }
-//     }
-
-//     if (empty($formatted_items)) {
-//         return new WP_Error('no_items_found', 'No wishlist items found for the user.', array('status' => 404));
-//     }
-
-//     return rest_ensure_response($formatted_items);
-// }
-
-// add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
 function yith_wishlist_rest_get_wishlist($request) {
     $user_id = $request->get_param('user_id');
 
@@ -1060,10 +1018,10 @@ function yith_wishlist_rest_register_routes() {
 add_action('rest_api_init', 'yith_wishlist_rest_register_routes');
 
 
-/*======================================================================/*
+/*==============================================/*
     Add a product to wishlist
-    @seehttps://staging.e-sell.today/wp-json/yith-wishlist/v1/wishlist
-/*=======================================================================*/
+    @see /wp-json/yith-wishlist/v1/wishlist
+/*==============================================*/
 function custom_yith_wishlist_rest_register_routes() {
     register_rest_route('yith-wishlist/v1', '/add-to-wishlist/(?P<product_id>\d+)', array(
         'methods'  => 'POST',
@@ -1118,7 +1076,7 @@ add_action('rest_api_init', 'custom_yith_wishlist_rest_register_routes');
 
 /*===============================================================/*
     Delete a product form wishlist for perticular user
-    @see 
+    @see /wp-json/yith-wishlist/v1/wishlist/delete/1/610
 /*===============================================================*/
 function yith_wishlist_rest_delete_item($request) {
     $user_id = $request->get_param('user_id');

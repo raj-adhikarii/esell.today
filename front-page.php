@@ -576,10 +576,10 @@ get_header();
                                             <?php echo ($down_desc); ?>
                                         <?php endif; ?>
                             </div>
-                            <!-- <div class="download-btn">
-                                <a href="#"><img src="assets/img/download/google-play.png" alt=""></a>
-                                <a href="#"><img src="assets/img/download/app-store.png" alt=""></a>
-                            </div> -->
+                            <div class="download-btn">
+                                <a href="#"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/download/google-play.png" alt=""></a>
+                                <a href="#"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/download/app-store.png" alt=""></a>
+                            </div>
                         </div>
                     </div>
                 <?php endwhile; ?> 

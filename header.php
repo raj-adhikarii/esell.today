@@ -104,8 +104,8 @@
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/home-lifestyle/">Lifestyle</a></li>
                             
                             <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/health-beauty/">Health & Beauty</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/groceries-pets/">Groceries</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/tv-home-appliances/">Appliances</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/jewellery/">Jewellery</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?php echo site_url(); ?>/product-category/watches/">Watches</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">More</a>
                                 <ul class="dropdown-menu fade-down">
@@ -113,8 +113,8 @@
                                     <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/groceries-pets/">Groceries & Pets</a></li>
                                     <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/sports-outdoor/">Sports & Outdoor</a></li>
                                     <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/babies-toys/">Babies & Toys</a></li>
-                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/jewellery/">Jewellery</a></li>
-                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/watches/">Watches</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/groceries-pets/">Groceries</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/tv-home-appliances/">Appliances</a></li>
                                     <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/Bags/">Bags</a></li>
                                     <li><a class="dropdown-item" href="<?php echo site_url(); ?>/product-category/tv-home-appliances/">TV & Home Appliances</a></li>
                                 </ul>
