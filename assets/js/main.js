@@ -391,13 +391,7 @@ Version         : 1.0
 
 })(jQuery);
 
-//hide form after submission
-jQuery(document).ready(function($) {
-    $('#my-reset-form').on('submit', function() {
-       $('.d-none-after-submit').hide();
-    });
- });
-//hide form after submission end
+
 
 // USER IMAGEUPLAD  
 $('#wp-submit-register').click(function(e) {
@@ -427,6 +421,38 @@ function wpestate_register() {
     });
 }
 
+// hide form
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('my-reset-form');
+    var dNoneAfterSubmit = document.querySelector('.d-none-after-submit');
+ 
+    form.addEventListener('submit', function() {
+       dNoneAfterSubmit.style.display = 'none';
+       setHideCookie();
+    });
+ 
+    function setHideCookie() {
+       var now = new Date();
+       var time = now.getTime();
+       time += 2 * 60 * 1000; // 2 minutes
+       now.setTime(time);
+ 
+       document.cookie = 'hideAfterSubmit=true; expires=' + now.toUTCString() + '; path=/';
+    }
+ 
+    function checkHideCookie() {
+       var cookies = document.cookie.split(';');
+       for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          if (cookie.indexOf('hideAfterSubmit=true') === 0) {
+             dNoneAfterSubmit.style.display = 'none';
+             break;
+          }
+       }
+    }
+ 
+    checkHideCookie();
+ });
 
 // new updated code for user image
 $(document).ready(function() {
