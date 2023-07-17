@@ -52,35 +52,36 @@
                         </div>
                         
                         <form class="woocommerce-form-reset-password" method="POST">
-                            <div class="form-group">
-                                <label>New Password</label>
-                                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
-                                <i class="far fa-lock"></i>
-                            </div>
+                            <div class="d-none-after-submit">
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="new_password" id="new_password" required />
+                                    <i class="far fa-lock"></i>
+                                </div>
 
-                            <div class="form-group">
-                                <label>Confirm Password</label>
-                                <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
-                                <i class="far fa-lock"></i>
-                            </div>
+                                <div class="form-group">
+                                    <label>Confirm Password</label>
+                                    <input type="password" class="form-control woocommerce-Input woocommerce-Input--text input-text" name="confirm_password" id="confirm_password" required />
+                                    <i class="far fa-lock"></i>
+                                </div>
 
-                            <input type="hidden" name="reset_submit" value="true" />
-                            <?php wp_nonce_field('reset_password', 'reset_password_nonce'); ?>
+                                <input type="hidden" name="reset_submit" value="true" />
+                                <?php wp_nonce_field('reset_password', 'reset_password_nonce'); ?>
 
-                            <div class="d-flex align-items-center">
-                                <input type="hidden" name="action" value="custom_login_authentication">
-                                <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
-                                <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e('Reset Password', 'woocommerce'); ?></button>
+                                <div class="d-flex align-items-center">
+                                    <input type="hidden" name="action" value="custom_login_authentication">
+                                    <?php wp_nonce_field('custom_login_nonce', 'custom_login_nonce'); ?>
+                                    <button type="submit" class="theme-btn" name="reset_submit"><?php esc_html_e('Reset Password', 'woocommerce'); ?></button>
+                                </div>
                             </div>
-
-                            <div class="mt-3">
-                                <?php
-                                wc_print_notices();
-                                if (!is_user_logged_in()) {
-                                    echo '<a href="/login" class="theme-btn text-center">Back To Login</a>';
-                                }
-                                ?>
-                            </div>
+                             <div class="mt-3">
+                                 <?php
+                                 wc_print_notices();
+                                 if (!is_user_logged_in()) {
+                                     echo '<a href="/login" class="theme-btn text-center">Back To Login</a>';
+                                 }
+                                 ?>
+                             </div>
                         </form>
                     </div>
                 </div>

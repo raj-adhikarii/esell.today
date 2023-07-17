@@ -54,7 +54,7 @@ get_header();
                 <div class="search-form">
                     <form action="#">
                         <div class="row align-items-center">
-                            <div class="col-lg-4">
+                            <div class="col-lg-7">
                                 <div class="form-group">
                                     <div class="form-group-icon">
                                         <input type="text" class="form-control"
@@ -63,7 +63,7 @@ get_header();
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
+                            <!-- <div class="col-lg-3">
                                 <div class="form-group">
                                     <div class="form-group-icon">
                                         <select class="select">
@@ -78,7 +78,7 @@ get_header();
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <div class="form-group-icon">
@@ -232,7 +232,7 @@ get_header();
             <div class="col-lg-7 mx-auto">
                 <div class="site-heading text-center">
                     <span class="site-title-tagline">Location</span>
-                    <h2 class="site-title">Most Popular Location</h2>
+                    <h2 class="section-title">Featured Ads</h2>
                     <p>It is a long established fact that a reader will be distracted by the readable content.
                     </p>
                 </div>
