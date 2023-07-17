@@ -951,30 +951,3 @@ add_shortcode('display_customers', 'display_all_customers_shortcode');
 /*================================/*
 	Hide sale price from product
 /*================================*/
-function hide_sale_price(){
-    // in theory this will grab all variations FIRST
-    $args = array( 'post_type' => array( 'product','product_variation' ), 'nopaging' => true, 'sortby' => 'post_type', 'order' => 'desc' );
-
-    $all_products = new WP_Query( $args );
-
-    if ( $all_products->have_posts() ) : 
-    while ( $all_products->have_posts() ) : 
-
-        $all_products->the_post();
-        $id = get_the_ID();
-        update_post_meta( $id, '_sale_price', '' );
-        $regular_price = get_post_meta( $id, '_regular_price', true );
-        update_post_meta( $id, '_price', $regular_price );
-
-        // we're on a variable product
-        if( has_term( 'variable', 'product_type', $id ) ){
-           variable_product_sync( $id );
-        }
-
-    endwhile;
-    endif;
-
-    wp_reset_postdata();
-
-}
-add_action( 'admin_init', 'hide_sale_price' );
