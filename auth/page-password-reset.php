@@ -76,9 +76,7 @@
                             </div>
                              <div class="mt-3" id="backtologin">
                                  <?php
-                                 wc_print_notices();
-                                     echo '<a href="/login" class="theme-btn text-center d-none">Back To Login</a>';
-                                 ?>
+                                 wc_print_notices(); ?>
                              </div>
                         </form>
                     </div>

@@ -455,18 +455,6 @@ document.addEventListener('DOMContentLoaded', function() {
  });
 
 //  btn show
-jQuery(document).ready(function($) {
-    var form = document.getElementById('my-reset-form');
-    var loginLink = document.getElementById('loginLink');
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission
-        loginLink.classList.remove('d-none');
-        loginLink.classList.add('d-block');
-
-        form.submit();
-    });
-});
 
 // new updated code for user image
 $(document).ready(function() {
