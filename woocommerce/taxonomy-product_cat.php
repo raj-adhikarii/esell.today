@@ -89,12 +89,6 @@
                                                             // Get the vendor ID for the current product
                                                             $vendor_id = get_post_field( 'post_author', get_the_ID() );
 
-                                                            // Get the vendor's store info
-                                                            // $store_info = dokan_get_store_info( $vendor_id );
-
-                                                            // Output the store location
-                                                            // echo '<p><i class="far fa-location-dot"></i> ' . $store_info['address']['city'] . ', ' . $store_info['address']['state'] . ', ' . $store_info['address']['country'] . '</p>';
-                                                    
                                                             $posted_time = get_the_time('U'); // get the post published time
                                                             $current_time = current_time('timestamp'); // get the current time
 

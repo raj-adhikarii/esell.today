@@ -29,7 +29,7 @@ get_header( 'shop' );
 do_action( 'woocommerce_before_main_content' );
 
 ?>
-<main id="primary" class="site-main" style="margin-top: -10rem;">
+<main id="primary" class="site-main mb-5" style="margin-top: -10rem;">
 	<!-- breadcrumb -->
 	<div class="site-breadcrumb" style="background: url(https://staging.e-sell.today/wp-content/uploads/2023/04/head.jpeg)">
 		<div class="container mt-5">
@@ -41,21 +41,6 @@ do_action( 'woocommerce_before_main_content' );
 		</div>
 	</div>
 
-<!-- <header class="woocommerce-products-header">
-	<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-		<h1 class="woocommerce-products-header__title page-title"><?php woocommerce_page_title(); ?></h1>
-	<?php endif; ?>
-
-	<?php
-	/**
-	 * Hook: woocommerce_archive_description.
-	 *
-	 * @hooked woocommerce_taxonomy_archive_description - 10
-	 * @hooked woocommerce_product_archive_description - 10
-	 */
-	do_action( 'woocommerce_archive_description' );
-	?>
-</header> -->
 <div class="container mt-5">
 <?php
 if ( woocommerce_product_loop() ) {

@@ -68,7 +68,7 @@ a:hover {
 }
 
 a:hover {
-  color: #0049D0;
+  color: var(--blue);
 }
 
 ul {
@@ -1659,10 +1659,11 @@ product css
   position: relative;
 }
 
-.product-item{
+.product-item, 
+.product{
   background: #fff;
   border-radius: 10px;
-  padding: 5px;
+  padding: 5px !important;
   margin-bottom: 25px;
   box-shadow: 0 0 40px 5px rgb(0 0 0 / 5%);
   transition: all .5s ease-in-out;
@@ -2026,9 +2027,31 @@ woocommerce css
 }
 
 .woocommerce ul.products li.product a img{
-  height: 256px;
-  width: 256px;
+  border-radius: 10px;
+  height: 262px;
+  width: 262px;
   object-fit: cover;
+}
+
+.woocommerce span.onsale {
+  padding: 0.02em;
+  font-size: 13px !important;
+  font-weight: 600;
+}
+
+.woocommerce ul.products li.product .price {
+  font-size: .857em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, .05);
+}
+
+.woocommerce ul.products li.product, .woocommerce-page ul.products li.product {
+  float: left;
+  margin: 0px 25px 25px 0;
 }
 
 /* ===================

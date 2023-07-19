@@ -245,8 +245,8 @@ get_header();
                         <img src="https://images.unsplash.com/photo-1483134529005-4c93495107d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80" alt="">
                     </div>
                     <div class="location-info">
-                        <h4>New York</h4>
-                        <span><i class="far fa-location-dot"></i> 30 Ads</span>
+                        <h4>Wordpress Pendent</h4>
+                        <span><i class="far fa-location-dot"></i> Category</span>
                     </div>
                 </a>
             </div>
@@ -256,8 +256,8 @@ get_header();
                         <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=704&q=80" alt="">
                     </div>
                     <div class="location-info">
-                        <h4>San Francisco</h4>
-                        <span><i class="far fa-location-dot"></i> 25 Ads</span>
+                        <h4>Temptation Rose Perfurm</h4>
+                        <span><i class="far fa-location-dot"></i>Mens Fashion</span>
                     </div>
                 </a>
             </div>
@@ -267,8 +267,8 @@ get_header();
                         <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=715&q=80" alt="">
                     </div>
                     <div class="location-info">
-                        <h4>Florida</h4>
-                        <span><i class="far fa-location-dot"></i> 15 Ads</span>
+                        <h4>Clinique Lipsticks</h4>
+                        <span><i class="far fa-location-dot"></i>Womens Fashion</span>
                     </div>
                 </a>
             </div>
